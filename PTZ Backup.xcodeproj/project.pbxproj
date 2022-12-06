@@ -1,0 +1,571 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		941ED01C293FF3D4001D8039 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 941ED01B293FF3D4001D8039 /* AppDelegate.m */; };
+		941ED01E293FF3D5001D8039 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 941ED01D293FF3D5001D8039 /* Assets.xcassets */; };
+		941ED021293FF3D5001D8039 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 941ED01F293FF3D5001D8039 /* MainMenu.xib */; };
+		941ED023293FF3D5001D8039 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 941ED022293FF3D5001D8039 /* main.m */; };
+		941ED02E293FF3D6001D8039 /* PTZ_BackupTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 941ED02D293FF3D6001D8039 /* PTZ_BackupTests.m */; };
+		941ED038293FF3D6001D8039 /* PTZ_BackupUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 941ED037293FF3D6001D8039 /* PTZ_BackupUITests.m */; };
+		941ED03A293FF3D6001D8039 /* PTZ_BackupUITestsLaunchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 941ED039293FF3D6001D8039 /* PTZ_BackupUITestsLaunchTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		941ED02A293FF3D6001D8039 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 941ED00F293FF3D4001D8039 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 941ED016293FF3D4001D8039;
+			remoteInfo = "PTZ Backup";
+		};
+		941ED034293FF3D6001D8039 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 941ED00F293FF3D4001D8039 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 941ED016293FF3D4001D8039;
+			remoteInfo = "PTZ Backup";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		941ED017293FF3D4001D8039 /* PTZ Backup.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PTZ Backup.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		941ED01A293FF3D4001D8039 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		941ED01B293FF3D4001D8039 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		941ED01D293FF3D5001D8039 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		941ED020293FF3D5001D8039 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		941ED022293FF3D5001D8039 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		941ED024293FF3D5001D8039 /* PTZ_Backup.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PTZ_Backup.entitlements; sourceTree = "<group>"; };
+		941ED029293FF3D6001D8039 /* PTZ BackupTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "PTZ BackupTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		941ED02D293FF3D6001D8039 /* PTZ_BackupTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTZ_BackupTests.m; sourceTree = "<group>"; };
+		941ED033293FF3D6001D8039 /* PTZ BackupUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "PTZ BackupUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		941ED037293FF3D6001D8039 /* PTZ_BackupUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTZ_BackupUITests.m; sourceTree = "<group>"; };
+		941ED039293FF3D6001D8039 /* PTZ_BackupUITestsLaunchTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTZ_BackupUITestsLaunchTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		941ED014293FF3D4001D8039 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		941ED026293FF3D6001D8039 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		941ED030293FF3D6001D8039 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		941ED00E293FF3D4001D8039 = {
+			isa = PBXGroup;
+			children = (
+				941ED019293FF3D4001D8039 /* PTZ Backup */,
+				941ED02C293FF3D6001D8039 /* PTZ BackupTests */,
+				941ED036293FF3D6001D8039 /* PTZ BackupUITests */,
+				941ED018293FF3D4001D8039 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		941ED018293FF3D4001D8039 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				941ED017293FF3D4001D8039 /* PTZ Backup.app */,
+				941ED029293FF3D6001D8039 /* PTZ BackupTests.xctest */,
+				941ED033293FF3D6001D8039 /* PTZ BackupUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		941ED019293FF3D4001D8039 /* PTZ Backup */ = {
+			isa = PBXGroup;
+			children = (
+				941ED01A293FF3D4001D8039 /* AppDelegate.h */,
+				941ED01B293FF3D4001D8039 /* AppDelegate.m */,
+				941ED01D293FF3D5001D8039 /* Assets.xcassets */,
+				941ED01F293FF3D5001D8039 /* MainMenu.xib */,
+				941ED022293FF3D5001D8039 /* main.m */,
+				941ED024293FF3D5001D8039 /* PTZ_Backup.entitlements */,
+			);
+			path = "PTZ Backup";
+			sourceTree = "<group>";
+		};
+		941ED02C293FF3D6001D8039 /* PTZ BackupTests */ = {
+			isa = PBXGroup;
+			children = (
+				941ED02D293FF3D6001D8039 /* PTZ_BackupTests.m */,
+			);
+			path = "PTZ BackupTests";
+			sourceTree = "<group>";
+		};
+		941ED036293FF3D6001D8039 /* PTZ BackupUITests */ = {
+			isa = PBXGroup;
+			children = (
+				941ED037293FF3D6001D8039 /* PTZ_BackupUITests.m */,
+				941ED039293FF3D6001D8039 /* PTZ_BackupUITestsLaunchTests.m */,
+			);
+			path = "PTZ BackupUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		941ED016293FF3D4001D8039 /* PTZ Backup */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 941ED03D293FF3D6001D8039 /* Build configuration list for PBXNativeTarget "PTZ Backup" */;
+			buildPhases = (
+				941ED013293FF3D4001D8039 /* Sources */,
+				941ED014293FF3D4001D8039 /* Frameworks */,
+				941ED015293FF3D4001D8039 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "PTZ Backup";
+			productName = "PTZ Backup";
+			productReference = 941ED017293FF3D4001D8039 /* PTZ Backup.app */;
+			productType = "com.apple.product-type.application";
+		};
+		941ED028293FF3D6001D8039 /* PTZ BackupTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 941ED040293FF3D6001D8039 /* Build configuration list for PBXNativeTarget "PTZ BackupTests" */;
+			buildPhases = (
+				941ED025293FF3D6001D8039 /* Sources */,
+				941ED026293FF3D6001D8039 /* Frameworks */,
+				941ED027293FF3D6001D8039 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				941ED02B293FF3D6001D8039 /* PBXTargetDependency */,
+			);
+			name = "PTZ BackupTests";
+			productName = "PTZ BackupTests";
+			productReference = 941ED029293FF3D6001D8039 /* PTZ BackupTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		941ED032293FF3D6001D8039 /* PTZ BackupUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 941ED043293FF3D6001D8039 /* Build configuration list for PBXNativeTarget "PTZ BackupUITests" */;
+			buildPhases = (
+				941ED02F293FF3D6001D8039 /* Sources */,
+				941ED030293FF3D6001D8039 /* Frameworks */,
+				941ED031293FF3D6001D8039 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				941ED035293FF3D6001D8039 /* PBXTargetDependency */,
+			);
+			name = "PTZ BackupUITests";
+			productName = "PTZ BackupUITests";
+			productReference = 941ED033293FF3D6001D8039 /* PTZ BackupUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		941ED00F293FF3D4001D8039 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1410;
+				TargetAttributes = {
+					941ED016293FF3D4001D8039 = {
+						CreatedOnToolsVersion = 14.1;
+					};
+					941ED028293FF3D6001D8039 = {
+						CreatedOnToolsVersion = 14.1;
+						TestTargetID = 941ED016293FF3D4001D8039;
+					};
+					941ED032293FF3D6001D8039 = {
+						CreatedOnToolsVersion = 14.1;
+						TestTargetID = 941ED016293FF3D4001D8039;
+					};
+				};
+			};
+			buildConfigurationList = 941ED012293FF3D4001D8039 /* Build configuration list for PBXProject "PTZ Backup" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 941ED00E293FF3D4001D8039;
+			productRefGroup = 941ED018293FF3D4001D8039 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				941ED016293FF3D4001D8039 /* PTZ Backup */,
+				941ED028293FF3D6001D8039 /* PTZ BackupTests */,
+				941ED032293FF3D6001D8039 /* PTZ BackupUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		941ED015293FF3D4001D8039 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				941ED01E293FF3D5001D8039 /* Assets.xcassets in Resources */,
+				941ED021293FF3D5001D8039 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		941ED027293FF3D6001D8039 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		941ED031293FF3D6001D8039 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		941ED013293FF3D4001D8039 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				941ED023293FF3D5001D8039 /* main.m in Sources */,
+				941ED01C293FF3D4001D8039 /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		941ED025293FF3D6001D8039 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				941ED02E293FF3D6001D8039 /* PTZ_BackupTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		941ED02F293FF3D6001D8039 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				941ED038293FF3D6001D8039 /* PTZ_BackupUITests.m in Sources */,
+				941ED03A293FF3D6001D8039 /* PTZ_BackupUITestsLaunchTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		941ED02B293FF3D6001D8039 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 941ED016293FF3D4001D8039 /* PTZ Backup */;
+			targetProxy = 941ED02A293FF3D6001D8039 /* PBXContainerItemProxy */;
+		};
+		941ED035293FF3D6001D8039 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 941ED016293FF3D4001D8039 /* PTZ Backup */;
+			targetProxy = 941ED034293FF3D6001D8039 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		941ED01F293FF3D5001D8039 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				941ED020293FF3D5001D8039 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		941ED03B293FF3D6001D8039 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		941ED03C293FF3D6001D8039 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		941ED03E293FF3D6001D8039 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "PTZ Backup/PTZ_Backup.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 92RP9V4XB5;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainNibFile = MainMenu;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "lrucker.PTZ-Backup";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		941ED03F293FF3D6001D8039 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "PTZ Backup/PTZ_Backup.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 92RP9V4XB5;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainNibFile = MainMenu;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "lrucker.PTZ-Backup";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		941ED041293FF3D6001D8039 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 92RP9V4XB5;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "lrucker.PTZ-BackupTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PTZ Backup.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PTZ Backup";
+			};
+			name = Debug;
+		};
+		941ED042293FF3D6001D8039 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 92RP9V4XB5;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "lrucker.PTZ-BackupTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PTZ Backup.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PTZ Backup";
+			};
+			name = Release;
+		};
+		941ED044293FF3D6001D8039 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 92RP9V4XB5;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "lrucker.PTZ-BackupUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_TARGET_NAME = "PTZ Backup";
+			};
+			name = Debug;
+		};
+		941ED045293FF3D6001D8039 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 92RP9V4XB5;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "lrucker.PTZ-BackupUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_TARGET_NAME = "PTZ Backup";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		941ED012293FF3D4001D8039 /* Build configuration list for PBXProject "PTZ Backup" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				941ED03B293FF3D6001D8039 /* Debug */,
+				941ED03C293FF3D6001D8039 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		941ED03D293FF3D6001D8039 /* Build configuration list for PBXNativeTarget "PTZ Backup" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				941ED03E293FF3D6001D8039 /* Debug */,
+				941ED03F293FF3D6001D8039 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		941ED040293FF3D6001D8039 /* Build configuration list for PBXNativeTarget "PTZ BackupTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				941ED041293FF3D6001D8039 /* Debug */,
+				941ED042293FF3D6001D8039 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		941ED043293FF3D6001D8039 /* Build configuration list for PBXNativeTarget "PTZ BackupUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				941ED044293FF3D6001D8039 /* Debug */,
+				941ED045293FF3D6001D8039 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 941ED00F293FF3D4001D8039 /* Project object */;
+}
