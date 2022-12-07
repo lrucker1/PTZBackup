@@ -14,6 +14,11 @@
 		941ED02E293FF3D6001D8039 /* PTZ_BackupTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 941ED02D293FF3D6001D8039 /* PTZ_BackupTests.m */; };
 		941ED038293FF3D6001D8039 /* PTZ_BackupUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 941ED037293FF3D6001D8039 /* PTZ_BackupUITests.m */; };
 		941ED03A293FF3D6001D8039 /* PTZ_BackupUITestsLaunchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 941ED039293FF3D6001D8039 /* PTZ_BackupUITestsLaunchTests.m */; };
+		941ED04E2940197F001D8039 /* libvisca.c in Sources */ = {isa = PBXBuildFile; fileRef = 941ED0482940197F001D8039 /* libvisca.c */; };
+		941ED04F2940197F001D8039 /* libvisca_posix.c in Sources */ = {isa = PBXBuildFile; fileRef = 941ED04A2940197F001D8039 /* libvisca_posix.c */; };
+		941ED0502940197F001D8039 /* libvisca_serial_posix.c in Sources */ = {isa = PBXBuildFile; fileRef = 941ED04B2940197F001D8039 /* libvisca_serial_posix.c */; };
+		941ED0512940197F001D8039 /* libvisca_tcp.c in Sources */ = {isa = PBXBuildFile; fileRef = 941ED04C2940197F001D8039 /* libvisca_tcp.c */; };
+		941ED0522940197F001D8039 /* libvisca_udp.c in Sources */ = {isa = PBXBuildFile; fileRef = 941ED04D2940197F001D8039 /* libvisca_udp.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +51,12 @@
 		941ED033293FF3D6001D8039 /* PTZ BackupUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "PTZ BackupUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		941ED037293FF3D6001D8039 /* PTZ_BackupUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTZ_BackupUITests.m; sourceTree = "<group>"; };
 		941ED039293FF3D6001D8039 /* PTZ_BackupUITestsLaunchTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTZ_BackupUITestsLaunchTests.m; sourceTree = "<group>"; };
+		941ED0482940197F001D8039 /* libvisca.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = libvisca.c; sourceTree = "<group>"; };
+		941ED0492940197F001D8039 /* libvisca.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libvisca.h; sourceTree = "<group>"; };
+		941ED04A2940197F001D8039 /* libvisca_posix.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = libvisca_posix.c; sourceTree = "<group>"; };
+		941ED04B2940197F001D8039 /* libvisca_serial_posix.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = libvisca_serial_posix.c; sourceTree = "<group>"; };
+		941ED04C2940197F001D8039 /* libvisca_tcp.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = libvisca_tcp.c; sourceTree = "<group>"; };
+		941ED04D2940197F001D8039 /* libvisca_udp.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = libvisca_udp.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +113,12 @@
 				941ED01F293FF3D5001D8039 /* MainMenu.xib */,
 				941ED022293FF3D5001D8039 /* main.m */,
 				941ED024293FF3D5001D8039 /* PTZ_Backup.entitlements */,
+				941ED04A2940197F001D8039 /* libvisca_posix.c */,
+				941ED04B2940197F001D8039 /* libvisca_serial_posix.c */,
+				941ED04C2940197F001D8039 /* libvisca_tcp.c */,
+				941ED04D2940197F001D8039 /* libvisca_udp.c */,
+				941ED0482940197F001D8039 /* libvisca.c */,
+				941ED0492940197F001D8039 /* libvisca.h */,
 			);
 			path = "PTZ Backup";
 			sourceTree = "<group>";
@@ -252,8 +269,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				941ED04F2940197F001D8039 /* libvisca_posix.c in Sources */,
 				941ED023293FF3D5001D8039 /* main.m in Sources */,
 				941ED01C293FF3D4001D8039 /* AppDelegate.m in Sources */,
+				941ED0522940197F001D8039 /* libvisca_udp.c in Sources */,
+				941ED0502940197F001D8039 /* libvisca_serial_posix.c in Sources */,
+				941ED0512940197F001D8039 /* libvisca_tcp.c in Sources */,
+				941ED04E2940197F001D8039 /* libvisca.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
