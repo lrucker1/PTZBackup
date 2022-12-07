@@ -5,6 +5,8 @@
 //  Created by Lee Ann Rucker on 12/6/22.
 //
 
+// Icon <a href="https://www.flaticon.com/free-icons/ptz-camera" title="ptz camera icons">Ptz camera icons created by Freepik - Flaticon</a>
+
 #import "AppDelegate.h"
 #import "libvisca.h"
 
@@ -35,7 +37,7 @@ NSString *PTZCameraIPs[3] = {
 @property (readonly) NSInteger recallValue, restoreValue;
 @property NSInteger currentMode;
 @property BOOL autoRecall;
-@property BOOL testMode;
+@property BOOL cameraOpen;
 @end
 
 @implementation AppDelegate
@@ -102,14 +104,12 @@ NSString *PTZCameraIPs[3] = {
     if (self.openCamera != -1) {
         close_interface();
         self.openCamera = -1;
+        self.cameraOpen = NO;
     }
-    if (!self.testMode) {
-        BOOL success = open_interface([[self cameraIP] UTF8String]);
-        if (success) {
-            self.openCamera = self.cameraIndex;
-        } else {
-            self.testMode = YES;
-        }
+    BOOL success = open_interface([[self cameraIP] UTF8String]);
+    if (success) {
+        self.openCamera = self.cameraIndex;
+        self.cameraOpen = YES;
     }
 }
 
@@ -152,8 +152,8 @@ NSString *PTZCameraIPs[3] = {
 
 - (IBAction)recallScene:(id)sender {
     NSLog(@"./visca_cli -d %@ memory_recall %ld", [self cameraIP], (long)self.recallValue);
-    if (!self.testMode) {
-        [self loadCameraIfNeeded];
+    [self loadCameraIfNeeded];
+    if (self.cameraOpen) {
         if (VISCA_memory_recall(&iface, &camera, self.recallValue) != VISCA_SUCCESS) {
             NSLog(@"failed to recall scene %ld\n", self.recallValue);
         }
@@ -163,8 +163,8 @@ NSString *PTZCameraIPs[3] = {
 
 - (IBAction)restoreScene:(id)sender {
     NSLog(@"./visca_cli -d %@ memory_set %ld", [self cameraIP], (long)self.restoreValue);
-    if (!self.testMode) {
-        [self loadCameraIfNeeded];
+    [self loadCameraIfNeeded];
+    if (self.cameraOpen) {
         if (VISCA_memory_set(&iface, &camera, self.restoreValue) != VISCA_SUCCESS) {
             NSLog(@"failed to restore scene %ld\n", self.restoreValue);
         }
