@@ -28,9 +28,27 @@ NSString *PTZCameraIPs[3] = {
     @"192.168.13.202",
     @"192.168.13.203"
 };
+
+@interface NSAttributedString (PTZAdditions)
++ (id)attributedStringWithString: (NSString *)string;
+@end
+
+@implementation NSAttributedString (PTZAdditions)
+
++ (id)attributedStringWithString: (NSString *)string
+{
+   // Use self, so we get NSMutableAttributedStrings when called on that class.
+   NSAttributedString *attributedString = [[self alloc] initWithString:string];
+   return attributedString;
+}
+
+@end
+
 @interface AppDelegate ()
 
 @property (strong) IBOutlet NSWindow *window;
+@property (strong) IBOutlet NSTextView *console;
+
 @property NSInteger rangeOffset, currentIndex;
 @property NSInteger openCamera, cameraIndex;
 @property NSInteger recallOffset, restoreOffset;
@@ -38,6 +56,10 @@ NSString *PTZCameraIPs[3] = {
 @property NSInteger currentMode;
 @property BOOL autoRecall;
 @property BOOL cameraOpen;
+@property BOOL busy;
+@property BOOL hideRecallIcon, hideRestoreIcon;
+@property (strong) NSFileHandle* pipeReadHandle;
+@property (strong) NSPipe *pipe;
 @end
 
 @implementation AppDelegate
@@ -61,13 +83,30 @@ NSString *PTZCameraIPs[3] = {
    return keyPaths;
 }
 
+- (void)handlePipeNotification:(NSNotification *)notification {
+    [_pipeReadHandle readInBackgroundAndNotify];
+    NSString *stdOutString = [[NSString alloc] initWithData: [[notification userInfo] objectForKey: NSFileHandleNotificationDataItem] encoding: NSASCIIStringEncoding];
+    [self writeToConsole:stdOutString];
+}
+
+- (void)configConsoleRedirect {
+    _pipe = [NSPipe pipe];
+    _pipeReadHandle = [_pipe fileHandleForReading];
+    dup2([[_pipe fileHandleForWriting] fileDescriptor], fileno(stderr));
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlePipeNotification:) name:NSFileHandleReadCompletionNotification object:_pipeReadHandle];
+    [_pipeReadHandle readInBackgroundAndNotify];
+}
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // Insert code here to initialize your application
+    [self configConsoleRedirect];
     self.openCamera = -1;
     self.rangeOffset = 80; // TODO: Defaults
     self.currentIndex = 1;
     self.cameraIndex = 0;
     [self updateMode:0]; // TODO: Defaults
+    self.hideRestoreIcon = YES;
+    self.hideRecallIcon = YES;
     [self loadCameraIfNeeded];
 }
 
@@ -97,10 +136,8 @@ NSString *PTZCameraIPs[3] = {
     return [NSString stringWithFormat:@"./visca_cli -d %@ memory_recall %ld\n./visca_cli -d %@ memory_set %ld", cameraIP, (long)self.recallValue, cameraIP, (long)self.restoreValue];
 }
 
-- (void)loadCameraIfNeeded {
-    if (self.openCamera == self.cameraIndex) {
-        return;
-    }
+- (void)loadCamera {
+    self.busy = YES;
     if (self.openCamera != -1) {
         close_interface();
         self.openCamera = -1;
@@ -111,6 +148,23 @@ NSString *PTZCameraIPs[3] = {
         self.openCamera = self.cameraIndex;
         self.cameraOpen = YES;
     }
+    self.busy = NO;
+}
+
+- (void)loadCameraIfNeeded {
+    if (self.openCamera == self.cameraIndex) {
+        return;
+    }
+    [self loadCamera];
+}
+
+- (IBAction)reopenCamera:(id)sender {
+    // Close and reload
+    [self loadCamera];
+}
+
+- (IBAction)changeCamera:(id)sender {
+    [self loadCameraIfNeeded];
 }
 
 - (void)nextCamera {
@@ -151,24 +205,32 @@ NSString *PTZCameraIPs[3] = {
 }
 
 - (IBAction)recallScene:(id)sender {
-    NSLog(@"./visca_cli -d %@ memory_recall %ld", [self cameraIP], (long)self.recallValue);
+    self.hideRecallIcon = YES;
     [self loadCameraIfNeeded];
     if (self.cameraOpen) {
+        self.busy = YES;
         if (VISCA_memory_recall(&iface, &camera, self.recallValue) != VISCA_SUCCESS) {
             NSLog(@"failed to recall scene %ld\n", self.recallValue);
+            self.hideRecallIcon = NO;
         }
-
+        self.busy = NO;
+    } else {
+        self.hideRecallIcon = NO;
     }
 }
 
 - (IBAction)restoreScene:(id)sender {
-    NSLog(@"./visca_cli -d %@ memory_set %ld", [self cameraIP], (long)self.restoreValue);
+    self.hideRestoreIcon = YES;
     [self loadCameraIfNeeded];
     if (self.cameraOpen) {
+        self.busy = YES;
         if (VISCA_memory_set(&iface, &camera, self.restoreValue) != VISCA_SUCCESS) {
             NSLog(@"failed to restore scene %ld\n", self.restoreValue);
+            self.hideRestoreIcon = NO;
         }
-
+        self.busy = NO;
+    } else {
+        self.hideRestoreIcon = NO;
     }
 }
 
@@ -199,9 +261,10 @@ NSString *PTZCameraIPs[3] = {
     if (self.currentIndex < 9) {
         self.currentIndex += 1;
     } else {
-        [self nextCamera];
         self.currentIndex = 1;
+        [self nextCamera];
     }
+    self.hideRecallIcon = self.hideRestoreIcon = YES;
     if (self.autoRecall) {
         [self recallScene:sender];
     }
@@ -214,6 +277,18 @@ NSString *PTZCameraIPs[3] = {
 
 - (NSInteger)restoreValue {
     return _restoreOffset + _currentIndex;
+}
+
+
+- (void)writeToConsole:(NSString *)string // IN
+{
+   NSTextStorage *textStorage = [self.console textStorage];
+   [textStorage beginEditing];
+   [textStorage appendAttributedString:
+      [NSAttributedString attributedStringWithString:string]];
+   [textStorage endEditing];
+   NSRange range = NSMakeRange([[self.console string] length], 0);
+   [self.console scrollRangeToVisible:range];
 }
 
 @end
