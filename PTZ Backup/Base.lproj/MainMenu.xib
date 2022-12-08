@@ -372,9 +372,9 @@
                         <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="Vj9-tT-UZQ">
                             <font key="font" metaFont="system"/>
                             <segments>
-                                <segment label="Restore" width="59" selected="YES"/>
-                                <segment label="Check" tag="1"/>
-                                <segment label="Backup"/>
+                                <segment label="Restore" toolTip="Restore scenes from backup location" width="59" selected="YES"/>
+                                <segment label="Check" toolTip="Recall and set current scenes" tag="1"/>
+                                <segment label="Backup" toolTip="Copy current scenes to backup location"/>
                             </segments>
                         </segmentedCell>
                         <connections>
@@ -423,12 +423,13 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
+                            <accessibilityConnection property="title" destination="ZT3-Mm-z7N" id="bVJ-lK-MWE"/>
                             <action selector="changeRangeOffset:" target="Voe-Tx-rLC" id="rrv-I1-FhV"/>
                             <binding destination="Voe-Tx-rLC" name="value" keyPath="rangeOffset" id="lVs-5v-fSO"/>
                             <outlet property="delegate" destination="Voe-Tx-rLC" id="v12-zO-Z3U"/>
                         </connections>
                     </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="ZT3-Mm-z7N">
+                    <textField toolTip="10 to 110" horizontalHuggingPriority="251" verticalHuggingPriority="750" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="ZT3-Mm-z7N">
                         <rect key="frame" x="270" y="213" width="46" height="16"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Offset:" id="sDN-Ot-qBa">
                             <font key="font" metaFont="system"/>
@@ -547,12 +548,13 @@ DQ
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
+                            <accessibilityConnection property="title" destination="hUh-Jn-YPK" id="Blp-tb-alF"/>
                             <action selector="changeCurrentIndex:" target="Voe-Tx-rLC" id="mvG-ob-XmM"/>
                             <binding destination="Voe-Tx-rLC" name="value" keyPath="currentIndex" id="O9n-ZJ-VrZ"/>
                             <outlet property="delegate" destination="Voe-Tx-rLC" id="flS-PG-hZr"/>
                         </connections>
                     </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hUh-Jn-YPK">
+                    <textField toolTip="1 to 9" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hUh-Jn-YPK">
                         <rect key="frame" x="275" y="180" width="41" height="16"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Index:" id="Tyq-6Q-2U1">
                             <font key="font" metaFont="system"/>

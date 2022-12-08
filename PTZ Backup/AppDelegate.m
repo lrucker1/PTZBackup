@@ -99,7 +99,11 @@ NSString *PTZCameraIPs[3] = {
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // Insert code here to initialize your application
+#if DEBUG
+    [self writeToConsole:@"Debug build; log is written to stderr"];
+#else
     [self configConsoleRedirect];
+#endif
     self.openCamera = -1;
     self.rangeOffset = 80; // TODO: Defaults
     self.currentIndex = 1;
@@ -252,6 +256,11 @@ NSString *PTZCameraIPs[3] = {
 }
 
 - (IBAction)changeCurrentIndex:(id)sender {
+    if (self.currentIndex > 9) {
+        self.currentIndex = 9;
+    } else if (self.currentIndex < 1) {
+        self.currentIndex = 1;
+    }
     if (self.autoRecall) {
         [self recallScene:sender];
     }
