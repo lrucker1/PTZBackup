@@ -22,6 +22,8 @@
 #ifndef __LIBVISCA_H__
 #define __LIBVISCA_H__
 
+#include <stddef.h>
+
 #if defined(_WIN32) || defined(WIN32) || defined(__WIN32__) || defined(_MSC_VER)
 #ifndef VISCA_API
 #define VISCA_API __declspec(dllimport)
@@ -369,8 +371,8 @@ extern "C" {
 struct _VISCA_interface;
 
 typedef struct _VISCA_callback {
-	int (*write)(struct _VISCA_interface *iface, const void *buf, int length);
-	int (*read)(struct _VISCA_interface *iface, void *buf, int length);
+    size_t (*write)(struct _VISCA_interface *iface, const void *buf, int length);
+    size_t (*read)(struct _VISCA_interface *iface, void *buf, int length);
 	void (*wait_read)(struct _VISCA_interface *iface);
 	void (*clear_error)(struct _VISCA_interface *iface);
 	int (*close)(struct _VISCA_interface *iface);
@@ -678,6 +680,10 @@ VISCA_API uint32_t VISCA_set_irreceive_on(VISCAInterface_t *iface, VISCACamera_t
 VISCA_API uint32_t VISCA_set_irreceive_off(VISCAInterface_t *iface, VISCACamera_t *camera);
 
 VISCA_API uint32_t VISCA_set_irreceive_onoff(VISCAInterface_t *iface, VISCACamera_t *camera);
+
+/*  preset_speed should be in the range 01 - 18 */
+
+VISCA_API uint32_t VISCA_set_pantilt_preset_speed(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t preset_speed);
 
 /*  pan_speed should be in the range 01 - 18.
     tilt_speed should be in the range 01 - 14 */

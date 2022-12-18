@@ -6,55 +6,10 @@
 	<integer>10</integer>
 	<key>logs</key>
 	<dict>
-		<key>0983ADE6-627B-4B67-82D0-7AA98B279025</key>
+		<key>015D37A4-F014-4DAB-8F25-BA436735A282</key>
 		<dict>
 			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>87157A79-B301-490A-89BF-6D9ABC7CD831</string>
-			<key>auxiliaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>className</key>
-			<string>IDESchemeActionsInvocationRecord</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
-			<key>fileName</key>
-			<string>Run-PTZ Backup-2022.12.08_11-19-16--0800.xcresult</string>
-			<key>hasAuxiliaryLog</key>
-			<true/>
-			<key>hasConsoleLog</key>
-			<true/>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>PTZ Backup project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>PTZ Backup</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run PTZ Backup</string>
-			<key>timeStartedRecording</key>
-			<real>692219956.99175501</real>
-			<key>timeStoppedRecording</key>
-			<real>0.0</real>
-			<key>title</key>
-			<string>Run PTZ Backup</string>
-			<key>uniqueIdentifier</key>
-			<string>0983ADE6-627B-4B67-82D0-7AA98B279025</string>
-		</dict>
-		<key>179FD962-9142-4EF4-A099-9BC41C640183</key>
-		<dict>
-			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>D63FA296-4926-4322-8EB6-06144E3A198D</string>
+			<string>83F6DC8F-EB66-48F5-B020-4BE4E68195F5</string>
 			<key>auxiliaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
@@ -67,7 +22,7 @@
 			<key>domainType</key>
 			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
 			<key>fileName</key>
-			<string>Run-PTZ Backup-2022.12.08_10-41-34--0800.xcresult</string>
+			<string>Run-PTZ Backup - Local-2022.12.15_00-40-40--0800.xcresult</string>
 			<key>hasAuxiliaryLog</key>
 			<true/>
 			<key>hasConsoleLog</key>
@@ -82,24 +37,24 @@
 			<key>schemeIdentifier-containerName</key>
 			<string>PTZ Backup project</string>
 			<key>schemeIdentifier-schemeName</key>
-			<string>PTZ Backup</string>
+			<string>PTZ Backup - Local</string>
 			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
+			<integer>0</integer>
 			<key>signature</key>
-			<string>Run PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>timeStartedRecording</key>
-			<real>692217694.14361405</real>
+			<real>692786440.31654203</real>
 			<key>timeStoppedRecording</key>
 			<real>0.0</real>
 			<key>title</key>
-			<string>Run PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>uniqueIdentifier</key>
-			<string>179FD962-9142-4EF4-A099-9BC41C640183</string>
+			<string>015D37A4-F014-4DAB-8F25-BA436735A282</string>
 		</dict>
-		<key>190F8AC6-86AA-446A-9F87-2134C67D89E6</key>
+		<key>0BDEEEEF-4FE5-4E47-8355-5FD070DEBD6F</key>
 		<dict>
 			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>6E72EB28-3650-4288-810F-0D0F18BCF78F</string>
+			<string>9066D747-A2A1-4A24-9C05-D5672AB1C1D3</string>
 			<key>auxiliaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
@@ -112,7 +67,7 @@
 			<key>domainType</key>
 			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
 			<key>fileName</key>
-			<string>Run-PTZ Backup-2022.12.08_11-05-40--0800.xcresult</string>
+			<string>Run-PTZ Backup - Local-2022.12.17_13-45-56--0800.xcresult</string>
 			<key>hasAuxiliaryLog</key>
 			<true/>
 			<key>hasConsoleLog</key>
@@ -127,69 +82,24 @@
 			<key>schemeIdentifier-containerName</key>
 			<string>PTZ Backup project</string>
 			<key>schemeIdentifier-schemeName</key>
-			<string>PTZ Backup</string>
+			<string>PTZ Backup - Local</string>
 			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
+			<integer>0</integer>
 			<key>signature</key>
-			<string>Run PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>timeStartedRecording</key>
-			<real>692219140.30701399</real>
+			<real>693006356.05489504</real>
 			<key>timeStoppedRecording</key>
 			<real>0.0</real>
 			<key>title</key>
-			<string>Run PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>uniqueIdentifier</key>
-			<string>190F8AC6-86AA-446A-9F87-2134C67D89E6</string>
+			<string>0BDEEEEF-4FE5-4E47-8355-5FD070DEBD6F</string>
 		</dict>
-		<key>22AFFE1F-9AE6-4418-83E0-F23E6F490A70</key>
+		<key>1BB5AFC7-45BE-4CBF-A73F-1C0448CBAAAD</key>
 		<dict>
 			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>A9BDCBD3-A5E7-45E7-B929-9DC813D0FAFA</string>
-			<key>auxiliaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>className</key>
-			<string>IDESchemeActionsInvocationRecord</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
-			<key>fileName</key>
-			<string>Run-PTZ Backup-2022.12.08_11-00-23--0800.xcresult</string>
-			<key>hasAuxiliaryLog</key>
-			<true/>
-			<key>hasConsoleLog</key>
-			<true/>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>PTZ Backup project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>PTZ Backup</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run PTZ Backup</string>
-			<key>timeStartedRecording</key>
-			<real>692218823.48342502</real>
-			<key>timeStoppedRecording</key>
-			<real>0.0</real>
-			<key>title</key>
-			<string>Run PTZ Backup</string>
-			<key>uniqueIdentifier</key>
-			<string>22AFFE1F-9AE6-4418-83E0-F23E6F490A70</string>
-		</dict>
-		<key>27B2556D-3CEC-4B1E-A362-E4CAB7BAE4FD</key>
-		<dict>
-			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>73361B60-C00E-40B6-B62D-208CCD1015B3</string>
+			<string>A15CA7D3-5BBC-4C88-9EFB-B8A5D16E5475</string>
 			<key>auxiliaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
@@ -202,7 +112,7 @@
 			<key>domainType</key>
 			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
 			<key>fileName</key>
-			<string>Run-PTZ Backup-2022.12.06_20-31-07--0800.xcresult</string>
+			<string>Run-PTZ Backup - Local-2022.12.16_23-52-15--0800.xcresult</string>
 			<key>hasAuxiliaryLog</key>
 			<true/>
 			<key>hasConsoleLog</key>
@@ -217,24 +127,24 @@
 			<key>schemeIdentifier-containerName</key>
 			<string>PTZ Backup project</string>
 			<key>schemeIdentifier-schemeName</key>
-			<string>PTZ Backup</string>
+			<string>PTZ Backup - Local</string>
 			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
+			<integer>0</integer>
 			<key>signature</key>
-			<string>Run PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>timeStartedRecording</key>
-			<real>692080267.10467994</real>
+			<real>692956335.024037</real>
 			<key>timeStoppedRecording</key>
 			<real>0.0</real>
 			<key>title</key>
-			<string>Run PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>uniqueIdentifier</key>
-			<string>27B2556D-3CEC-4B1E-A362-E4CAB7BAE4FD</string>
+			<string>1BB5AFC7-45BE-4CBF-A73F-1C0448CBAAAD</string>
 		</dict>
-		<key>2B14A404-0E51-4AE2-83E9-B6E01B05838E</key>
+		<key>1BE0BC2B-03BE-4A42-B149-7EA7775B54ED</key>
 		<dict>
 			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>56E201B6-EFBC-452E-B7F1-AD00A6A7E051</string>
+			<string>F7C08D6B-9413-46A3-9DF5-5D2FFD85DE7C</string>
 			<key>auxiliaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
@@ -247,7 +157,7 @@
 			<key>domainType</key>
 			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
 			<key>fileName</key>
-			<string>Run-PTZ Backup-2022.12.08_10-44-02--0800.xcresult</string>
+			<string>Run-PTZ Backup - Local-2022.12.17_12-18-22--0800.xcresult</string>
 			<key>hasAuxiliaryLog</key>
 			<true/>
 			<key>hasConsoleLog</key>
@@ -262,24 +172,114 @@
 			<key>schemeIdentifier-containerName</key>
 			<string>PTZ Backup project</string>
 			<key>schemeIdentifier-schemeName</key>
-			<string>PTZ Backup</string>
+			<string>PTZ Backup - Local</string>
 			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
+			<integer>0</integer>
 			<key>signature</key>
-			<string>Run PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>timeStartedRecording</key>
-			<real>692217842.922207</real>
+			<real>693001102.40668499</real>
 			<key>timeStoppedRecording</key>
 			<real>0.0</real>
 			<key>title</key>
-			<string>Run PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>uniqueIdentifier</key>
-			<string>2B14A404-0E51-4AE2-83E9-B6E01B05838E</string>
+			<string>1BE0BC2B-03BE-4A42-B149-7EA7775B54ED</string>
 		</dict>
-		<key>3451CD51-D064-4920-AF3E-4C17C81B99DB</key>
+		<key>1E4114C4-58BC-4A8E-A6E6-6B7A527E1DB4</key>
 		<dict>
 			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>6C1E46B3-4E38-4D60-950D-587637C3554B</string>
+			<string>3B966E89-020B-4B7F-AC11-817ABB31E666</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.16_22-49-07--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>692952547.36364698</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>1E4114C4-58BC-4A8E-A6E6-6B7A527E1DB4</string>
+		</dict>
+		<key>231E633C-7FD7-49EE-92F7-8B03D9BED8CA</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>D1156CFD-FBFC-493E-823C-EA99FD7176FC</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.17_11-25-22--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>692997922.93445694</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>231E633C-7FD7-49EE-92F7-8B03D9BED8CA</string>
+		</dict>
+		<key>25679B41-4F14-4EF3-836E-0125AAC4F7CA</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>12631E01-4B53-4FF0-A22A-71A14A757BE3</string>
 			<key>auxiliaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
@@ -292,7 +292,7 @@
 			<key>domainType</key>
 			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
 			<key>fileName</key>
-			<string>Run-PTZ Backup-2022.12.08_11-07-34--0800.xcresult</string>
+			<string>Run-PTZ Backup - Local-2022.12.16_22-03-19--0800.xcresult</string>
 			<key>hasAuxiliaryLog</key>
 			<true/>
 			<key>hasConsoleLog</key>
@@ -307,73 +307,28 @@
 			<key>schemeIdentifier-containerName</key>
 			<string>PTZ Backup project</string>
 			<key>schemeIdentifier-schemeName</key>
-			<string>PTZ Backup</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run PTZ Backup</string>
-			<key>timeStartedRecording</key>
-			<real>692219254.29234099</real>
-			<key>timeStoppedRecording</key>
-			<real>0.0</real>
-			<key>title</key>
-			<string>Run PTZ Backup</string>
-			<key>uniqueIdentifier</key>
-			<string>3451CD51-D064-4920-AF3E-4C17C81B99DB</string>
-		</dict>
-		<key>443B70F0-3515-47D6-9607-72DFD9383503</key>
-		<dict>
-			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>C3F970CB-F6DB-46A1-9CD1-B347DC3ABBBC</string>
-			<key>auxiliaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>W</string>
-			</dict>
-			<key>className</key>
-			<string>IDESchemeActionsInvocationRecord</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
-			<key>fileName</key>
-			<string>Run-Copy of PTZ Backup-2022.12.08_11-35-57--0800.xcresult</string>
-			<key>hasAuxiliaryLog</key>
-			<true/>
-			<key>hasConsoleLog</key>
-			<true/>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>W</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>PTZ Backup project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>Copy of PTZ Backup</string>
+			<string>PTZ Backup - Local</string>
 			<key>schemeIdentifier-sharedScheme</key>
 			<integer>0</integer>
 			<key>signature</key>
-			<string>Run Copy of PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>timeStartedRecording</key>
-			<real>692220957.281147</real>
+			<real>692949799.76755202</real>
 			<key>timeStoppedRecording</key>
 			<real>0.0</real>
 			<key>title</key>
-			<string>Run Copy of PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>uniqueIdentifier</key>
-			<string>443B70F0-3515-47D6-9607-72DFD9383503</string>
+			<string>25679B41-4F14-4EF3-836E-0125AAC4F7CA</string>
 		</dict>
-		<key>4B640CB2-BC5D-4401-A945-0BAE035B93EB</key>
+		<key>2A59F60F-A72E-45CB-97B5-0709A182426D</key>
 		<dict>
 			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>B794C724-E8CE-4921-A5D9-585581C5CF0B</string>
+			<string>36AB43A1-9E0A-4921-9A8A-A857EBD6A390</string>
 			<key>auxiliaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
-				<string>W</string>
+				<string>E</string>
 			</dict>
 			<key>className</key>
 			<string>IDESchemeActionsInvocationRecord</string>
@@ -382,7 +337,7 @@
 			<key>domainType</key>
 			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
 			<key>fileName</key>
-			<string>Run-Copy of PTZ Backup-2022.12.08_11-38-27--0800.xcresult</string>
+			<string>Run-PTZ Backup - Local-2022.12.16_23-34-11--0800.xcresult</string>
 			<key>hasAuxiliaryLog</key>
 			<true/>
 			<key>hasConsoleLog</key>
@@ -392,164 +347,29 @@
 			<key>primaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
-				<string>W</string>
+				<string>E</string>
 			</dict>
 			<key>schemeIdentifier-containerName</key>
 			<string>PTZ Backup project</string>
 			<key>schemeIdentifier-schemeName</key>
-			<string>Copy of PTZ Backup</string>
+			<string>PTZ Backup - Local</string>
 			<key>schemeIdentifier-sharedScheme</key>
 			<integer>0</integer>
 			<key>signature</key>
-			<string>Run Copy of PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>timeStartedRecording</key>
-			<real>692221107.21365702</real>
+			<real>692955251.44963801</real>
 			<key>timeStoppedRecording</key>
 			<real>0.0</real>
 			<key>title</key>
-			<string>Run Copy of PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>uniqueIdentifier</key>
-			<string>4B640CB2-BC5D-4401-A945-0BAE035B93EB</string>
+			<string>2A59F60F-A72E-45CB-97B5-0709A182426D</string>
 		</dict>
-		<key>5443985F-8E89-4AF6-9A90-CB51BDFAEBE3</key>
+		<key>2A961BC2-C0AC-4104-8287-995DCAC97BA7</key>
 		<dict>
 			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>F2B4B4F4-E498-4E25-B061-533B09434EA2</string>
-			<key>auxiliaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>className</key>
-			<string>IDESchemeActionsInvocationRecord</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
-			<key>fileName</key>
-			<string>Run-PTZ Backup-2022.12.08_11-21-15--0800.xcresult</string>
-			<key>hasAuxiliaryLog</key>
-			<true/>
-			<key>hasConsoleLog</key>
-			<true/>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>PTZ Backup project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>PTZ Backup</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run PTZ Backup</string>
-			<key>timeStartedRecording</key>
-			<real>692220075.84349597</real>
-			<key>timeStoppedRecording</key>
-			<real>0.0</real>
-			<key>title</key>
-			<string>Run PTZ Backup</string>
-			<key>uniqueIdentifier</key>
-			<string>5443985F-8E89-4AF6-9A90-CB51BDFAEBE3</string>
-		</dict>
-		<key>68FB8FAA-A5D8-4E75-BDB8-D5F11D0721F4</key>
-		<dict>
-			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>721543C3-E775-4C04-9DB0-B539D5B798C8</string>
-			<key>auxiliaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>className</key>
-			<string>IDESchemeActionsInvocationRecord</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
-			<key>fileName</key>
-			<string>Run-PTZ Backup-2022.12.08_11-26-25--0800.xcresult</string>
-			<key>hasAuxiliaryLog</key>
-			<true/>
-			<key>hasConsoleLog</key>
-			<true/>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>PTZ Backup project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>PTZ Backup</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run PTZ Backup</string>
-			<key>timeStartedRecording</key>
-			<real>692220385.60640895</real>
-			<key>timeStoppedRecording</key>
-			<real>0.0</real>
-			<key>title</key>
-			<string>Run PTZ Backup</string>
-			<key>uniqueIdentifier</key>
-			<string>68FB8FAA-A5D8-4E75-BDB8-D5F11D0721F4</string>
-		</dict>
-		<key>6D7D065E-332E-42CB-8552-BF70A7566A32</key>
-		<dict>
-			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>D617D052-885F-43D4-9E74-E0ECFE0725C6</string>
-			<key>auxiliaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>className</key>
-			<string>IDESchemeActionsInvocationRecord</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
-			<key>fileName</key>
-			<string>Run-PTZ Backup-2022.12.08_10-56-17--0800.xcresult</string>
-			<key>hasAuxiliaryLog</key>
-			<true/>
-			<key>hasConsoleLog</key>
-			<true/>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>PTZ Backup project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>PTZ Backup</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run PTZ Backup</string>
-			<key>timeStartedRecording</key>
-			<real>692218577.39708698</real>
-			<key>timeStoppedRecording</key>
-			<real>0.0</real>
-			<key>title</key>
-			<string>Run PTZ Backup</string>
-			<key>uniqueIdentifier</key>
-			<string>6D7D065E-332E-42CB-8552-BF70A7566A32</string>
-		</dict>
-		<key>807E2E06-1CD6-429B-89C2-CEC82A794CBE</key>
-		<dict>
-			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>7AE41120-DF28-4AA1-AC78-B284120B3568</string>
+			<string>20BC3244-C001-42F9-934F-BF80A5F32E33</string>
 			<key>auxiliaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
@@ -562,7 +382,7 @@
 			<key>domainType</key>
 			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
 			<key>fileName</key>
-			<string>Run-PTZ Backup-2022.12.07_22-57-31--0800.xcresult</string>
+			<string>Run-PTZ Backup - Local-2022.12.17_12-20-14--0800.xcresult</string>
 			<key>hasAuxiliaryLog</key>
 			<true/>
 			<key>hasConsoleLog</key>
@@ -577,114 +397,24 @@
 			<key>schemeIdentifier-containerName</key>
 			<string>PTZ Backup project</string>
 			<key>schemeIdentifier-schemeName</key>
-			<string>PTZ Backup</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run PTZ Backup</string>
-			<key>timeStartedRecording</key>
-			<real>692175451.53491199</real>
-			<key>timeStoppedRecording</key>
-			<real>0.0</real>
-			<key>title</key>
-			<string>Run PTZ Backup</string>
-			<key>uniqueIdentifier</key>
-			<string>807E2E06-1CD6-429B-89C2-CEC82A794CBE</string>
-		</dict>
-		<key>8095C654-C1D8-4917-97BD-C3CB70F2162D</key>
-		<dict>
-			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>CC748636-365B-46D0-85A4-BB5FBE6D6C0F</string>
-			<key>auxiliaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>W</string>
-			</dict>
-			<key>className</key>
-			<string>IDESchemeActionsInvocationRecord</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
-			<key>fileName</key>
-			<string>Run-Copy of PTZ Backup-2022.12.08_14-21-54--0800.xcresult</string>
-			<key>hasAuxiliaryLog</key>
-			<true/>
-			<key>hasConsoleLog</key>
-			<true/>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>W</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>PTZ Backup project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>Copy of PTZ Backup</string>
+			<string>PTZ Backup - Local</string>
 			<key>schemeIdentifier-sharedScheme</key>
 			<integer>0</integer>
 			<key>signature</key>
-			<string>Run Copy of PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>timeStartedRecording</key>
-			<real>692230914.16379905</real>
+			<real>693001214.598804</real>
 			<key>timeStoppedRecording</key>
 			<real>0.0</real>
 			<key>title</key>
-			<string>Run Copy of PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>uniqueIdentifier</key>
-			<string>8095C654-C1D8-4917-97BD-C3CB70F2162D</string>
+			<string>2A961BC2-C0AC-4104-8287-995DCAC97BA7</string>
 		</dict>
-		<key>882B6D9E-8619-4B21-B8A0-3D589998C79A</key>
+		<key>3A2B95D7-0BF9-46DF-903F-6D8A535B1C4C</key>
 		<dict>
 			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>61C2408A-0A41-417D-9BC0-E4004B84E767</string>
-			<key>auxiliaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>className</key>
-			<string>IDESchemeActionsInvocationRecord</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
-			<key>fileName</key>
-			<string>Run-PTZ Backup-2022.12.08_10-50-04--0800.xcresult</string>
-			<key>hasAuxiliaryLog</key>
-			<true/>
-			<key>hasConsoleLog</key>
-			<true/>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>PTZ Backup project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>PTZ Backup</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run PTZ Backup</string>
-			<key>timeStartedRecording</key>
-			<real>692218204.77752399</real>
-			<key>timeStoppedRecording</key>
-			<real>0.0</real>
-			<key>title</key>
-			<string>Run PTZ Backup</string>
-			<key>uniqueIdentifier</key>
-			<string>882B6D9E-8619-4B21-B8A0-3D589998C79A</string>
-		</dict>
-		<key>971430D1-3DA2-4E22-9C80-04B870A6EE63</key>
-		<dict>
-			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>1EE7C2D2-62FB-4138-8CE1-AE63AA642CF3</string>
+			<string>43903126-2A86-41A5-967C-D2408F362C32</string>
 			<key>auxiliaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
@@ -697,7 +427,7 @@
 			<key>domainType</key>
 			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
 			<key>fileName</key>
-			<string>Run-Copy of PTZ Backup-2022.12.08_11-27-21--0800.xcresult</string>
+			<string>Run-PTZ Backup - Local-2022.12.17_13-41-29--0800.xcresult</string>
 			<key>hasAuxiliaryLog</key>
 			<true/>
 			<key>hasConsoleLog</key>
@@ -712,24 +442,24 @@
 			<key>schemeIdentifier-containerName</key>
 			<string>PTZ Backup project</string>
 			<key>schemeIdentifier-schemeName</key>
-			<string>Copy of PTZ Backup</string>
+			<string>PTZ Backup - Local</string>
 			<key>schemeIdentifier-sharedScheme</key>
 			<integer>0</integer>
 			<key>signature</key>
-			<string>Run Copy of PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>timeStartedRecording</key>
-			<real>692220441.33152103</real>
+			<real>693006089.92293406</real>
 			<key>timeStoppedRecording</key>
 			<real>0.0</real>
 			<key>title</key>
-			<string>Run Copy of PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>uniqueIdentifier</key>
-			<string>971430D1-3DA2-4E22-9C80-04B870A6EE63</string>
+			<string>3A2B95D7-0BF9-46DF-903F-6D8A535B1C4C</string>
 		</dict>
-		<key>9BEF3EBB-E0FB-4FC3-831B-0E03494BB129</key>
+		<key>40322FB5-33F0-42BC-A434-76007B524392</key>
 		<dict>
 			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>E5C9A6D6-77C6-44A9-B2F1-19256FBBDD21</string>
+			<string>B79B7D0F-72A3-4F2F-A6FE-A8A82CF01DBA</string>
 			<key>auxiliaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
@@ -742,7 +472,7 @@
 			<key>domainType</key>
 			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
 			<key>fileName</key>
-			<string>Run-PTZ Backup-2022.12.07_22-59-43--0800.xcresult</string>
+			<string>Run-PTZ Backup - Local-2022.12.17_13-42-27--0800.xcresult</string>
 			<key>hasAuxiliaryLog</key>
 			<true/>
 			<key>hasConsoleLog</key>
@@ -757,114 +487,24 @@
 			<key>schemeIdentifier-containerName</key>
 			<string>PTZ Backup project</string>
 			<key>schemeIdentifier-schemeName</key>
-			<string>PTZ Backup</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run PTZ Backup</string>
-			<key>timeStartedRecording</key>
-			<real>692175583.486148</real>
-			<key>timeStoppedRecording</key>
-			<real>0.0</real>
-			<key>title</key>
-			<string>Run PTZ Backup</string>
-			<key>uniqueIdentifier</key>
-			<string>9BEF3EBB-E0FB-4FC3-831B-0E03494BB129</string>
-		</dict>
-		<key>9C3A0420-99BB-4929-95CD-83762F271D7E</key>
-		<dict>
-			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>85917CD3-3A80-4BE7-87E9-B6BEC0D363CB</string>
-			<key>auxiliaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>className</key>
-			<string>IDESchemeActionsInvocationRecord</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
-			<key>fileName</key>
-			<string>Run-PTZ Backup-2022.12.08_10-49-09--0800.xcresult</string>
-			<key>hasAuxiliaryLog</key>
-			<true/>
-			<key>hasConsoleLog</key>
-			<true/>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>PTZ Backup project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>PTZ Backup</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run PTZ Backup</string>
-			<key>timeStartedRecording</key>
-			<real>692218149.83656001</real>
-			<key>timeStoppedRecording</key>
-			<real>0.0</real>
-			<key>title</key>
-			<string>Run PTZ Backup</string>
-			<key>uniqueIdentifier</key>
-			<string>9C3A0420-99BB-4929-95CD-83762F271D7E</string>
-		</dict>
-		<key>9D84C22F-318F-4992-8F19-AD83808A25B4</key>
-		<dict>
-			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>F0E5DC3D-F705-4375-AED7-4E1E2363F9DB</string>
-			<key>auxiliaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>W</string>
-			</dict>
-			<key>className</key>
-			<string>IDESchemeActionsInvocationRecord</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
-			<key>fileName</key>
-			<string>Run-Copy of PTZ Backup-2022.12.08_14-22-13--0800.xcresult</string>
-			<key>hasAuxiliaryLog</key>
-			<true/>
-			<key>hasConsoleLog</key>
-			<true/>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>W</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>PTZ Backup project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>Copy of PTZ Backup</string>
+			<string>PTZ Backup - Local</string>
 			<key>schemeIdentifier-sharedScheme</key>
 			<integer>0</integer>
 			<key>signature</key>
-			<string>Run Copy of PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>timeStartedRecording</key>
-			<real>692230933.67712498</real>
+			<real>693006147.49270797</real>
 			<key>timeStoppedRecording</key>
 			<real>0.0</real>
 			<key>title</key>
-			<string>Run Copy of PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>uniqueIdentifier</key>
-			<string>9D84C22F-318F-4992-8F19-AD83808A25B4</string>
+			<string>40322FB5-33F0-42BC-A434-76007B524392</string>
 		</dict>
-		<key>A43DFC83-0284-4C2E-B1B2-C667AFD0EC42</key>
+		<key>49472F87-801D-4BBA-9E93-124CAA06C643</key>
 		<dict>
 			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>C83D368F-3EA2-4B4F-8540-928FBBC2840B</string>
+			<string>00D148E3-5E98-4912-B89A-FC7C0AFB3C82</string>
 			<key>auxiliaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
@@ -877,7 +517,7 @@
 			<key>domainType</key>
 			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
 			<key>fileName</key>
-			<string>Run-Copy of PTZ Backup-2022.12.08_11-35-21--0800.xcresult</string>
+			<string>Run-PTZ Backup - Local-2022.12.14_15-05-59--0800.xcresult</string>
 			<key>hasAuxiliaryLog</key>
 			<true/>
 			<key>hasConsoleLog</key>
@@ -892,69 +532,24 @@
 			<key>schemeIdentifier-containerName</key>
 			<string>PTZ Backup project</string>
 			<key>schemeIdentifier-schemeName</key>
-			<string>Copy of PTZ Backup</string>
+			<string>PTZ Backup - Local</string>
 			<key>schemeIdentifier-sharedScheme</key>
 			<integer>0</integer>
 			<key>signature</key>
-			<string>Run Copy of PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>timeStartedRecording</key>
-			<real>692220921.79620099</real>
+			<real>692751959.80629206</real>
 			<key>timeStoppedRecording</key>
 			<real>0.0</real>
 			<key>title</key>
-			<string>Run Copy of PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>uniqueIdentifier</key>
-			<string>A43DFC83-0284-4C2E-B1B2-C667AFD0EC42</string>
+			<string>49472F87-801D-4BBA-9E93-124CAA06C643</string>
 		</dict>
-		<key>AAF5C1A6-CFE6-4828-B2C4-236F46BAB116</key>
+		<key>52B87C02-810E-4771-B335-7649014B0288</key>
 		<dict>
 			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>4B959B6F-61F4-47BB-9D34-2CD6B83C0D5C</string>
-			<key>auxiliaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>className</key>
-			<string>IDESchemeActionsInvocationRecord</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
-			<key>fileName</key>
-			<string>Run-PTZ Backup-2022.12.08_11-04-52--0800.xcresult</string>
-			<key>hasAuxiliaryLog</key>
-			<true/>
-			<key>hasConsoleLog</key>
-			<true/>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>PTZ Backup project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>PTZ Backup</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run PTZ Backup</string>
-			<key>timeStartedRecording</key>
-			<real>692219092.01601398</real>
-			<key>timeStoppedRecording</key>
-			<real>0.0</real>
-			<key>title</key>
-			<string>Run PTZ Backup</string>
-			<key>uniqueIdentifier</key>
-			<string>AAF5C1A6-CFE6-4828-B2C4-236F46BAB116</string>
-		</dict>
-		<key>AFB539FB-0050-4EF3-9B00-67D8410092CF</key>
-		<dict>
-			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>C7ED55C6-48ED-4D27-92FD-5C985D306DDD</string>
+			<string>DBE83B3D-893A-43C3-B9EA-1642C103C6B0</string>
 			<key>auxiliaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
@@ -967,7 +562,7 @@
 			<key>domainType</key>
 			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
 			<key>fileName</key>
-			<string>Run-Copy of PTZ Backup-2022.12.08_11-38-32--0800.xcresult</string>
+			<string>Run-PTZ Backup - Local-2022.12.15_00-38-32--0800.xcresult</string>
 			<key>hasAuxiliaryLog</key>
 			<true/>
 			<key>hasConsoleLog</key>
@@ -982,24 +577,24 @@
 			<key>schemeIdentifier-containerName</key>
 			<string>PTZ Backup project</string>
 			<key>schemeIdentifier-schemeName</key>
-			<string>Copy of PTZ Backup</string>
+			<string>PTZ Backup - Local</string>
 			<key>schemeIdentifier-sharedScheme</key>
 			<integer>0</integer>
 			<key>signature</key>
-			<string>Run Copy of PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>timeStartedRecording</key>
-			<real>692221112.60749805</real>
+			<real>692786312.84218895</real>
 			<key>timeStoppedRecording</key>
 			<real>0.0</real>
 			<key>title</key>
-			<string>Run Copy of PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>uniqueIdentifier</key>
-			<string>AFB539FB-0050-4EF3-9B00-67D8410092CF</string>
+			<string>52B87C02-810E-4771-B335-7649014B0288</string>
 		</dict>
-		<key>C433AF90-853F-4111-B36D-BF3FF7AD8CCB</key>
+		<key>599A3485-D9B1-4411-8474-134E9D3B7570</key>
 		<dict>
 			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>C5275579-3C89-4BE2-813C-64F472A82559</string>
+			<string>FE6F5154-25A3-41EB-A3F4-DDB36642E01A</string>
 			<key>auxiliaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
@@ -1012,7 +607,7 @@
 			<key>domainType</key>
 			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
 			<key>fileName</key>
-			<string>Run-PTZ Backup-2022.12.07_22-56-39--0800.xcresult</string>
+			<string>Run-PTZ Backup - Local-2022.12.16_22-47-52--0800.xcresult</string>
 			<key>hasAuxiliaryLog</key>
 			<true/>
 			<key>hasConsoleLog</key>
@@ -1027,339 +622,24 @@
 			<key>schemeIdentifier-containerName</key>
 			<string>PTZ Backup project</string>
 			<key>schemeIdentifier-schemeName</key>
-			<string>PTZ Backup</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run PTZ Backup</string>
-			<key>timeStartedRecording</key>
-			<real>692175399.15490699</real>
-			<key>timeStoppedRecording</key>
-			<real>0.0</real>
-			<key>title</key>
-			<string>Run PTZ Backup</string>
-			<key>uniqueIdentifier</key>
-			<string>C433AF90-853F-4111-B36D-BF3FF7AD8CCB</string>
-		</dict>
-		<key>C9008F3F-5A4B-4260-A5C0-74C3943EB62C</key>
-		<dict>
-			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>A687D9B3-AAD9-4CEC-81D4-7B20C7B56111</string>
-			<key>auxiliaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>className</key>
-			<string>IDESchemeActionsInvocationRecord</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
-			<key>fileName</key>
-			<string>Run-PTZ Backup-2022.12.08_11-06-20--0800.xcresult</string>
-			<key>hasAuxiliaryLog</key>
-			<true/>
-			<key>hasConsoleLog</key>
-			<true/>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>PTZ Backup project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>PTZ Backup</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run PTZ Backup</string>
-			<key>timeStartedRecording</key>
-			<real>692219180.57582104</real>
-			<key>timeStoppedRecording</key>
-			<real>0.0</real>
-			<key>title</key>
-			<string>Run PTZ Backup</string>
-			<key>uniqueIdentifier</key>
-			<string>C9008F3F-5A4B-4260-A5C0-74C3943EB62C</string>
-		</dict>
-		<key>CC33895E-D7D4-4195-B52D-50D41F178D40</key>
-		<dict>
-			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>C8B214E5-137B-4379-AAB8-104597CDE3EC</string>
-			<key>auxiliaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>className</key>
-			<string>IDESchemeActionsInvocationRecord</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
-			<key>fileName</key>
-			<string>Run-PTZ Backup-2022.12.08_11-03-50--0800.xcresult</string>
-			<key>hasAuxiliaryLog</key>
-			<true/>
-			<key>hasConsoleLog</key>
-			<true/>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>PTZ Backup project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>PTZ Backup</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run PTZ Backup</string>
-			<key>timeStartedRecording</key>
-			<real>692219030.36259496</real>
-			<key>timeStoppedRecording</key>
-			<real>0.0</real>
-			<key>title</key>
-			<string>Run PTZ Backup</string>
-			<key>uniqueIdentifier</key>
-			<string>CC33895E-D7D4-4195-B52D-50D41F178D40</string>
-		</dict>
-		<key>CD28C75E-1606-4E9E-BC74-31F24E49363C</key>
-		<dict>
-			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>17A44B63-3922-4F41-A41C-A79E5C486B46</string>
-			<key>auxiliaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>className</key>
-			<string>IDESchemeActionsInvocationRecord</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
-			<key>fileName</key>
-			<string>Run-PTZ Backup-2022.12.08_10-50-37--0800.xcresult</string>
-			<key>hasAuxiliaryLog</key>
-			<true/>
-			<key>hasConsoleLog</key>
-			<true/>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>PTZ Backup project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>PTZ Backup</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run PTZ Backup</string>
-			<key>timeStartedRecording</key>
-			<real>692218237.82237005</real>
-			<key>timeStoppedRecording</key>
-			<real>0.0</real>
-			<key>title</key>
-			<string>Run PTZ Backup</string>
-			<key>uniqueIdentifier</key>
-			<string>CD28C75E-1606-4E9E-BC74-31F24E49363C</string>
-		</dict>
-		<key>D7F0320E-2D55-4131-B7AE-3187D9BBFE60</key>
-		<dict>
-			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>634D4A83-0B92-4AB8-BB0F-A82F3A5EE3EB</string>
-			<key>auxiliaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>W</string>
-			</dict>
-			<key>className</key>
-			<string>IDESchemeActionsInvocationRecord</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
-			<key>fileName</key>
-			<string>Run-PTZ Backup-2022.12.08_10-48-22--0800.xcresult</string>
-			<key>hasAuxiliaryLog</key>
-			<true/>
-			<key>hasConsoleLog</key>
-			<true/>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>W</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>PTZ Backup project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>PTZ Backup</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run PTZ Backup</string>
-			<key>timeStartedRecording</key>
-			<real>692218102.14957595</real>
-			<key>timeStoppedRecording</key>
-			<real>0.0</real>
-			<key>title</key>
-			<string>Run PTZ Backup</string>
-			<key>uniqueIdentifier</key>
-			<string>D7F0320E-2D55-4131-B7AE-3187D9BBFE60</string>
-		</dict>
-		<key>DA5F3DD7-E24D-421E-866C-4A9D6ED7C708</key>
-		<dict>
-			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>FDF5E65A-D227-44A4-AB81-03384AEA8F52</string>
-			<key>auxiliaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>className</key>
-			<string>IDESchemeActionsInvocationRecord</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
-			<key>fileName</key>
-			<string>Run-PTZ Backup-2022.12.08_11-07-58--0800.xcresult</string>
-			<key>hasAuxiliaryLog</key>
-			<true/>
-			<key>hasConsoleLog</key>
-			<true/>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>PTZ Backup project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>PTZ Backup</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run PTZ Backup</string>
-			<key>timeStartedRecording</key>
-			<real>692219278.32797205</real>
-			<key>timeStoppedRecording</key>
-			<real>0.0</real>
-			<key>title</key>
-			<string>Run PTZ Backup</string>
-			<key>uniqueIdentifier</key>
-			<string>DA5F3DD7-E24D-421E-866C-4A9D6ED7C708</string>
-		</dict>
-		<key>DB6166F7-5BEF-43AC-8648-346945203094</key>
-		<dict>
-			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>907A340D-3CE0-4482-AA03-32C22A158F94</string>
-			<key>auxiliaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>W</string>
-			</dict>
-			<key>className</key>
-			<string>IDESchemeActionsInvocationRecord</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
-			<key>fileName</key>
-			<string>Run-PTZ Backup-2022.12.08_10-48-41--0800.xcresult</string>
-			<key>hasAuxiliaryLog</key>
-			<true/>
-			<key>hasConsoleLog</key>
-			<true/>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>W</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>PTZ Backup project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>PTZ Backup</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run PTZ Backup</string>
-			<key>timeStartedRecording</key>
-			<real>692218121.05329895</real>
-			<key>timeStoppedRecording</key>
-			<real>0.0</real>
-			<key>title</key>
-			<string>Run PTZ Backup</string>
-			<key>uniqueIdentifier</key>
-			<string>DB6166F7-5BEF-43AC-8648-346945203094</string>
-		</dict>
-		<key>DC5C21CF-404D-4389-B2A6-8E49EDF43B2F</key>
-		<dict>
-			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>E8EA4873-5995-4825-AD44-078FEE07A69E</string>
-			<key>auxiliaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>W</string>
-			</dict>
-			<key>className</key>
-			<string>IDESchemeActionsInvocationRecord</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
-			<key>fileName</key>
-			<string>Run-Copy of PTZ Backup-2022.12.08_11-39-08--0800.xcresult</string>
-			<key>hasAuxiliaryLog</key>
-			<true/>
-			<key>hasConsoleLog</key>
-			<true/>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>W</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>PTZ Backup project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>Copy of PTZ Backup</string>
+			<string>PTZ Backup - Local</string>
 			<key>schemeIdentifier-sharedScheme</key>
 			<integer>0</integer>
 			<key>signature</key>
-			<string>Run Copy of PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>timeStartedRecording</key>
-			<real>692221148.66636097</real>
+			<real>692952472.12947094</real>
 			<key>timeStoppedRecording</key>
 			<real>0.0</real>
 			<key>title</key>
-			<string>Run Copy of PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>uniqueIdentifier</key>
-			<string>DC5C21CF-404D-4389-B2A6-8E49EDF43B2F</string>
+			<string>599A3485-D9B1-4411-8474-134E9D3B7570</string>
 		</dict>
-		<key>EC6DD08B-A0D6-484A-9F38-687576F9C6EC</key>
+		<key>59E36B98-04B2-40DC-BA09-C42B8288080D</key>
 		<dict>
 			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>81171919-F488-43CB-AE06-979358763465</string>
+			<string>AECEC89F-194F-41FA-BD67-7EC8E0CF3BF0</string>
 			<key>auxiliaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
@@ -1372,7 +652,7 @@
 			<key>domainType</key>
 			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
 			<key>fileName</key>
-			<string>Run-Copy of PTZ Backup-2022.12.08_11-38-04--0800.xcresult</string>
+			<string>Run-PTZ Backup - Local-2022.12.17_11-22-37--0800.xcresult</string>
 			<key>hasAuxiliaryLog</key>
 			<true/>
 			<key>hasConsoleLog</key>
@@ -1387,24 +667,24 @@
 			<key>schemeIdentifier-containerName</key>
 			<string>PTZ Backup project</string>
 			<key>schemeIdentifier-schemeName</key>
-			<string>Copy of PTZ Backup</string>
+			<string>PTZ Backup - Local</string>
 			<key>schemeIdentifier-sharedScheme</key>
 			<integer>0</integer>
 			<key>signature</key>
-			<string>Run Copy of PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>timeStartedRecording</key>
-			<real>692221084.06075001</real>
+			<real>692997757.60074103</real>
 			<key>timeStoppedRecording</key>
 			<real>0.0</real>
 			<key>title</key>
-			<string>Run Copy of PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>uniqueIdentifier</key>
-			<string>EC6DD08B-A0D6-484A-9F38-687576F9C6EC</string>
+			<string>59E36B98-04B2-40DC-BA09-C42B8288080D</string>
 		</dict>
-		<key>EDCBC40F-214F-4082-AE6A-C9B16958B9A5</key>
+		<key>5ADEC498-0646-4BB9-9BDB-1193A9581E51</key>
 		<dict>
 			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>7C98D043-349D-4E6D-B88F-D2044FED4914</string>
+			<string>396A1502-3E53-4CC1-AC77-A425D0C73408</string>
 			<key>auxiliaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
@@ -1417,7 +697,7 @@
 			<key>domainType</key>
 			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
 			<key>fileName</key>
-			<string>Run-Copy of PTZ Backup-2022.12.08_14-18-42--0800.xcresult</string>
+			<string>Run-PTZ Backup - Local-2022.12.16_22-58-30--0800.xcresult</string>
 			<key>hasAuxiliaryLog</key>
 			<true/>
 			<key>hasConsoleLog</key>
@@ -1432,69 +712,24 @@
 			<key>schemeIdentifier-containerName</key>
 			<string>PTZ Backup project</string>
 			<key>schemeIdentifier-schemeName</key>
-			<string>Copy of PTZ Backup</string>
+			<string>PTZ Backup - Local</string>
 			<key>schemeIdentifier-sharedScheme</key>
 			<integer>0</integer>
 			<key>signature</key>
-			<string>Run Copy of PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>timeStartedRecording</key>
-			<real>692230722.52788103</real>
+			<real>692953110.05517495</real>
 			<key>timeStoppedRecording</key>
 			<real>0.0</real>
 			<key>title</key>
-			<string>Run Copy of PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>uniqueIdentifier</key>
-			<string>EDCBC40F-214F-4082-AE6A-C9B16958B9A5</string>
+			<string>5ADEC498-0646-4BB9-9BDB-1193A9581E51</string>
 		</dict>
-		<key>F3794E46-4833-4580-A5AF-D52FDED12383</key>
+		<key>69F5AA52-BAFF-46C1-881C-A903D890600D</key>
 		<dict>
 			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>04F5868C-6CC4-42E2-A5E0-408DF7B66C72</string>
-			<key>auxiliaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>className</key>
-			<string>IDESchemeActionsInvocationRecord</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
-			<key>fileName</key>
-			<string>Run-PTZ Backup-2022.12.08_11-41-55--0800.xcresult</string>
-			<key>hasAuxiliaryLog</key>
-			<true/>
-			<key>hasConsoleLog</key>
-			<true/>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>PTZ Backup project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>PTZ Backup</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run PTZ Backup</string>
-			<key>timeStartedRecording</key>
-			<real>692221315.06761205</real>
-			<key>timeStoppedRecording</key>
-			<real>0.0</real>
-			<key>title</key>
-			<string>Run PTZ Backup</string>
-			<key>uniqueIdentifier</key>
-			<string>F3794E46-4833-4580-A5AF-D52FDED12383</string>
-		</dict>
-		<key>F5CAD1DF-BEA0-46B8-B051-8AB335AFFE69</key>
-		<dict>
-			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>02FB7019-34CE-4EA1-B043-1620E6D3C1F2</string>
+			<string>3CD61249-A18B-460C-9C85-E97ABDC4ED74</string>
 			<key>auxiliaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
@@ -1507,7 +742,7 @@
 			<key>domainType</key>
 			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
 			<key>fileName</key>
-			<string>Run-Copy of PTZ Backup-2022.12.08_11-36-10--0800.xcresult</string>
+			<string>Run-PTZ Backup - Local-2022.12.16_21-42-04--0800.xcresult</string>
 			<key>hasAuxiliaryLog</key>
 			<true/>
 			<key>hasConsoleLog</key>
@@ -1522,69 +757,24 @@
 			<key>schemeIdentifier-containerName</key>
 			<string>PTZ Backup project</string>
 			<key>schemeIdentifier-schemeName</key>
-			<string>Copy of PTZ Backup</string>
+			<string>PTZ Backup - Local</string>
 			<key>schemeIdentifier-sharedScheme</key>
 			<integer>0</integer>
 			<key>signature</key>
-			<string>Run Copy of PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>timeStartedRecording</key>
-			<real>692220970.15536594</real>
+			<real>692948524.67271101</real>
 			<key>timeStoppedRecording</key>
 			<real>0.0</real>
 			<key>title</key>
-			<string>Run Copy of PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>uniqueIdentifier</key>
-			<string>F5CAD1DF-BEA0-46B8-B051-8AB335AFFE69</string>
+			<string>69F5AA52-BAFF-46C1-881C-A903D890600D</string>
 		</dict>
-		<key>F9E93EAF-2B01-42FB-ADE0-7C3656D1C5FA</key>
+		<key>6DD124BF-B208-4F0E-A09A-29973C4849F3</key>
 		<dict>
 			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>12835012-2D86-4C6D-A04D-01796A7DBB7F</string>
-			<key>auxiliaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>className</key>
-			<string>IDESchemeActionsInvocationRecord</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
-			<key>fileName</key>
-			<string>Run-PTZ Backup-2022.12.08_11-15-06--0800.xcresult</string>
-			<key>hasAuxiliaryLog</key>
-			<true/>
-			<key>hasConsoleLog</key>
-			<true/>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>PTZ Backup project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>PTZ Backup</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run PTZ Backup</string>
-			<key>timeStartedRecording</key>
-			<real>692219706.81607294</real>
-			<key>timeStoppedRecording</key>
-			<real>0.0</real>
-			<key>title</key>
-			<string>Run PTZ Backup</string>
-			<key>uniqueIdentifier</key>
-			<string>F9E93EAF-2B01-42FB-ADE0-7C3656D1C5FA</string>
-		</dict>
-		<key>FCE0CD3C-2222-457E-AE10-FE6DA75CA559</key>
-		<dict>
-			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>22D1D624-9AD8-4EB8-A0E3-648149B2B4F8</string>
+			<string>A94A0C75-D2F2-44D2-B053-66E397AF8BF3</string>
 			<key>auxiliaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
@@ -1597,7 +787,7 @@
 			<key>domainType</key>
 			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
 			<key>fileName</key>
-			<string>Run-Copy of PTZ Backup-2022.12.08_11-38-47--0800.xcresult</string>
+			<string>Run-PTZ Backup - Local-2022.12.16_22-03-55--0800.xcresult</string>
 			<key>hasAuxiliaryLog</key>
 			<true/>
 			<key>hasConsoleLog</key>
@@ -1612,28 +802,28 @@
 			<key>schemeIdentifier-containerName</key>
 			<string>PTZ Backup project</string>
 			<key>schemeIdentifier-schemeName</key>
-			<string>Copy of PTZ Backup</string>
+			<string>PTZ Backup - Local</string>
 			<key>schemeIdentifier-sharedScheme</key>
 			<integer>0</integer>
 			<key>signature</key>
-			<string>Run Copy of PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>timeStartedRecording</key>
-			<real>692221127.97428703</real>
+			<real>692949835.21868396</real>
 			<key>timeStoppedRecording</key>
 			<real>0.0</real>
 			<key>title</key>
-			<string>Run Copy of PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>uniqueIdentifier</key>
-			<string>FCE0CD3C-2222-457E-AE10-FE6DA75CA559</string>
+			<string>6DD124BF-B208-4F0E-A09A-29973C4849F3</string>
 		</dict>
-		<key>FEF15368-561E-4F79-8424-3B2EFB953376</key>
+		<key>731B575E-F19A-4D97-B144-B6F02A71FC18</key>
 		<dict>
 			<key>auxiliaryLogUniqueIdentifier</key>
-			<string>C98CFD2D-0A8E-4A01-AC06-D7945E0C5CF2</string>
+			<string>05EDC0E6-B78D-483D-AA2F-4C37C210D8DB</string>
 			<key>auxiliaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
-				<string>S</string>
+				<string>W</string>
 			</dict>
 			<key>className</key>
 			<string>IDESchemeActionsInvocationRecord</string>
@@ -1642,7 +832,7 @@
 			<key>domainType</key>
 			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
 			<key>fileName</key>
-			<string>Run-PTZ Backup-2022.12.08_11-02-29--0800.xcresult</string>
+			<string>Run-PTZ Backup - Local-2022.12.17_13-59-50--0800.xcresult</string>
 			<key>hasAuxiliaryLog</key>
 			<true/>
 			<key>hasConsoleLog</key>
@@ -1652,24 +842,1464 @@
 			<key>primaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
-				<string>S</string>
+				<string>W</string>
 			</dict>
 			<key>schemeIdentifier-containerName</key>
 			<string>PTZ Backup project</string>
 			<key>schemeIdentifier-schemeName</key>
-			<string>PTZ Backup</string>
+			<string>PTZ Backup - Local</string>
 			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
+			<integer>0</integer>
 			<key>signature</key>
-			<string>Run PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>timeStartedRecording</key>
-			<real>692218949.97186506</real>
+			<real>693007190.95378602</real>
 			<key>timeStoppedRecording</key>
 			<real>0.0</real>
 			<key>title</key>
-			<string>Run PTZ Backup</string>
+			<string>Run PTZ Backup - Local</string>
 			<key>uniqueIdentifier</key>
-			<string>FEF15368-561E-4F79-8424-3B2EFB953376</string>
+			<string>731B575E-F19A-4D97-B144-B6F02A71FC18</string>
+		</dict>
+		<key>7B452DB8-5C0A-4472-A3F3-06745354D46C</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>86955542-76F8-4CA3-AE9A-A1FA8D00AB10</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.16_23-34-28--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>692955268.03620005</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>7B452DB8-5C0A-4472-A3F3-06745354D46C</string>
+		</dict>
+		<key>833CD452-D391-486F-9B80-3F64C9005E8E</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>60354832-2192-454E-AAA2-F848AEF061AA</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.16_21-15-12--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>692946912.03470194</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>833CD452-D391-486F-9B80-3F64C9005E8E</string>
+		</dict>
+		<key>851EC9AF-03E3-4610-9317-172654210D49</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>F768EB9E-1CCC-4547-AE6A-B0E223E1D79B</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.17_12-19-29--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>693001169.18729806</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>851EC9AF-03E3-4610-9317-172654210D49</string>
+		</dict>
+		<key>858B4613-C8D5-4ECA-B555-627460561CCD</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>7BDF519C-54CA-4604-9323-986BF56B5D3F</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.15_01-55-47--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>692790947.52295494</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>858B4613-C8D5-4ECA-B555-627460561CCD</string>
+		</dict>
+		<key>894EE5EC-CA00-44F1-A65F-2334BA9C7964</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>1FEAF999-DB70-4F06-B9A8-DE6BF0EE8BC4</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.17_12-20-34--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>693001234.13232696</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>894EE5EC-CA00-44F1-A65F-2334BA9C7964</string>
+		</dict>
+		<key>8AAA9681-E0D9-40BD-82BC-A33BEEC7F221</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>E01E7894-F176-4F40-B6C1-12A53CAA4A04</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.17_12-18-57--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>693001137.497859</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>8AAA9681-E0D9-40BD-82BC-A33BEEC7F221</string>
+		</dict>
+		<key>8E9B9B56-C3DA-4AFB-BBCC-5AD11893D618</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>E38FF037-A730-4E5C-97BE-2CD363F1FBE6</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.17_12-21-28--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>693001288.07982504</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>8E9B9B56-C3DA-4AFB-BBCC-5AD11893D618</string>
+		</dict>
+		<key>98D3BAD9-C89D-4E22-B85E-D4A57B231B2B</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>B174C24B-FF9A-4408-BEDA-1B48FACF7682</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.16_23-33-29--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>692955209.16315198</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>98D3BAD9-C89D-4E22-B85E-D4A57B231B2B</string>
+		</dict>
+		<key>98E30070-E0A4-49D2-B9B7-80101E118E34</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>19806164-7CB0-4283-BE68-3EEC7722FD2C</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.15_00-32-12--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>692785932.94019997</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>98E30070-E0A4-49D2-B9B7-80101E118E34</string>
+		</dict>
+		<key>A0C1B9BF-742C-4D42-A8CF-E01B6EDBF678</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>45B3BAC1-372B-4398-8BB8-B69A5B704A04</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.16_21-39-22--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>692948362.85899496</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>A0C1B9BF-742C-4D42-A8CF-E01B6EDBF678</string>
+		</dict>
+		<key>A62AFAE7-F44B-402F-AC39-6075612A76E6</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>0C7B6CA4-0697-428A-9B70-20E62908E19C</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.16_23-27-27--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>692954847.91319704</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>A62AFAE7-F44B-402F-AC39-6075612A76E6</string>
+		</dict>
+		<key>A6D518C2-813C-4954-B977-C89DB7EA569B</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>E0407447-E61E-4D85-93DC-4C4E6F626E26</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.17_13-40-20--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>693006020.68456304</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>A6D518C2-813C-4954-B977-C89DB7EA569B</string>
+		</dict>
+		<key>A90BFFC9-AD54-453C-A655-C9BCCAE39FBD</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>66426A16-C997-45A2-94C8-92DD8162ABEC</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.17_12-26-46--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>693001606.74764895</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>A90BFFC9-AD54-453C-A655-C9BCCAE39FBD</string>
+		</dict>
+		<key>AF106CDB-2D9C-43F9-82BA-A744E3821B0B</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>BDCD9158-C2F5-44CA-9DB8-944DCED31C00</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.17_13-50-57--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>693006657.86082602</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>AF106CDB-2D9C-43F9-82BA-A744E3821B0B</string>
+		</dict>
+		<key>B373D6E7-DF33-499D-B89C-FB2770240858</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>58038812-B59D-4239-B471-1D248E9CC48C</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.17_12-21-10--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>693001270.99700296</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>B373D6E7-DF33-499D-B89C-FB2770240858</string>
+		</dict>
+		<key>BD273720-16A1-4C67-B3DC-D649CF13EF25</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>5025A3B4-23EB-4014-AEA0-7AB79DD3D435</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.15_00-37-29--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>692786249.14488995</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>BD273720-16A1-4C67-B3DC-D649CF13EF25</string>
+		</dict>
+		<key>C7E4B28A-0D94-4CBD-8CD9-BDE87ECC4DEF</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>DFAEBD38-0452-47AA-BB90-E79C8E75C7FE</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.16_21-16-02--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>692946962.82515597</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>C7E4B28A-0D94-4CBD-8CD9-BDE87ECC4DEF</string>
+		</dict>
+		<key>C88C0378-E3C3-49FA-8BFC-6381C96C4283</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>E15BB98B-9733-4D02-A3CC-3AF066B25ECD</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-\PTZ Backup - Local-2022.12.14_13-20-54--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>\PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run \PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>692745654.46562195</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run \PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>C88C0378-E3C3-49FA-8BFC-6381C96C4283</string>
+		</dict>
+		<key>C9C60675-02BC-4141-9295-52804B72548B</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>B68E5AB2-B9DF-4E05-9F47-C0B61BE8ECE2</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.16_23-53-59--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>692956439.64266896</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>C9C60675-02BC-4141-9295-52804B72548B</string>
+		</dict>
+		<key>D2BAF4EC-1831-43B4-955E-E8C3702429C8</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>348B780C-80C0-4BAD-A735-835CCFCA12D5</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.17_14-09-20--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>693007760.01459205</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>D2BAF4EC-1831-43B4-955E-E8C3702429C8</string>
+		</dict>
+		<key>D517B578-3697-44FF-98A2-706E9E254280</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>9AEB89B2-E040-4C28-8F98-342A07A4CBA9</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.16_23-32-31--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>692955151.39059901</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>D517B578-3697-44FF-98A2-706E9E254280</string>
+		</dict>
+		<key>D67A88E3-005A-4448-B7FE-4631292FB7A4</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>EBA63EDE-B483-4362-9872-E7203D5D2041</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.16_21-13-37--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>692946817.12738097</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>D67A88E3-005A-4448-B7FE-4631292FB7A4</string>
+		</dict>
+		<key>D87FE8FD-A9A0-4DE8-8791-0FD0419241AA</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>D0E92647-8BAA-4C70-931A-4E362D607D2F</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.17_13-31-50--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>693005510.87622404</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>D87FE8FD-A9A0-4DE8-8791-0FD0419241AA</string>
+		</dict>
+		<key>DCF00FF2-F11F-4E55-8374-B9B14B8DF594</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>C780407F-C84C-4108-89B0-BF078BF3F25F</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.17_13-39-40--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>693005980.71977901</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>DCF00FF2-F11F-4E55-8374-B9B14B8DF594</string>
+		</dict>
+		<key>E2FDDE4E-F67D-4C25-9A5D-92CE3F94F3CC</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>80CBC045-472F-4A15-B086-CFA262A664AD</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.16_22-58-52--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>692953132.03120399</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>E2FDDE4E-F67D-4C25-9A5D-92CE3F94F3CC</string>
+		</dict>
+		<key>E5CA5746-3140-48EB-A768-A0099738C52A</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>BB32FAEA-570F-4DA0-9C53-AB3CEEB5AC9B</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.15_00-33-03--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>692785983.69984806</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>E5CA5746-3140-48EB-A768-A0099738C52A</string>
+		</dict>
+		<key>E69CE2E9-0A1C-4F1E-B860-375DDE8C9C26</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>CA4B5CBB-FA11-46E3-A30B-886EB6B6224F</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.16_23-50-00--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>692956200.15823996</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>E69CE2E9-0A1C-4F1E-B860-375DDE8C9C26</string>
+		</dict>
+		<key>EC7D45C1-4804-4CF8-B0B5-218012E02D85</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>933BE6CD-A324-4A56-9125-6F4F07A1867B</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.16_23-54-52--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>692956492.63220596</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>EC7D45C1-4804-4CF8-B0B5-218012E02D85</string>
+		</dict>
+		<key>EDDFDF24-3312-4A6C-9AA4-365C44BC4233</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>FECA0D81-3730-4BBB-B028-D063AB7D4419</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.16_23-55-19--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>692956519.99571705</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>EDDFDF24-3312-4A6C-9AA4-365C44BC4233</string>
+		</dict>
+		<key>F12D73B9-6876-4E53-8DC5-C6B2C634B9BA</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>A733715D-BFC1-462C-8C76-FB0C78CFA28D</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.17_10-56-33--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>692996193.548558</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>F12D73B9-6876-4E53-8DC5-C6B2C634B9BA</string>
+		</dict>
+		<key>FA76DB83-C2A7-4399-BF2C-9E7C82D28246</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>58E8AAC6-C66C-406B-91D6-4F9B0E856522</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.17_14-12-47--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>693007967.94601202</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>FA76DB83-C2A7-4399-BF2C-9E7C82D28246</string>
+		</dict>
+		<key>FF9BE3D3-E73B-47BD-A7D9-6F1178D0F8D9</key>
+		<dict>
+			<key>auxiliaryLogUniqueIdentifier</key>
+			<string>4E734949-8355-4D2E-8F4E-36E2215462A8</string>
+			<key>auxiliaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>className</key>
+			<string>IDESchemeActionsInvocationRecord</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>com.apple.dt.IDE.LaunchSchemeAction</string>
+			<key>fileName</key>
+			<string>Run-PTZ Backup - Local-2022.12.15_00-39-35--0800.xcresult</string>
+			<key>hasAuxiliaryLog</key>
+			<true/>
+			<key>hasConsoleLog</key>
+			<true/>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>PTZ Backup project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>PTZ Backup - Local</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>timeStartedRecording</key>
+			<real>692786375.54545295</real>
+			<key>timeStoppedRecording</key>
+			<real>0.0</real>
+			<key>title</key>
+			<string>Run PTZ Backup - Local</string>
+			<key>uniqueIdentifier</key>
+			<string>FF9BE3D3-E73B-47BD-A7D9-6F1178D0F8D9</string>
 		</dict>
 	</dict>
 </dict>

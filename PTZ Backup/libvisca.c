@@ -2082,6 +2082,20 @@ VISCA_API uint32_t VISCA_set_irreceive_onoff(VISCAInterface_t *iface, VISCACamer
 	return _VISCA_send_packet_with_reply(iface, camera, &packet);
 }
 
+
+VISCA_API uint32_t VISCA_set_pantilt_preset_speed(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t preset_speed)
+{
+    VISCAPacket_t packet;
+
+    _VISCA_init_packet(&packet);
+    _VISCA_append_byte(&packet, VISCA_COMMAND);
+    _VISCA_append_byte(&packet, VISCA_CATEGORY_PAN_TILTER);
+    _VISCA_append_byte(&packet, VISCA_PT_DRIVE);
+    _VISCA_append_byte(&packet, preset_speed); // speed grade, 0x01-0x18
+    return _VISCA_send_packet_with_reply(iface, camera, &packet);
+}
+
+
 VISCA_API uint32_t VISCA_set_pantilt_up(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t pan_speed,
 					uint32_t tilt_speed)
 {

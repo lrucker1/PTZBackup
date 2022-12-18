@@ -11,6 +11,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <netinet/tcp.h>
 #endif
 
 typedef struct _VISCA_tcp_ctx {
@@ -21,13 +22,13 @@ typedef struct _VISCA_tcp_ctx {
 #endif
 } VISCA_tcp_ctx_t;
 
-static int visca_tcp_cb_write(VISCAInterface_t *iface, const void *buf, int length)
+static size_t visca_tcp_cb_write(VISCAInterface_t *iface, const void *buf, int length)
 {
 	VISCA_tcp_ctx_t *ctx = iface->ctx;
 	return send(ctx->sockfd, buf, length, 0);
 }
 
-static int visca_tcp_cb_read(VISCAInterface_t *iface, void *buf, int length)
+static size_t visca_tcp_cb_read(VISCAInterface_t *iface, void *buf, int length)
 {
 	VISCA_tcp_ctx_t *ctx = iface->ctx;
 	return recv(ctx->sockfd, buf, length, 0);
@@ -75,7 +76,12 @@ static int initialize_socket(VISCA_tcp_ctx_t *ctx, const char *hostname, int por
 		fprintf(stderr, "Error: cannot create socket\n");
 		return 1;
 	}
-
+    
+    // People on the web say it needs NODELAY, but the original was only setting it in serial_posix. So let's see if this helps.
+//    int flag = 1;
+//    if (setsockopt(ctx->sockfd, IPPROTO_TCP, TCP_NODELAY, (char*)&flag, sizeof(int))) {
+//        fprintf(stderr, "Warning: failed to set NODELAY\n");
+//    }
 	struct sockaddr_in server = {
 		.sin_family = AF_INET,
 		.sin_port = htons(port),
