@@ -120,6 +120,7 @@ uint32_t _VISCA_get_reply(VISCAInterface_t *iface, VISCACamera_t *camera)
 	if (_VISCA_get_packet(iface) != VISCA_SUCCESS)
 		return VISCA_FAILURE;
 	iface->type = iface->ibuf[1] & 0xF0;
+    iface->errortype = 0;
 
 	// skip ack messages
 	while (iface->type == VISCA_RESPONSE_ACK) {
@@ -140,6 +141,7 @@ uint32_t _VISCA_get_reply(VISCAInterface_t *iface, VISCACamera_t *camera)
 		return VISCA_SUCCESS;
 		break;
 	case VISCA_RESPONSE_ERROR:
+        iface->errortype = iface->ibuf[2] & 0x0F;
 		return VISCA_SUCCESS;
 		break;
 	}
@@ -207,6 +209,21 @@ VISCA_API uint32_t VISCA_set_address(VISCAInterface_t *iface, int *camera_num)
 				return VISCA_SUCCESS;
 		}
 	}
+}
+
+VISCA_API uint32_t VISCA_cancel(VISCAInterface_t *iface, VISCACamera_t *camera)
+{
+    VISCAPacket_t packet;
+
+    // 8x 2y FF (y:Socket No.)
+    _VISCA_init_packet(&packet);
+    _VISCA_append_byte(&packet, 0x20 | camera->socket_num);
+
+    // Reply will be handled by the operation being cancelled.
+    if (_VISCA_send_packet(iface, camera, &packet) != VISCA_SUCCESS)
+        return VISCA_FAILURE;
+    else
+        return VISCA_SUCCESS;
 }
 
 VISCA_API uint32_t VISCA_clear(VISCAInterface_t *iface, VISCACamera_t *camera)

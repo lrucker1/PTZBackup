@@ -1,0 +1,15 @@
+
+https://help.ptzoptics.com/support/discussions/topics/13000029804
+
+it will not respond to recalls of presets,
+
+1). When using the stream deck I had a multi action first send preset recall via http-cgi and then after a delay call a python script to send a visca command for iris setting.  Without a sufficient delay (>=2500mS)  between the two commands the problem would sometimes occur.  
+
+
+Me:
+>> If I send 9 "recall" commands in a loop with no pause other than waiting for the camera to report success, it works fine. Likewise if I send 9 "set" commands. But if I send 9 "recall/set" combinations in a loop, the camera will stop responding at the 3rd "recall”. Putting in a 1 second delay after the set works around this.
+
+PTZ Support:
+> It is expected that you would need to put a delay in between each command, the camera may get overloaded with all at once.
+
+I think they missed the “waiting for the camera to report success”. I still think it’s a bug, but I guess I need a bigger delay.

@@ -9,6 +9,7 @@
 
 @interface AppDelegate : NSObject <NSApplicationDelegate, NSWindowDelegate>
 
+@property NSString *obsSettingsDirectory;
 
 @end
 

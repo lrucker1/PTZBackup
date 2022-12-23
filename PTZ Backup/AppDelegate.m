@@ -9,10 +9,19 @@
 
 #import "AppDelegate.h"
 #import "PTZCamera.h"
+#import "PTZSettingsFile.h"
 #import "libvisca.h"
+#import "PTZPrefsController.h"
 
-#define PTZ_EPSILON 1 // In case it needs tweaking if the camera value doesn't return precisely the same value on repeated calls. I don't know. It's hardware!
-#define PTZ_MAX_RECALL_SEC 15 // Breaks the loop after X seconds if epsilon is too small.
+//  downloadDestination[reply] = new QFile(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QString::asprintf("%s" , (DOWNLOAD_FILE_DEST_PREFIX)) + currentCamIp + QString::number(1) + ".jpg");
+//
+// AppDataLocation is
+// \li "~/Library/Application Support/<APPNAME>", "/Library/Application Support/<APPNAME>". "<APPDIR>/../Resources"
+
+#define DEFAULT_SETTINGS_PATH "/ptzoptics-controller/settings.ini"
+#define DOWNLOAD_FILE_DEST_PREFIX "/ptzoptics-controller/downloads/snapshot_"
+#define DOWNLOAD_FILE_URI "/snapshot.jpg"
+//     settings->setValue(QString::asprintf("mem%d", presetNum) + currentCamIp, presetText);
 
 // yeah, yeah, globals bad.
 VISCAInterface_t iface;
@@ -27,12 +36,11 @@ typedef enum {
     PTZBackup = 2
 } PTZMode;
 
-// These are the registered defaults. It can be changed by using 'defaults' command line app; I'd make an actual UI but this is not likely to change. This is just an emergency backup if for some reason the cameras change unexpectedly.
-// command format: defaults write lrucker.PTZ-Backup PTZCameras -array-add '(Test, 10.0.0.1)' '(Test2, 10.0.0.2)'
-// defaults delete lrucker.PTZ-Backup PTZCameras
-NSArray *PTZCameras = @[@[@"1 - Altar", @"192.168.13.201"],
-                        @[@"2 - Ambo", @"192.168.13.202"],
-                        @[@"3 - Choir", @"192.168.13.203"]];
+typedef enum {
+    ReachableUnknown = 0,
+    ReachableYes,
+    ReachableNo
+} Reachable;
 
 @interface NSAttributedString (PTZAdditions)
 + (id)attributedStringWithString: (NSString *)string;
@@ -65,9 +73,15 @@ NSArray *PTZCameras = @[@[@"1 - Altar", @"192.168.13.201"],
 @property BOOL cameraOpen;
 @property BOOL busy, recallBusy;
 @property BOOL hideRecallIcon, hideRestoreIcon;
+@property BOOL useOBSSettings;
+@property Reachable reachable;
 @property (strong) NSFileHandle* pipeReadHandle;
 @property (strong) NSPipe *pipe;
 @property (strong) PTZCamera *cameraState;
+@property (strong) NSImage *snapshotImage;
+@property PTZPrefsController *prefsController;
+@property (strong) PTZSettingsFile *sourceSettings;
+@property (strong) PTZSettingsFile *backupSettings;
 
 @property dispatch_queue_t recallQueue;
 @end
@@ -80,13 +94,13 @@ NSArray *PTZCameras = @[@[@"1 - Altar", @"192.168.13.201"],
 
   if (   [key isEqualToString:@"recallValue"]
       || [key isEqualToString:@"restoreValue"]
-      || [key isEqualToString:@"currentCommand"]) {
+      || [key isEqualToString:@"currentCommand"]
+      || [key isEqualToString:@"sceneName"]) {
       [keyPaths addObject:@"rangeOffset"];
       [keyPaths addObject:@"recallOffset"];
       [keyPaths addObject:@"restoreOffset"];
       [keyPaths addObject:@"currentIndex"];
       [keyPaths addObject:@"cameraIndex"];
-
    }
    [keyPaths unionSet:[super keyPathsForValuesAffectingValueForKey:key]];
 
@@ -101,6 +115,20 @@ NSArray *PTZCameras = @[@[@"1 - Altar", @"192.168.13.201"],
     });
 }
 
+static NSString *PTZ_SettingsPathKey = @"PTZSettingsPath";
+
+- (NSString *)obsSettingsDirectory {
+    return [[NSUserDefaults standardUserDefaults] stringForKey:PTZ_SettingsPathKey];
+}
+
+- (void)setObsSettingsDirectory:(NSString *)newPath {
+    NSString *oldPath = self.obsSettingsDirectory;
+    if (![oldPath isEqualToString:newPath]) {
+        [[NSUserDefaults standardUserDefaults] setObject:newPath forKey:PTZ_SettingsPathKey];
+        [self updateCameraPopup];
+    }
+}
+
 - (void)configConsoleRedirect {
     _pipe = [NSPipe pipe];
     _pipeReadHandle = [_pipe fileHandleForReading];
@@ -111,10 +139,9 @@ NSArray *PTZCameras = @[@[@"1 - Altar", @"192.168.13.201"],
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     _recallQueue = dispatch_queue_create("recallQueue", NULL);
-
-    [[NSUserDefaults standardUserDefaults] registerDefaults:
-       @{@"PTZCameras":PTZCameras}];
-
+    
+    self.openCamera = -1;
+    
     self.cameraState = [PTZCamera new];
     self.cameraState.presetSpeed = 24; // Note that this is write-only; we could save to Mac prefs but we can't read back from the camera.
     BOOL useLocalhost = NO;
@@ -123,56 +150,72 @@ NSArray *PTZCameras = @[@[@"1 - Altar", @"192.168.13.201"],
         if ([arg isEqualToString:@"localhost"]) {
             useLocalhost = YES;
             [self writeToConsole:@"Using localhost\n"];
-            // The index binding hits a range error if we remove all the items.
+            [self.cameraButton removeAllItems];
             [self.cameraButton addItemWithTitle:@"localhost"];
             [[self.cameraButton lastItem] setRepresentedObject:@"localhost"];
-            while ([self.cameraButton numberOfItems] > 1) {
-                [self.cameraButton removeItemAtIndex:0];
-            }
+            [self loadCamera];
         }
     }
-    if (!useLocalhost) {
-        // Load the cameras from defaults if they're different.
-        NSArray *cameraDefaults = [[NSUserDefaults standardUserDefaults] arrayForKey:@"PTZCameras"];
-        if ([cameraDefaults count] != [self.cameraButton numberOfItems]) {
-            // Clunky yes, but the index binding hates empty menus
-            [self.cameraButton addItemWithTitle:@"placeholder"];
-            while ([self.cameraButton numberOfItems] > 1) {
-                [self.cameraButton removeItemAtIndex:0];
-            }
-            for (NSArray *cameraInfo in cameraDefaults) {
-                NSString *title = [cameraInfo firstObject];
-                NSString *ipAddr = [cameraInfo lastObject];
-                [self.cameraButton addItemWithTitle:title];
-                [[self.cameraButton lastItem] setRepresentedObject:ipAddr];
-            }
-            [self.cameraButton removeItemAtIndex:0];
-        } else {
-            // Just update ipAddresses
-            for (NSInteger i = 0; i < [self.cameraButton numberOfItems]; i++) {
-                NSArray *cameraInfo = [cameraDefaults objectAtIndex:i];
-                NSString *ipAddr = [cameraInfo lastObject];
-                [[self.cameraButton itemAtIndex:i] setRepresentedObject:ipAddr];
-            }
+    if (useLocalhost) {
+        self.reachable = ReachableYes;
+        // Use the bundle resource for testing.
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"settings" ofType:@"ini"];
+        if (path) {
+            self.sourceSettings = [[PTZSettingsFile alloc] initWithPath:path];
         }
+    } else {
+        [self updateCameraPopup];
     }
 #if DEBUG
     [self writeToConsole:@"Debug build; log is written to stderr"];
 #else
     [self configConsoleRedirect];
 #endif
-    self.openCamera = -1;
     self.rangeOffset = 80; // TODO: Defaults
     self.currentIndex = 1;
     self.cameraIndex = 0;
     [self updateMode:0]; // TODO: Defaults
     self.hideRestoreIcon = YES;
     self.hideRecallIcon = YES;
-    // Delay to next runloop to give the window time to show
-    self.busy = YES;
-    [self performSelector:@selector(loadCameraIfNeeded) withObject:nil afterDelay:0];
+    NSString *rootPath = [self obsSettingsDirectory];
+    if (rootPath == nil || [[NSFileManager defaultManager] fileExistsAtPath:rootPath]) {
+        [self showPrefs:nil];
+    }
 }
 
+- (NSArray *)cameraList {
+    NSString *rootPath = [self obsSettingsDirectory];
+    if (rootPath != nil && [[NSFileManager defaultManager] fileExistsAtPath:rootPath]) {
+        NSString *path = [NSString pathWithComponents:@[rootPath, @"settings.ini"]];
+        
+        if (path != nil && [[NSFileManager defaultManager] fileExistsAtPath:path]) {
+            self.sourceSettings = [[PTZSettingsFile alloc] initWithPath:path];
+            NSArray *cameras = [self.sourceSettings cameraInfo];
+            if ([cameras count] > 0) {
+                return cameras;
+            }
+        }
+    }
+
+    return nil;
+}
+
+- (void)updateCameraPopup {
+    [self closeCamera];
+    NSArray *cameraList = [self cameraList];
+    [self.cameraButton removeAllItems];
+    int i = 1;
+    for (NSArray *cameraInfo in cameraList) {
+        NSString *cameraname = [cameraInfo firstObject];
+        NSString *title = [NSString stringWithFormat:@"%d - %@", i++, cameraname];
+        NSString *ipAddr = [cameraInfo lastObject];
+        [self.cameraButton addItemWithTitle:title];
+        [[self.cameraButton lastItem] setRepresentedObject:ipAddr];
+    }
+    if ([cameraList count] > 0) {
+        [self loadCameraIfReachable];
+    }
+}
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
     // Insert code here to tear down your application
@@ -187,8 +230,47 @@ NSArray *PTZCameras = @[@[@"1 - Altar", @"192.168.13.201"],
     return YES;
 }
 
+- (IBAction)showPrefs:(id)sender {
+    if (self.prefsController == nil) {
+        self.prefsController = [PTZPrefsController new];
+    }
+    [self.prefsController.window orderFront:sender];
+}
+
 - (NSString *)cameraIP {
     return [[self.cameraButton selectedItem] representedObject];
+}
+
+- (NSString *)recallName {
+    switch (self.currentMode) {
+        case PTZRestore:
+            return self.backupName;
+        case PTZCheck:
+            return self.sceneName;
+        case PTZBackup:
+            return self.sceneName;
+    }
+    return @"";
+}
+
+- (NSString *)restoreName {
+    switch (self.currentMode) {
+        case PTZRestore:
+            return self.sceneName;
+        case PTZCheck:
+            return @"";
+        case PTZBackup:
+            return self.backupName;
+    }
+    return @"";
+}
+
+- (NSString *)sceneName {
+    return [self.sourceSettings nameForScene:self.currentIndex camera:self.cameraIP];
+}
+
+- (NSString *)backupName {
+    return [self.backupSettings nameForScene:self.currentIndex camera:self.cameraIP];
 }
 
 // memory_recall, memory_set
@@ -196,6 +278,14 @@ NSArray *PTZCameras = @[@[@"1 - Altar", @"192.168.13.201"],
 - (NSString *)currentCommand {
     NSString *cameraIP = [self cameraIP];
     return [NSString stringWithFormat:@"./visca_cli -d %@ memory_recall %ld\n./visca_cli -d %@ memory_set %ld", cameraIP, (long)self.recallValue, cameraIP, (long)self.restoreValue];
+}
+
+- (void)closeCamera {
+    if (self.openCamera != -1) {
+        close_interface();
+        self.openCamera = -1;
+        self.cameraOpen = NO;
+    }
 }
 
 - (void)loadCamera {
@@ -213,8 +303,9 @@ NSArray *PTZCameras = @[@[@"1 - Altar", @"192.168.13.201"],
     self.busy = NO;
 }
 
+// This will not test reachability because that is async.
 - (void)loadCameraIfNeeded {
-    if (self.openCamera == self.cameraIndex) {
+    if (self.openCamera == self.cameraIndex || self.reachable == ReachableNo) {
         return;
     }
     [self loadCamera];
@@ -222,11 +313,17 @@ NSArray *PTZCameras = @[@[@"1 - Altar", @"192.168.13.201"],
 
 - (IBAction)reopenCamera:(id)sender {
     // Close and reload
-    [self loadCamera];
+    if (self.reachable == ReachableYes) {
+        [self loadCamera];
+    } else {
+        [self loadCameraIfReachable];
+    }
 }
 
 - (IBAction)changeCamera:(id)sender {
-    [self loadCameraIfNeeded];
+    if (self.openCamera != self.cameraIndex) {
+        [self loadCameraIfReachable];
+    }
 }
 
 - (void)nextCamera {
@@ -297,6 +394,8 @@ NSArray *PTZCameras = @[@[@"1 - Altar", @"192.168.13.201"],
 
     if (VISCA_set_pantilt_absolute_position(&iface, &camera, (uint32_t)self.cameraState.panSpeed, (uint32_t)self.cameraState.tiltSpeed, (int)self.cameraState.pan, (int)self.cameraState.tilt) != VISCA_SUCCESS) {
         NSLog(@"visca: unable to set pan/tilt\n");
+    } else {
+        VISCA_set_pantilt_stop(&iface, &camera, (uint32_t)self.cameraState.panSpeed, (uint32_t)self.cameraState.tiltSpeed);
     }
     if (first != nil) {
         [window makeFirstResponder:first];
@@ -313,6 +412,8 @@ NSArray *PTZCameras = @[@[@"1 - Altar", @"192.168.13.201"],
     }
     if (VISCA_set_zoom_value(&iface, &camera, (uint32_t)self.cameraState.zoom) != VISCA_SUCCESS) {
         NSLog(@"visca: unable to set zoom\n");
+    } else {
+        VISCA_set_zoom_stop(&iface, &camera);
     }
     if (first != nil) {
         [window makeFirstResponder:first];
@@ -373,78 +474,87 @@ NSArray *PTZCameras = @[@[@"1 - Altar", @"192.168.13.201"],
     [self loadCameraIfNeeded];
     if (self.cameraOpen) {
         self.recallBusy = YES;
-        __block uint16_t zoomValue;
-        __block int16_t panPosition, tiltPosition;
-        __block BOOL waitForZoom = YES, waitForPT = YES;;
-        if (VISCA_get_zoom_value(&iface, &camera, &zoomValue) == VISCA_SUCCESS) {
-            self.cameraState.zoom = zoomValue;
-        } else {
-            NSLog(@"failed to get starting zoom value\n");
-            waitForZoom = NO;
-        }
-        if (VISCA_get_pantilt_position(&iface, &camera, &panPosition, &tiltPosition) == VISCA_SUCCESS) {
-            self.cameraState.pan = panPosition;
-            self.cameraState.tilt = tiltPosition;
-        } else {
-            NSLog(@"failed to get starting pan/tilt values\n");
-            waitForPT = NO;
-        }
-        if (VISCA_memory_recall(&iface, &camera, self.recallValue) != VISCA_SUCCESS) {
-            NSLog(@"failed to recall scene %ld\n", self.recallValue);
-            self.hideRecallIcon = NO;
-        }
-        if (!waitForZoom && !waitForPT) {
-            self.recallBusy = NO;
-        } else {
-            dispatch_async(_recallQueue, ^{
-                int16_t lastPan, lastTilt, lastZoom;
-                NSDate *endTime = [NSDate dateWithTimeIntervalSinceNow:PTZ_MAX_RECALL_SEC];
-                // (original)Give it time to start changing, then ping every 0.1 second.
-                //nanosleep((const struct timespec[]){{0, 500000000L}}, NULL);
-                // OK, I can ping it every half second, or I can do some complex "is same after X pings". Running with the simulator, I sometimes get a false-done with a 0.1sec ping. Need to make sure real camera works with a 0.5 ping. Also that PTZ_EPSILON is OK at 1.
-                do {
-                    nanosleep((const struct timespec[]){{0, 500000000L}}, NULL);
-                    lastPan = panPosition;
-                    lastTilt = tiltPosition;
-                    lastZoom = zoomValue;
-                    if (waitForPT) {
-                        if (VISCA_get_pantilt_position(&iface, &camera, &panPosition, &tiltPosition) != VISCA_SUCCESS) {
-                            waitForPT = NO;
-                        } else {
-                            waitForPT = (GET_EPS(lastPan, panPosition) > PTZ_EPSILON) || (GET_EPS(lastTilt, tiltPosition) > PTZ_EPSILON);
-                        }
-                    }
-                    if (waitForZoom) {
-                        if (VISCA_get_zoom_value(&iface, &camera, &zoomValue) != VISCA_SUCCESS) {
-                            waitForZoom = NO;
-                        } else {
-                            waitForZoom = (abs(lastZoom - zoomValue) > PTZ_EPSILON);
-                        }
-                    }
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        // main_queue because it updates the UI
-                        self.cameraState.pan = panPosition;
-                        self.cameraState.tilt = tiltPosition;
-                        self.cameraState.zoom = zoomValue;
-                    });
-#if DEBUG
-                    // I miss NSLog extensions.
-                    NSLog(@"pan %d %d, tilt %d %d, zoom %d %d wait %d %d", lastPan, panPosition, lastTilt, tiltPosition, lastZoom, zoomValue, waitForPT, waitForZoom);
-#endif
-                    if ([[NSDate now] compare:endTime] == NSOrderedDescending) {
-                        // Don't loop forever, even if the PTZ values aren't within epsilon.
-                        break;
-                    }
-                } while (waitForPT || waitForZoom);
+        // We want the spinner to start spinning so the run loop needs to run.
+        dispatch_async(_recallQueue, ^{
+            uint16_t zoomValue;
+            int16_t panPosition, tiltPosition;
+            if (VISCA_get_zoom_value(&iface, &camera, &zoomValue) == VISCA_SUCCESS) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    // main_queue because it updates the UI
-                    self.recallBusy = NO;
+                    self.cameraState.zoom = zoomValue;
                 });
+            }
+            if (VISCA_get_pantilt_position(&iface, &camera, &panPosition, &tiltPosition) == VISCA_SUCCESS) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.cameraState.pan = panPosition;
+                    self.cameraState.tilt = tiltPosition;
+                });
+            }
+            if (VISCA_memory_recall(&iface, &camera, self.recallValue) != VISCA_SUCCESS) {
+                NSLog(@"failed to recall scene %ld\n", self.recallValue);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.hideRecallIcon = NO;
+                });
+            } else if (iface.type == VISCA_RESPONSE_ERROR && iface.errortype == VISCA_ERROR_CMD_CANCELLED) {
+                NSLog(@"command cancelled\n");
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.recallBusy = NO;
             });
-        }
+            if (VISCA_get_zoom_value(&iface, &camera, &zoomValue) == VISCA_SUCCESS) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.cameraState.zoom = zoomValue;
+                });
+            }
+            if (VISCA_get_pantilt_position(&iface, &camera, &panPosition, &tiltPosition) == VISCA_SUCCESS) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.cameraState.pan = panPosition;
+                    self.cameraState.tilt = tiltPosition;
+                });
+            }
+        });
     } else {
         self.hideRecallIcon = NO;
     }
+}
+
+- (NSString *)snapshotURL {
+    // I do know this is not the recommended way to make an URL! :)
+    return [NSString stringWithFormat:@"http://%@:80/snapshot.jpg", [self cameraIP]];
+}
+
+- (void)fetchSnapshot {
+    // I do know this is not the recommended way to make an URL! :)
+    NSString *url = [self snapshotURL];
+    [[[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:url]
+                                 completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (data != nil) {
+            self.snapshotImage = [[NSImage alloc] initWithData:data];
+            NSString *rootPath = [self obsSettingsDirectory];
+            if ([rootPath length] > 0) {
+                NSString *filename = [NSString stringWithFormat:@"snapshot_%@%d.jpg", self.cameraIP, (int)self.currentIndex];
+                
+                NSString *path = [NSString pathWithComponents:@[rootPath, @"downloads", filename]];
+                NSLog(@"saving snapshot to %@", path);
+                [data writeToFile:path atomically:NO];
+            }
+        } else {
+            NSLog(@"Failed to get snapshot: error %@", error);
+        }
+    }] resume];
+}
+
+- (void)loadCameraIfReachable {
+    NSString *url = [self snapshotURL];
+    [[[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:url]
+                                 completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (data != nil) {
+            self.reachable = ReachableYes;
+            [self loadCameraIfNeeded];
+        } else {
+            self.reachable = ReachableNo;
+        }
+    }] resume];
+
 }
 
 - (IBAction)restoreScene:(id)sender {
@@ -455,6 +565,8 @@ NSArray *PTZCameras = @[@[@"1 - Altar", @"192.168.13.201"],
         if (VISCA_memory_set(&iface, &camera, self.restoreValue) != VISCA_SUCCESS) {
             NSLog(@"failed to restore scene %ld\n", self.restoreValue);
             self.hideRestoreIcon = NO;
+        } else {
+            [self fetchSnapshot];
         }
         self.busy = NO;
     } else {
@@ -569,6 +681,11 @@ NSArray *PTZCameras = @[@[@"1 - Altar", @"192.168.13.201"],
     return _restoreOffset + _currentIndex;
 }
 
+- (IBAction)commandCancel:(id)sender {
+    if (VISCA_cancel(&iface, &camera) != VISCA_SUCCESS) {
+        NSLog(@"visca: cancel attempt failed\n");
+    }
+}
 
 - (void)writeToConsole:(NSString *)string // IN
 {
@@ -585,21 +702,14 @@ NSArray *PTZCameras = @[@[@"1 - Altar", @"192.168.13.201"],
 
 BOOL open_interface(const char *ttydev)
 {
-    int camera_num;
-    int port = 5678;
+    int port = 5678; // True for PTZOptics. YMMV.
     if (VISCA_open_tcp(&iface, ttydev, port) != VISCA_SUCCESS) {
         NSLog(@"visca: unable to open tcp device %s:%d\n", ttydev, port);
         return NO;
     }
 
     iface.broadcast = 0;
-    if (VISCA_set_address(&iface, &camera_num) != VISCA_SUCCESS) {
-        NSLog(@"visca: unable to set address\n");
-        VISCA_close(&iface);
-        return NO;
-    }
-
-    camera.address = 1;
+    camera.address = 1; // Because we are using IP
 
     if (VISCA_clear(&iface, &camera) != VISCA_SUCCESS) {
         NSLog(@"visca: unable to clear interface\n");
@@ -607,7 +717,7 @@ BOOL open_interface(const char *ttydev)
         return NO;
     }
 
-    NSLog(@"Camera %s initialisation successful.\n", ttydev);
+    NSLog(@"Camera %s initialization successful.\n", ttydev);
     return YES;
 }
 

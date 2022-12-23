@@ -454,6 +454,7 @@ struct _VISCA_interface {
 	unsigned char ibuf[VISCA_INPUT_BUFFER_SIZE];
 	uint32_t bytes;
 	uint32_t type;
+    uint32_t errortype;
 };
 typedef struct _VISCA_interface VISCAInterface_t;
 
@@ -493,6 +494,8 @@ typedef struct _VISCA_packet {
 /* GENERAL FUNCTIONS */
 
 VISCA_API uint32_t VISCA_set_address(VISCAInterface_t *iface, int *camera_num);
+
+VISCA_API uint32_t VISCA_cancel(VISCAInterface_t *iface, VISCACamera_t *camera);
 
 VISCA_API uint32_t VISCA_clear(VISCAInterface_t *iface, VISCACamera_t *camera);
 
