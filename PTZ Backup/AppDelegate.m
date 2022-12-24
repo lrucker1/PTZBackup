@@ -29,6 +29,7 @@ VISCACamera_t camera;
 
 BOOL open_interface(const char *ttydev);
 void close_interface(void);
+VISCA_API uint32_t backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOffset, uint32_t delaySecs, bool isBackup, AppDelegate *appDelegate);
 
 typedef enum {
     PTZRestore = 0,
@@ -41,6 +42,9 @@ typedef enum {
     ReachableYes,
     ReachableNo
 } Reachable;
+
+static NSString *PTZ_SettingsPathKey = @"PTZSettingsPath";
+static NSString *PTZ_BatchDelayKey = @"BatchDelay";
 
 @interface NSAttributedString (PTZAdditions)
 + (id)attributedStringWithString: (NSString *)string;
@@ -68,12 +72,14 @@ typedef enum {
 @property NSInteger openCamera, cameraIndex;
 @property NSInteger recallOffset, restoreOffset;
 @property (readonly) NSInteger recallValue, restoreValue;
+@property NSInteger batchDelay;
 @property NSInteger currentMode;
 @property BOOL autoRecall;
 @property BOOL cameraOpen;
 @property BOOL busy, recallBusy;
 @property BOOL hideRecallIcon, hideRestoreIcon;
 @property BOOL useOBSSettings;
+@property BOOL batchIsBackup;
 @property Reachable reachable;
 @property (strong) NSFileHandle* pipeReadHandle;
 @property (strong) NSPipe *pipe;
@@ -94,15 +100,30 @@ typedef enum {
 
   if (   [key isEqualToString:@"recallValue"]
       || [key isEqualToString:@"restoreValue"]
-      || [key isEqualToString:@"currentCommand"]
-      || [key isEqualToString:@"sceneName"]) {
+      || [key isEqualToString:@"currentCommand"]) {
       [keyPaths addObject:@"rangeOffset"];
       [keyPaths addObject:@"recallOffset"];
       [keyPaths addObject:@"restoreOffset"];
       [keyPaths addObject:@"currentIndex"];
       [keyPaths addObject:@"cameraIndex"];
-   }
-   [keyPaths unionSet:[super keyPathsForValuesAffectingValueForKey:key]];
+    }
+    if (   [key isEqualToString:@"sceneName"]) {
+        [keyPaths addObject:@"sourceSettings"];
+        [keyPaths addObject:@"currentIndex"];
+        [keyPaths addObject:@"cameraIndex"];
+    }
+    if (   [key isEqualToString:@"backupName"]) {
+        [keyPaths addObject:@"backupSettings"];
+        [keyPaths addObject:@"currentIndex"];
+        [keyPaths addObject:@"cameraIndex"];
+    }
+    if (   [key isEqualToString:@"recallName"]
+        || [key isEqualToString:@"restoreName"]) {
+        [keyPaths addObject:@"backupName"];
+        [keyPaths addObject:@"sceneName"];
+        [keyPaths addObject:@"currentMode"];
+    }
+    [keyPaths unionSet:[super keyPathsForValuesAffectingValueForKey:key]];
 
    return keyPaths;
 }
@@ -115,7 +136,13 @@ typedef enum {
     });
 }
 
-static NSString *PTZ_SettingsPathKey = @"PTZSettingsPath";
+- (NSInteger)batchDelay {
+    return [[NSUserDefaults standardUserDefaults] integerForKey:PTZ_BatchDelayKey];
+}
+
+- (void)setBatchDelay:(NSInteger)value {
+    [[NSUserDefaults standardUserDefaults] setInteger:value forKey:PTZ_BatchDelayKey];
+}
 
 - (NSString *)obsSettingsDirectory {
     return [[NSUserDefaults standardUserDefaults] stringForKey:PTZ_SettingsPathKey];
@@ -138,6 +165,10 @@ static NSString *PTZ_SettingsPathKey = @"PTZSettingsPath";
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    // Restoration has already read this value; make sure it gets a real one.
+    [self willChangeValueForKey:@"batchDelay"];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:@{PTZ_BatchDelayKey:@(5)}];
+    [self didChangeValueForKey:@"batchDelay"];
     _recallQueue = dispatch_queue_create("recallQueue", NULL);
     
     self.openCamera = -1;
@@ -181,6 +212,7 @@ static NSString *PTZ_SettingsPathKey = @"PTZSettingsPath";
     if (rootPath == nil || [[NSFileManager defaultManager] fileExistsAtPath:rootPath]) {
         [self showPrefs:nil];
     }
+    [self loadBackupSettings];
 }
 
 - (NSArray *)cameraList {
@@ -311,6 +343,40 @@ static NSString *PTZ_SettingsPathKey = @"PTZSettingsPath";
     [self loadCamera];
 }
 
+- (void)loadBackupSettings {
+    self.backupSettings = nil;
+    NSString *rootPath = [self obsSettingsDirectory];
+    if (rootPath != nil && [[NSFileManager defaultManager] fileExistsAtPath:rootPath]) {
+        NSString *filename = [NSString stringWithFormat:@"settings%d.ini", (int)self.recallOffset];
+        NSString *path = [NSString pathWithComponents:@[rootPath, filename]];
+        
+        if (path != nil && [[NSFileManager defaultManager] fileExistsAtPath:path]) {
+            self.backupSettings = [[PTZSettingsFile alloc] initWithPath:path];
+        }
+    }
+}
+
+- (IBAction)settingsIniCopyToBackup:(id)sender {
+    NSString *rootPath = [self obsSettingsDirectory];
+    if (rootPath != nil) {
+        NSString *filename = [NSString stringWithFormat:@"settings%d.ini", (int)self.recallOffset];
+        NSString *path = [NSString pathWithComponents:@[rootPath, filename]];
+        [self.sourceSettings writeToFile:path];
+        [self loadBackupSettings];
+    }
+}
+
+- (IBAction)settingsIniCopyFromBackup:(id)sender {
+    if (self.backupSettings != nil) {
+        NSString *rootPath = [self obsSettingsDirectory];
+        if (rootPath != nil) {
+            NSString *path = [NSString pathWithComponents:@[rootPath, @"settings.ini"]];
+            [self.backupSettings writeToFile:path];
+            self.sourceSettings = [[PTZSettingsFile alloc] initWithPath:path];
+        }
+    }
+}
+
 - (IBAction)reopenCamera:(id)sender {
     // Close and reload
     if (self.reachable == ReachableYes) {
@@ -375,6 +441,19 @@ static NSString *PTZ_SettingsPathKey = @"PTZSettingsPath";
     }
     if (VISCA_set_pantilt_preset_speed(&iface, &camera, (uint32_t)self.cameraState.presetSpeed) != VISCA_SUCCESS) {
         NSLog(@"visca: unable to set speed\n");
+    }
+    if (first != nil) {
+        [window makeFirstResponder:first];
+    }
+}
+
+- (IBAction)applyBatchDelay:(id)sender {
+    // Force an active textfield to end editing so we get the current value, then put it back when we're done.
+    NSView *view = (NSView *)sender;
+    NSWindow *window = view.window;
+    NSView *first = [self currentEditingViewForWindow:window];
+    if (first != nil) {
+        [self.stateWindow makeFirstResponder:self.stateWindow.contentView];
     }
     if (first != nil) {
         [window makeFirstResponder:first];
@@ -468,27 +547,43 @@ static NSString *PTZ_SettingsPathKey = @"PTZSettingsPath";
     }
 }
 
-#define GET_EPS(x, y) abs(abs(x) - abs(y))
+- (void)batchRecallCamera:(NSInteger)cam {
+    
+    dispatch_async(_recallQueue, ^{
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            self.cameraIndex = cam;
+            [self loadCameraIfNeeded];
+        });
+        if (self.cameraOpen) {
+           //backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOffset, uint32_t delaySecs, bool isBackup)
+            if (backupRestore(&iface, &camera, (uint32_t)self.rangeOffset, (uint32_t)self.batchDelay, self.batchIsBackup, self) != VISCA_SUCCESS) {
+                NSLog(@"failed to recall scene %ld\n", self.recallValue);
+            } else if (iface.type == VISCA_RESPONSE_ERROR && iface.errortype == VISCA_ERROR_CMD_CANCELLED) {
+                NSLog(@"command cancelled\n");
+            }
+        }
+    });
+}
+
+- (IBAction)batchAction:(id)sender {
+    NSInteger cameraCount = [self.cameraButton numberOfItems];
+    for (NSInteger i = 0; i < cameraCount; i++) {
+        [self batchRecallCamera:i];
+    }
+}
+
+- (IBAction)batchOneAction:(id)sender {
+    [self batchRecallCamera:self.cameraIndex];
+}
+
 - (IBAction)recallScene:(id)sender {
     self.hideRecallIcon = YES;
     [self loadCameraIfNeeded];
     if (self.cameraOpen) {
         self.recallBusy = YES;
-        // We want the spinner to start spinning so the run loop needs to run.
         dispatch_async(_recallQueue, ^{
             uint16_t zoomValue;
             int16_t panPosition, tiltPosition;
-            if (VISCA_get_zoom_value(&iface, &camera, &zoomValue) == VISCA_SUCCESS) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    self.cameraState.zoom = zoomValue;
-                });
-            }
-            if (VISCA_get_pantilt_position(&iface, &camera, &panPosition, &tiltPosition) == VISCA_SUCCESS) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    self.cameraState.pan = panPosition;
-                    self.cameraState.tilt = tiltPosition;
-                });
-            }
             if (VISCA_memory_recall(&iface, &camera, self.recallValue) != VISCA_SUCCESS) {
                 NSLog(@"failed to recall scene %ld\n", self.recallValue);
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -522,20 +617,32 @@ static NSString *PTZ_SettingsPathKey = @"PTZSettingsPath";
     return [NSString stringWithFormat:@"http://%@:80/snapshot.jpg", [self cameraIP]];
 }
 
+- (void)batchSetFinishedAtIndex:(int)index {
+    [self fetchSnapshotAtIndex:index];
+}
+
 - (void)fetchSnapshot {
+    [self fetchSnapshotAtIndex:(int)self.currentIndex];
+}
+
+- (void)fetchSnapshotAtIndex:(int)index {
     // I do know this is not the recommended way to make an URL! :)
     NSString *url = [self snapshotURL];
+    NSString *cameraIP = [self cameraIP];
     [[[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:url]
                                  completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (data != nil) {
-            self.snapshotImage = [[NSImage alloc] initWithData:data];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.snapshotImage = [[NSImage alloc] initWithData:data];
+            });
+            // PTZ app only shows 6, but being able to see what got saved is useful.
             NSString *rootPath = [self obsSettingsDirectory];
             if ([rootPath length] > 0) {
-                NSString *filename = [NSString stringWithFormat:@"snapshot_%@%d.jpg", self.cameraIP, (int)self.currentIndex];
+                NSString *filename = [NSString stringWithFormat:@"snapshot_%@%d.jpg", cameraIP, index];
                 
                 NSString *path = [NSString pathWithComponents:@[rootPath, @"downloads", filename]];
-                NSLog(@"saving snapshot to %@", path);
-                [data writeToFile:path atomically:NO];
+                //NSLog(@"saving snapshot to %@", path);
+                [data writeToFile:path atomically:YES];
             }
         } else {
             NSLog(@"Failed to get snapshot: error %@", error);
@@ -589,6 +696,7 @@ static NSString *PTZ_SettingsPathKey = @"PTZSettingsPath";
     if (self.autoRecall) {
         [self recallScene:sender];
     }
+    [self loadBackupSettings];
 }
 
 - (IBAction)changeCurrentIndex:(id)sender {
@@ -726,4 +834,33 @@ void close_interface(void)
     //VISCA_usleep(2000); // calls usleep. doesn't appear to actually sleep.
 
     VISCA_close(&iface);
+}
+
+VISCA_API uint32_t backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOffset, uint32_t delaySecs, bool isBackup, AppDelegate *appDelegate)
+{
+    uint32_t fromOffset = isBackup ? 0 : inOffset;
+    uint32_t toOffset = isBackup ? inOffset : 0;
+
+    uint32_t sceneIndex;
+    for (sceneIndex = 1; sceneIndex < 10; sceneIndex++) {
+        fprintf(stderr, "recall %d", sceneIndex + fromOffset);
+        if (VISCA_memory_recall(iface, camera, sceneIndex + fromOffset) != VISCA_SUCCESS) {
+            fprintf(stderr, "\nfailed to recall scene %d\n", sceneIndex + fromOffset);
+            continue;
+        }
+        fprintf(stderr, " set %d", sceneIndex + toOffset);
+        if (VISCA_memory_set(iface, camera, sceneIndex + toOffset) != VISCA_SUCCESS) {
+            fprintf(stderr, "\nfailed to set scene %d\n", sceneIndex + toOffset);
+            continue;
+        }
+        fprintf(stderr, " copied scene %d to %d\n", sceneIndex + fromOffset, sceneIndex + toOffset);
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [appDelegate batchSetFinishedAtIndex:sceneIndex+toOffset];
+        });
+        // You can recall all 9 scenes in a row with no delay. You can set 9 scenes without a delay!
+        // But if you are doing a recall/set combo, the delay is required. Otherwise it just sits there in 'send' starting at recall 3. Might just be a bug in our cameras - well, PTZOptics says no. I don't believe them. They said I'm overloading the camera with commands, but these *are* waiting for the previous one to finish.
+        // Also 'usleep' doesn't seem to sleep, so we're stuck with integer seconds. Fortunately '1' works.
+        sleep(delaySecs);
+    }
+    return VISCA_SUCCESS;
 }
