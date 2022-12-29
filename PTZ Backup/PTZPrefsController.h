@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface PTZPrefsController : NSWindowController
+@interface PTZPrefsController : NSWindowController <NSOpenSavePanelDelegate>
 
 @end
 

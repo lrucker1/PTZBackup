@@ -82,7 +82,10 @@ static int initialize_socket(VISCA_tcp_ctx_t *ctx, const char *hostname, int por
 //    if (setsockopt(ctx->sockfd, IPPROTO_TCP, TCP_NODELAY, (char*)&flag, sizeof(int))) {
 //        fprintf(stderr, "Warning: failed to set NODELAY\n");
 //    }
-	struct sockaddr_in server = {
+    // Do not crash on SIGPIPE (13)
+    int set = 1;
+    setsockopt(ctx->sockfd, SOL_SOCKET, SO_NOSIGPIPE, (void *)&set, sizeof(int));
+    struct sockaddr_in server = {
 		.sin_family = AF_INET,
 		.sin_port = htons(port),
 	};

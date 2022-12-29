@@ -13,3 +13,12 @@ PTZ Support:
 > It is expected that you would need to put a delay in between each command, the camera may get overloaded with all at once.
 
 I think they missed the “waiting for the camera to report success”. I still think it’s a bug, but I guess I need a bigger delay.
+After getting all 3 of our cameras on the latest firmware, a 1 second delay works for them all. Cameras on older firmware needed a 5 second delay.
+
+signal 13
+https://stackoverflow.com/questions/108183/how-to-prevent-sigpipes-or-handle-them-properly
+
+Apparently PTZOptics doesn't support cancel:
+Packet: 81 20 ff
+errortype 02 (expected 04)
+- but we can cancel the loop.

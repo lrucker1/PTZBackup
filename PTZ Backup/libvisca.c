@@ -34,6 +34,14 @@
 /*      PRIVATE FUNCTIONS       */
 /********************************/
 
+void _packet_print(VISCAPacket_t *packet) {
+    fprintf(stderr, "\nPacket: ");
+    for (int i = 0; i < packet->length; i++) {
+        fprintf(stderr, "%02hhx ", packet->bytes[i]);
+    }
+    fprintf(stderr, "\n");
+}
+
 void _VISCA_append_byte(VISCAPacket_t *packet, unsigned char byte)
 {
 	packet->bytes[packet->length] = byte;
@@ -42,11 +50,12 @@ void _VISCA_append_byte(VISCAPacket_t *packet, unsigned char byte)
 
 uint32_t _VISCA_write_packet_data(VISCAInterface_t *iface, VISCACamera_t *camera, VISCAPacket_t *packet)
 {
-	int bytes_written;
+	size_t bytes_written;
 
+    // _packet_print(packet);
 	bytes_written = iface->callback->write(iface, packet->bytes, packet->length);
-	if (bytes_written < (int)packet->length) {
-        fprintf(stderr, " write fail written %d packet length %d   \n", bytes_written, packet->length);
+	if (bytes_written < packet->length) {
+        fprintf(stderr, " write fail written %zu packet length %d   \n", bytes_written, packet->length);
 		return VISCA_FAILURE;
     } else {
 		return VISCA_SUCCESS;
@@ -82,7 +91,7 @@ uint32_t _VISCA_send_packet(VISCAInterface_t *iface, VISCACamera_t *camera, VISC
 uint32_t _VISCA_get_packet(VISCAInterface_t *iface)
 {
 	int pos = 0;
-	int bytes_read;
+	size_t bytes_read;
 
 	// wait for message
 	if (iface->callback->wait_read)

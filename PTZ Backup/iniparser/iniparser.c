@@ -42,7 +42,7 @@ typedef enum _line_status_ {
   At most len - 1 elements of the input string will be converted.
  */
 /*--------------------------------------------------------------------------*/
-static const char * strlwc(const char * in, char *out, unsigned len)
+static const char * strlwc(const char * in, char *out, size_t len)
 {
     unsigned i ;
 
@@ -105,7 +105,7 @@ static unsigned strstrip(char * s)
     *last = (char)0;
 
     memmove(dest,s,last - s + 1);
-    return last - s;
+    return (unsigned)(last - s);
 }
 
 /*-------------------------------------------------------------------------*/

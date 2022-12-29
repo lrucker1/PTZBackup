@@ -7,9 +7,15 @@
 
 #import <Cocoa/Cocoa.h>
 
+#define PTZ_LocalCamerasKey @"LocalCameras"
+
 @interface AppDelegate : NSObject <NSApplicationDelegate, NSWindowDelegate>
 
-@property NSString *obsSettingsDirectory;
+@property NSString *ptzopticsSettingsFilePath;
+
+- (NSArray *)cameraList;
+
+- (void)applyPrefChanges;
 
 @end
 

@@ -11,6 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PTZSettingsFile : NSObject
 
++ (BOOL)validateFileWithPath:(NSString *)path error:(NSError * _Nullable *)error;
 - (instancetype)initWithPath:(NSString *)path;
 - (void)logDictionary;
 - (NSString *)stringForKey:(NSString *)aKey;

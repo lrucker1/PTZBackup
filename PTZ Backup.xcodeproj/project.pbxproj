@@ -15,6 +15,7 @@
 		9409E79D2954BEE500163502 /* PTZSettingsFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9409E79C2954BEE500163502 /* PTZSettingsFile.m */; };
 		9409E7A12954D7F700163502 /* PTZPrefsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9409E79F2954D7F700163502 /* PTZPrefsController.m */; };
 		9409E7A22954D7F700163502 /* PTZPrefsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9409E7A02954D7F700163502 /* PTZPrefsController.xib */; };
+		9409E7A429596BF600163502 /* ObjCUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9409E7A329596BF600163502 /* ObjCUtils.m */; };
 		941ED01C293FF3D4001D8039 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 941ED01B293FF3D4001D8039 /* AppDelegate.m */; };
 		941ED01E293FF3D5001D8039 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 941ED01D293FF3D5001D8039 /* Assets.xcassets */; };
 		941ED021293FF3D5001D8039 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 941ED01F293FF3D5001D8039 /* MainMenu.xib */; };
@@ -28,6 +29,7 @@
 		941ED0512940197F001D8039 /* libvisca_tcp.c in Sources */ = {isa = PBXBuildFile; fileRef = 941ED04C2940197F001D8039 /* libvisca_tcp.c */; };
 		941ED0522940197F001D8039 /* libvisca_udp.c in Sources */ = {isa = PBXBuildFile; fileRef = 941ED04D2940197F001D8039 /* libvisca_udp.c */; };
 		9479B0E7294273800021734F /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = 9479B0E6294273800021734F /* Credits.html */; };
+		94FA285F295E2B00007A4BDF /* PTZCameraStateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94FA285E295E2B00007A4BDF /* PTZCameraStateViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +63,8 @@
 		9409E79E2954D7F700163502 /* PTZPrefsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTZPrefsController.h; sourceTree = "<group>"; };
 		9409E79F2954D7F700163502 /* PTZPrefsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTZPrefsController.m; sourceTree = "<group>"; };
 		9409E7A02954D7F700163502 /* PTZPrefsController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PTZPrefsController.xib; sourceTree = "<group>"; };
+		9409E7A329596BF600163502 /* ObjCUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjCUtils.m; sourceTree = "<group>"; };
+		9409E7A529596C8300163502 /* ObjCUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjCUtils.h; sourceTree = "<group>"; };
 		941ED017293FF3D4001D8039 /* PTZ Backup.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PTZ Backup.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		941ED01A293FF3D4001D8039 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		941ED01B293FF3D4001D8039 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -80,6 +84,8 @@
 		941ED04C2940197F001D8039 /* libvisca_tcp.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = libvisca_tcp.c; sourceTree = "<group>"; };
 		941ED04D2940197F001D8039 /* libvisca_udp.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = libvisca_udp.c; sourceTree = "<group>"; };
 		9479B0E6294273800021734F /* Credits.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = Credits.html; sourceTree = "<group>"; };
+		94FA285D295E2B00007A4BDF /* PTZCameraStateViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTZCameraStateViewController.h; sourceTree = "<group>"; };
+		94FA285E295E2B00007A4BDF /* PTZCameraStateViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTZCameraStateViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +118,8 @@
 			children = (
 				9409E79B2954BEE500163502 /* PTZSettingsFile.h */,
 				9409E79C2954BEE500163502 /* PTZSettingsFile.m */,
+				9409E7A329596BF600163502 /* ObjCUtils.m */,
+				9409E7A529596C8300163502 /* ObjCUtils.h */,
 				9409E7952954BD2300163502 /* iniparser.c */,
 				9409E7942954BD2200163502 /* iniparser.h */,
 				9409E7982954BDC300163502 /* dictionary.c */,
@@ -148,6 +156,8 @@
 				94039E742950504C009FAE39 /* Notes */,
 				94039E71294E4C5E009FAE39 /* PTZCamera.h */,
 				94039E72294E4C5F009FAE39 /* PTZCamera.m */,
+				94FA285D295E2B00007A4BDF /* PTZCameraStateViewController.h */,
+				94FA285E295E2B00007A4BDF /* PTZCameraStateViewController.m */,
 				9479B0E6294273800021734F /* Credits.html */,
 				941ED01D293FF3D5001D8039 /* Assets.xcassets */,
 				941ED01F293FF3D5001D8039 /* MainMenu.xib */,
@@ -323,8 +333,10 @@
 				941ED023293FF3D5001D8039 /* main.m in Sources */,
 				9409E79D2954BEE500163502 /* PTZSettingsFile.m in Sources */,
 				941ED01C293FF3D4001D8039 /* AppDelegate.m in Sources */,
+				9409E7A429596BF600163502 /* ObjCUtils.m in Sources */,
 				9409E7962954BD2300163502 /* iniparser.c in Sources */,
 				941ED0522940197F001D8039 /* libvisca_udp.c in Sources */,
+				94FA285F295E2B00007A4BDF /* PTZCameraStateViewController.m in Sources */,
 				9409E7992954BDC300163502 /* dictionary.c in Sources */,
 				941ED0502940197F001D8039 /* libvisca_serial_posix.c in Sources */,
 				94039E73294E4C5F009FAE39 /* PTZCamera.m in Sources */,

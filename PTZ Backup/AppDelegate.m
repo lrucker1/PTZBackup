@@ -23,13 +23,13 @@
 #define DOWNLOAD_FILE_URI "/snapshot.jpg"
 //     settings->setValue(QString::asprintf("mem%d", presetNum) + currentCamIp, presetText);
 
-// yeah, yeah, globals bad.
+// yeah, yeah, globals bad. Next major upgrade: refactor into separate windows, prep for supporting multiple windows - one per camera.
 VISCAInterface_t iface;
 VISCACamera_t camera;
 
 BOOL open_interface(const char *ttydev);
 void close_interface(void);
-VISCA_API uint32_t backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOffset, uint32_t delaySecs, bool isBackup, AppDelegate *appDelegate);
+void backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOffset, uint32_t delaySecs, bool isBackup, AppDelegate *appDelegate);
 
 typedef enum {
     PTZRestore = 0,
@@ -43,8 +43,16 @@ typedef enum {
     ReachableNo
 } Reachable;
 
+typedef enum {
+    TabSingle = 0,
+    TabBatch
+} CurrentTab;
+
 static NSString *PTZ_SettingsPathKey = @"PTZSettingsPath";
+static NSString *PTZ_SettingsFilePathKey = @"PTZSettingsFilePath";
 static NSString *PTZ_BatchDelayKey = @"BatchDelay";
+static NSString *PTZ_UseLocalCamerasKey = @"UseLocalCameraSettings";
+static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 
 @interface NSAttributedString (PTZAdditions)
 + (id)attributedStringWithString: (NSString *)string;
@@ -74,12 +82,14 @@ static NSString *PTZ_BatchDelayKey = @"BatchDelay";
 @property (readonly) NSInteger recallValue, restoreValue;
 @property NSInteger batchDelay;
 @property NSInteger currentMode;
+@property NSInteger currentTab;
 @property BOOL autoRecall;
 @property BOOL cameraOpen;
 @property BOOL busy, recallBusy;
 @property BOOL hideRecallIcon, hideRestoreIcon;
 @property BOOL useOBSSettings;
 @property BOOL batchIsBackup;
+@property BOOL batchCancelPending, batchOperationInProgress;
 @property Reachable reachable;
 @property (strong) NSFileHandle* pipeReadHandle;
 @property (strong) NSPipe *pipe;
@@ -111,6 +121,7 @@ static NSString *PTZ_BatchDelayKey = @"BatchDelay";
         [keyPaths addObject:@"sourceSettings"];
         [keyPaths addObject:@"currentIndex"];
         [keyPaths addObject:@"cameraIndex"];
+        [keyPaths addObject:@"cameraList"];
     }
     if (   [key isEqualToString:@"backupName"]) {
         [keyPaths addObject:@"backupSettings"];
@@ -122,6 +133,16 @@ static NSString *PTZ_BatchDelayKey = @"BatchDelay";
         [keyPaths addObject:@"backupName"];
         [keyPaths addObject:@"sceneName"];
         [keyPaths addObject:@"currentMode"];
+    }
+    if (   [key isEqualToString:@"cameraName"]
+        || [key isEqualToString:@"cameraIP"]) {
+        [keyPaths addObject:@"cameraIndex"];
+        [keyPaths addObject:@"cameraList"];
+    }
+    // batchAllButtonLabel
+    if (   [key isEqualToString:@"batchAllButtonLabel"]
+        || [key isEqualToString:@"batchOneButtonLabel"]) {
+        [keyPaths addObject:@"batchIsBackup"];
     }
     [keyPaths unionSet:[super keyPathsForValuesAffectingValueForKey:key]];
 
@@ -144,16 +165,27 @@ static NSString *PTZ_BatchDelayKey = @"BatchDelay";
     [[NSUserDefaults standardUserDefaults] setInteger:value forKey:PTZ_BatchDelayKey];
 }
 
-- (NSString *)obsSettingsDirectory {
-    return [[NSUserDefaults standardUserDefaults] stringForKey:PTZ_SettingsPathKey];
+- (NSString *)ptzopticsSettingsFilePath {
+    return [[NSUserDefaults standardUserDefaults] stringForKey:PTZ_SettingsFilePathKey];
 }
 
-- (void)setObsSettingsDirectory:(NSString *)newPath {
-    NSString *oldPath = self.obsSettingsDirectory;
+// path/to/settings.ini. Should be a subdir of PTZOptics, not OBS - that's the wrong format!
+- (void)setPtzopticsSettingsFilePath:(NSString *)newPath {
+    NSString *oldPath = self.ptzopticsSettingsFilePath;
     if (![oldPath isEqualToString:newPath]) {
-        [[NSUserDefaults standardUserDefaults] setObject:newPath forKey:PTZ_SettingsPathKey];
-        [self updateCameraPopup];
+        [[NSUserDefaults standardUserDefaults] setObject:newPath forKey:PTZ_SettingsFilePathKey];
     }
+}
+
+// should contain settings.ini, downloads folder, and backup settingsXX.ini
+- (NSString *)ptzopticsSettingsDirectory {
+    return [[self ptzopticsSettingsFilePath] stringByDeletingLastPathComponent];
+}
+
+- (void)applyPrefChanges {
+    [self willChangeValueForKey:@"cameraList"];
+    [self updateCameraPopup];
+    [self didChangeValueForKey:@"cameraList"];
 }
 
 - (void)configConsoleRedirect {
@@ -165,6 +197,7 @@ static NSString *PTZ_BatchDelayKey = @"BatchDelay";
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    [[NSUserDefaults standardUserDefaults] registerDefaults:@{PTZ_MaxRangeOffsetKey:@(80)}];
     // Restoration has already read this value; make sure it gets a real one.
     [self willChangeValueForKey:@"batchDelay"];
     [[NSUserDefaults standardUserDefaults] registerDefaults:@{PTZ_BatchDelayKey:@(5)}];
@@ -183,7 +216,7 @@ static NSString *PTZ_BatchDelayKey = @"BatchDelay";
             [self writeToConsole:@"Using localhost\n"];
             [self.cameraButton removeAllItems];
             [self.cameraButton addItemWithTitle:@"localhost"];
-            [[self.cameraButton lastItem] setRepresentedObject:@"localhost"];
+            [[self.cameraButton lastItem] setRepresentedObject:@[@"localhost", @"localhost"]];
             [self loadCamera];
         }
     }
@@ -208,41 +241,54 @@ static NSString *PTZ_BatchDelayKey = @"BatchDelay";
     [self updateMode:0]; // TODO: Defaults
     self.hideRestoreIcon = YES;
     self.hideRecallIcon = YES;
-    NSString *rootPath = [self obsSettingsDirectory];
-    if (rootPath == nil || [[NSFileManager defaultManager] fileExistsAtPath:rootPath]) {
+    NSString *iniPath = [self ptzopticsSettingsFilePath];
+    if (iniPath == nil || [[NSFileManager defaultManager] fileExistsAtPath:iniPath]) {
         [self showPrefs:nil];
     }
     [self loadBackupSettings];
 }
 
 - (NSArray *)cameraList {
-    NSString *rootPath = [self obsSettingsDirectory];
-    if (rootPath != nil && [[NSFileManager defaultManager] fileExistsAtPath:rootPath]) {
-        NSString *path = [NSString pathWithComponents:@[rootPath, @"settings.ini"]];
-        
-        if (path != nil && [[NSFileManager defaultManager] fileExistsAtPath:path]) {
-            self.sourceSettings = [[PTZSettingsFile alloc] initWithPath:path];
-            NSArray *cameras = [self.sourceSettings cameraInfo];
-            if ([cameras count] > 0) {
-                return cameras;
-            }
-        }
+    NSString *path = [self ptzopticsSettingsFilePath];
+    if (path == nil) {
+        NSLog(@"PTZOptics settings.ini file path not set");
+        return nil;
+    }
+    if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
+        NSLog(@"%@ not found", path);
+        return nil;
     }
 
+    self.sourceSettings = [[PTZSettingsFile alloc] initWithPath:path];
+    NSArray *cameras = [self.sourceSettings cameraInfo];
+    if ([cameras count] > 0) {
+        return cameras;
+    }
+
+    NSLog(@"No valid cameras found in %@", path);
+    [self.sourceSettings logDictionary];
     return nil;
 }
 
 - (void)updateCameraPopup {
+    NSArray *cameraList = nil;
     [self closeCamera];
-    NSArray *cameraList = [self cameraList];
+    BOOL useLocal = [[NSUserDefaults standardUserDefaults] boolForKey:PTZ_UseLocalCamerasKey];
+    
+    if (useLocal) {
+        cameraList = [[NSUserDefaults standardUserDefaults] arrayForKey:@"LocalCameras"];
+    } else {
+        cameraList = [self cameraList];
+    }
     [self.cameraButton removeAllItems];
     int i = 1;
-    for (NSArray *cameraInfo in cameraList) {
-        NSString *cameraname = [cameraInfo firstObject];
+    for (NSDictionary *cameraInfo in cameraList) {
+        NSString *cameraname = [cameraInfo objectForKey:@"cameraname"];
         NSString *title = [NSString stringWithFormat:@"%d - %@", i++, cameraname];
-        NSString *ipAddr = [cameraInfo lastObject];
+        NSString *ipAddr = [cameraInfo objectForKey:@"devicename"];
+        NSString *originalIP = [cameraInfo objectForKey:@"original"] ?: ipAddr;
         [self.cameraButton addItemWithTitle:title];
-        [[self.cameraButton lastItem] setRepresentedObject:ipAddr];
+        [[self.cameraButton lastItem] setRepresentedObject:@[ipAddr, originalIP]];
     }
     if ([cameraList count] > 0) {
         [self loadCameraIfReachable];
@@ -257,7 +303,6 @@ static NSString *PTZ_BatchDelayKey = @"BatchDelay";
     }
 }
 
-
 - (BOOL)applicationSupportsSecureRestorableState:(NSApplication *)app {
     return YES;
 }
@@ -269,8 +314,18 @@ static NSString *PTZ_BatchDelayKey = @"BatchDelay";
     [self.prefsController.window orderFront:sender];
 }
 
+- (NSString *)cameraName {
+    return [[self.cameraButton selectedItem] title];
+}
+
+// Current camera address
 - (NSString *)cameraIP {
-    return [[self.cameraButton selectedItem] representedObject];
+    return [[[self.cameraButton selectedItem] representedObject] firstObject];
+}
+
+// Address as used in settings.ini
+- (NSString *)settingsFileCameraIP {
+    return [[[self.cameraButton selectedItem] representedObject] lastObject];
 }
 
 - (NSString *)recallName {
@@ -298,11 +353,11 @@ static NSString *PTZ_BatchDelayKey = @"BatchDelay";
 }
 
 - (NSString *)sceneName {
-    return [self.sourceSettings nameForScene:self.currentIndex camera:self.cameraIP];
+    return [self.sourceSettings nameForScene:self.currentIndex camera:self.settingsFileCameraIP];
 }
 
 - (NSString *)backupName {
-    return [self.backupSettings nameForScene:self.currentIndex camera:self.cameraIP];
+    return [self.backupSettings nameForScene:self.currentIndex camera:self.settingsFileCameraIP];
 }
 
 // memory_recall, memory_set
@@ -345,7 +400,7 @@ static NSString *PTZ_BatchDelayKey = @"BatchDelay";
 
 - (void)loadBackupSettings {
     self.backupSettings = nil;
-    NSString *rootPath = [self obsSettingsDirectory];
+    NSString *rootPath = [self ptzopticsSettingsDirectory];
     if (rootPath != nil && [[NSFileManager defaultManager] fileExistsAtPath:rootPath]) {
         NSString *filename = [NSString stringWithFormat:@"settings%d.ini", (int)self.recallOffset];
         NSString *path = [NSString pathWithComponents:@[rootPath, filename]];
@@ -357,22 +412,36 @@ static NSString *PTZ_BatchDelayKey = @"BatchDelay";
 }
 
 - (IBAction)settingsIniCopyToBackup:(id)sender {
-    NSString *rootPath = [self obsSettingsDirectory];
+    NSString *rootPath = [self ptzopticsSettingsDirectory];
     if (rootPath != nil) {
         NSString *filename = [NSString stringWithFormat:@"settings%d.ini", (int)self.recallOffset];
         NSString *path = [NSString pathWithComponents:@[rootPath, filename]];
         [self.sourceSettings writeToFile:path];
         [self loadBackupSettings];
+    } else {
+        NSLog(@"Unable to copy: settings directory not found");
     }
 }
 
 - (IBAction)settingsIniCopyFromBackup:(id)sender {
     if (self.backupSettings != nil) {
-        NSString *rootPath = [self obsSettingsDirectory];
+        NSString *rootPath = [self ptzopticsSettingsDirectory];
         if (rootPath != nil) {
             NSString *path = [NSString pathWithComponents:@[rootPath, @"settings.ini"]];
+            if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+                NSLog(@"Copying old settings.ini to settings_backup.ini");
+                NSString *backupPath = [NSString pathWithComponents:@[rootPath, @"settings_backup.ini"]];
+                NSError *error;
+                if (![[NSFileManager defaultManager] copyItemAtPath:path toPath:backupPath error:&error]) {
+                    NSLog(@"Failed to make settings_backup: %@", error);
+                    [[NSAlert alertWithError:error] runModal];
+                    return;
+                }
+            }
             [self.backupSettings writeToFile:path];
             self.sourceSettings = [[PTZSettingsFile alloc] initWithPath:path];
+        } else {
+            NSLog(@"Unable to copy: settings directory not found");
         }
     }
 }
@@ -437,7 +506,7 @@ static NSString *PTZ_BatchDelayKey = @"BatchDelay";
     NSWindow *window = view.window;
     NSView *first = [self currentEditingViewForWindow:window];
     if (first != nil) {
-        [self.stateWindow makeFirstResponder:self.stateWindow.contentView];
+        [window makeFirstResponder:window.contentView];
     }
     if (VISCA_set_pantilt_preset_speed(&iface, &camera, (uint32_t)self.cameraState.presetSpeed) != VISCA_SUCCESS) {
         NSLog(@"visca: unable to set speed\n");
@@ -452,9 +521,6 @@ static NSString *PTZ_BatchDelayKey = @"BatchDelay";
     NSView *view = (NSView *)sender;
     NSWindow *window = view.window;
     NSView *first = [self currentEditingViewForWindow:window];
-    if (first != nil) {
-        [self.stateWindow makeFirstResponder:self.stateWindow.contentView];
-    }
     if (first != nil) {
         [window makeFirstResponder:first];
     }
@@ -487,7 +553,7 @@ static NSString *PTZ_BatchDelayKey = @"BatchDelay";
     NSWindow *window = view.window;
     NSView *first = [self currentEditingViewForWindow:window];
     if (first != nil) {
-        [self.stateWindow makeFirstResponder:self.stateWindow.contentView];
+        [window makeFirstResponder:window.contentView];
     }
     if (VISCA_set_zoom_value(&iface, &camera, (uint32_t)self.cameraState.zoom) != VISCA_SUCCESS) {
         NSLog(@"visca: unable to set zoom\n");
@@ -548,7 +614,6 @@ static NSString *PTZ_BatchDelayKey = @"BatchDelay";
 }
 
 - (void)batchRecallCamera:(NSInteger)cam {
-    
     dispatch_async(_recallQueue, ^{
         dispatch_sync(dispatch_get_main_queue(), ^{
             self.cameraIndex = cam;
@@ -556,11 +621,7 @@ static NSString *PTZ_BatchDelayKey = @"BatchDelay";
         });
         if (self.cameraOpen) {
            //backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOffset, uint32_t delaySecs, bool isBackup)
-            if (backupRestore(&iface, &camera, (uint32_t)self.rangeOffset, (uint32_t)self.batchDelay, self.batchIsBackup, self) != VISCA_SUCCESS) {
-                NSLog(@"failed to recall scene %ld\n", self.recallValue);
-            } else if (iface.type == VISCA_RESPONSE_ERROR && iface.errortype == VISCA_ERROR_CMD_CANCELLED) {
-                NSLog(@"command cancelled\n");
-            }
+            backupRestore(&iface, &camera, (uint32_t)self.rangeOffset, (uint32_t)self.batchDelay, self.batchIsBackup, self);
         }
     });
 }
@@ -574,6 +635,14 @@ static NSString *PTZ_BatchDelayKey = @"BatchDelay";
 
 - (IBAction)batchOneAction:(id)sender {
     [self batchRecallCamera:self.cameraIndex];
+}
+
+- (NSString *)batchOneButtonLabel {
+    return self.batchIsBackup ? @"Backup One Camera" : @"Restore One Camera";
+}
+
+- (NSString *)batchAllButtonLabel {
+    return self.batchIsBackup ? @"Backup All" : @"Restore All";
 }
 
 - (IBAction)recallScene:(id)sender {
@@ -636,7 +705,7 @@ static NSString *PTZ_BatchDelayKey = @"BatchDelay";
                 self.snapshotImage = [[NSImage alloc] initWithData:data];
             });
             // PTZ app only shows 6, but being able to see what got saved is useful.
-            NSString *rootPath = [self obsSettingsDirectory];
+            NSString *rootPath = [self ptzopticsSettingsDirectory];
             if ([rootPath length] > 0) {
                 NSString *filename = [NSString stringWithFormat:@"snapshot_%@%d.jpg", cameraIP, index];
                 
@@ -654,12 +723,14 @@ static NSString *PTZ_BatchDelayKey = @"BatchDelay";
     NSString *url = [self snapshotURL];
     [[[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:url]
                                  completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        if (data != nil) {
-            self.reachable = ReachableYes;
-            [self loadCameraIfNeeded];
-        } else {
-            self.reachable = ReachableNo;
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (data != nil) {
+                self.reachable = ReachableYes;
+                [self loadCameraIfNeeded];
+            } else {
+                self.reachable = ReachableNo;
+            }
+        });
     }] resume];
 
 }
@@ -684,16 +755,18 @@ static NSString *PTZ_BatchDelayKey = @"BatchDelay";
 // NSTextField actions are required so we don't propagate return to the button, because it increments. But we may stil want to load the scene.
 
 - (IBAction)changeRangeOffset:(id)sender {
-    // Usually a multiple of 10 when doing batches, but can be other values for one-off saves. It's up to the user to choose wisely. I only protect you from tromping on the OBS default 9
-    if (self.rangeOffset < 10) {
-        self.rangeOffset = 10;
+    // Usually a multiple of 10 when doing batches, but can be other values for one-off saves. It's up to the user to choose wisely. I only protect you from tromping on the PTZOptics default 9.
+    if (self.rangeOffset < 9) {
+        self.rangeOffset = 9;
     }
-    // PTZOptics doc says range for the memory commands is (0 to 127), IIRC Chris said reality was lower. If your offset is 126 and index > 1, the failure is all yours.
-    if (self.rangeOffset > 126) {
-        self.rangeOffset = 126;
+    // PTZOptics doc says range for the memory commands is (0 to 127). Testing shows the real max is 89. Oddly, the command to toggle the OSD/Menu is the same as recall scene 95.
+    // But other brands have different ranges, plus they could change in the future.
+    NSInteger maxOffset = [[NSUserDefaults standardUserDefaults] integerForKey:PTZ_MaxRangeOffsetKey];
+    if (self.rangeOffset > maxOffset) {
+        self.rangeOffset = maxOffset;
     }
     [self updateMode:self.currentMode];
-    if (self.autoRecall) {
+    if (self.autoRecall && self.currentTab == TabSingle) {
         [self recallScene:sender];
     }
     [self loadBackupSettings];
@@ -748,7 +821,15 @@ static NSString *PTZ_BatchDelayKey = @"BatchDelay";
     //NSLog(@"Selector method is (%@)", NSStringFromSelector( commandSelector ) );
     if (commandSelector == @selector(insertNewline:)) {
         //Do something against ENTER key
-        // Should the speed field do an "apply"?
+        // Force the field to do an "apply". Seriously, guys, this code is ancient and there's still no better way?
+        NSWindow *window = fieldEditor.window;
+        NSView *first = [self currentEditingViewForWindow:window];
+        if (first != nil) {
+            [window makeFirstResponder:window.contentView];
+        }
+        if (first != nil) {
+            [window makeFirstResponder:first];
+        }
         return YES;
 
     } else if (commandSelector == @selector(deleteForward:)) {
@@ -790,6 +871,9 @@ static NSString *PTZ_BatchDelayKey = @"BatchDelay";
 }
 
 - (IBAction)commandCancel:(id)sender {
+    if (self.batchOperationInProgress) {
+        self.batchCancelPending = YES;
+    }
     if (VISCA_cancel(&iface, &camera) != VISCA_SUCCESS) {
         NSLog(@"visca: cancel attempt failed\n");
     }
@@ -836,31 +920,52 @@ void close_interface(void)
     VISCA_close(&iface);
 }
 
-VISCA_API uint32_t backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOffset, uint32_t delaySecs, bool isBackup, AppDelegate *appDelegate)
+void backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOffset, uint32_t delaySecs, bool isBackup, AppDelegate *appDelegate)
 {
     uint32_t fromOffset = isBackup ? 0 : inOffset;
     uint32_t toOffset = isBackup ? inOffset : 0;
 
     uint32_t sceneIndex;
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        appDelegate.batchCancelPending = NO;
+        appDelegate.batchOperationInProgress = YES;
+        appDelegate.recallBusy = YES;
+    });
+    __block BOOL cancel = NO;
     for (sceneIndex = 1; sceneIndex < 10; sceneIndex++) {
         fprintf(stderr, "recall %d", sceneIndex + fromOffset);
         if (VISCA_memory_recall(iface, camera, sceneIndex + fromOffset) != VISCA_SUCCESS) {
-            fprintf(stderr, "\nfailed to recall scene %d\n", sceneIndex + fromOffset);
+            fprintf(stderr, "\nfailed to send recall command %d\n", sceneIndex + fromOffset);
             continue;
+        } else if (iface->type == VISCA_RESPONSE_ERROR) {
+            fprintf(stderr, "\nCancelled recall at scene %d\n", sceneIndex + fromOffset);
+            break;
         }
         fprintf(stderr, " set %d", sceneIndex + toOffset);
         if (VISCA_memory_set(iface, camera, sceneIndex + toOffset) != VISCA_SUCCESS) {
-            fprintf(stderr, "\nfailed to set scene %d\n", sceneIndex + toOffset);
+            fprintf(stderr, "\nfailed to send set command %d\n", sceneIndex + toOffset);
             continue;
+        } else if (iface->type == VISCA_RESPONSE_ERROR) {
+            fprintf(stderr, "\nCancelled set at scene %d\n", sceneIndex + toOffset);
+            break;
         }
         fprintf(stderr, " copied scene %d to %d\n", sceneIndex + fromOffset, sceneIndex + toOffset);
         dispatch_sync(dispatch_get_main_queue(), ^{
             [appDelegate batchSetFinishedAtIndex:sceneIndex+toOffset];
+            cancel = appDelegate.batchCancelPending;
         });
+        if (cancel) {
+            break;
+        }
         // You can recall all 9 scenes in a row with no delay. You can set 9 scenes without a delay!
-        // But if you are doing a recall/set combo, the delay is required. Otherwise it just sits there in 'send' starting at recall 3. Might just be a bug in our cameras - well, PTZOptics says no. I don't believe them. They said I'm overloading the camera with commands, but these *are* waiting for the previous one to finish.
-        // Also 'usleep' doesn't seem to sleep, so we're stuck with integer seconds. Fortunately '1' works.
+        // But if you are doing a recall/set combo, the delay is required. Otherwise it just sits there in 'send' starting around recall 3. Might just be a bug in our cameras - well, PTZOptics says no. I don't believe them. They said I'm overloading the camera with commands, but these *are* waiting for the previous one to finish.
+        // Also 'usleep' doesn't seem to sleep, so we're stuck with integer seconds. And the firmware version affects the required delay. Latest one only needs 1 sec; older ones needed 5.
         sleep(delaySecs);
     }
-    return VISCA_SUCCESS;
+    // DO NOT DO AN EARLY RETURN! We must get here.
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        appDelegate.batchCancelPending = NO;
+        appDelegate.batchOperationInProgress = NO;
+        appDelegate.recallBusy = NO;
+    });
 }

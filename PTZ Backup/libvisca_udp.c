@@ -50,7 +50,7 @@ typedef struct _VISCA_udp_ctx {
 
 	// receiving buffer
 	uint8_t buf_recv[64];
-	int buf_recv_n, buf_recv_pl_n, buf_recv_pl_i;
+    size_t buf_recv_n, buf_recv_pl_n, buf_recv_pl_i;
 } VISCA_udp_ctx_t;
 
 inline static int is_payload_device_setting(const uint8_t *buf)
@@ -75,11 +75,11 @@ inline static void set_timeout_ms(VISCA_udp_ctx_t *ctx, int timeout)
 		fprintf(stderr, "Error: setsockopt(SO_RCVTIMEO) failed");
 }
 
-static int visca_udp_send_packet_buf(VISCA_udp_ctx_t *ctx)
+static size_t visca_udp_send_packet_buf(VISCA_udp_ctx_t *ctx)
 {
 	debug_udp("udp: send header=%s payload length=%d buf=%s", b2s(ctx->buf_send, 8), ctx->buf_send_n - 8,
 		  b2s(ctx->buf_send + 8, ctx->buf_send_n - 8));
-	int ret = sendto(ctx->sockfd, ctx->buf_send, ctx->buf_send_n, 0, (struct sockaddr *)&ctx->addr,
+	size_t ret = sendto(ctx->sockfd, ctx->buf_send, ctx->buf_send_n, 0, (struct sockaddr *)&ctx->addr,
 			 sizeof(ctx->addr));
 	if (ret >= 8)
 		return ret - 8;
@@ -87,7 +87,7 @@ static int visca_udp_send_packet_buf(VISCA_udp_ctx_t *ctx)
 		return -1;
 }
 
-static int visca_udp_send_packet(VISCA_udp_ctx_t *ctx, uint16_t type, const void *buf, int length)
+static size_t visca_udp_send_packet(VISCA_udp_ctx_t *ctx, uint16_t type, const void *buf, int length)
 {
 	uint8_t *buf_udp = ctx->buf_send;
 	ctx->buf_send_n = length + 8;
@@ -106,7 +106,7 @@ static int visca_udp_send_packet(VISCA_udp_ctx_t *ctx, uint16_t type, const void
 	return visca_udp_send_packet_buf(ctx);
 }
 
-static int visca_udp_cb_write(VISCAInterface_t *iface, const void *buf, int length)
+static size_t visca_udp_cb_write(VISCAInterface_t *iface, const void *buf, int length)
 {
 	VISCA_udp_ctx_t *ctx = iface->ctx;
 	const uint8_t *buf_int = buf;
@@ -124,9 +124,9 @@ static int visca_udp_cb_write(VISCAInterface_t *iface, const void *buf, int leng
 	return visca_udp_send_packet(ctx, type, buf, length);
 }
 
-inline static int visca_udp_recv_packet_buf(VISCA_udp_ctx_t *ctx)
+inline static size_t visca_udp_recv_packet_buf(VISCA_udp_ctx_t *ctx)
 {
-	int length = recv(ctx->sockfd, ctx->buf_recv, sizeof(ctx->buf_recv), 0);
+    size_t length = recv(ctx->sockfd, ctx->buf_recv, sizeof(ctx->buf_recv), 0);
 	if (length >= 0) {
 		ctx->buf_recv_n = length;
 		debug_udp("udp: recv header=%s payload length=%d buf=%s", b2s(ctx->buf_recv, 8), length - 8,
@@ -135,11 +135,11 @@ inline static int visca_udp_recv_packet_buf(VISCA_udp_ctx_t *ctx)
 	return length;
 }
 
-inline static int visca_udp_recv_packet(VISCA_udp_ctx_t *ctx)
+inline static size_t visca_udp_recv_packet(VISCA_udp_ctx_t *ctx)
 {
 	uint8_t *buf = ctx->buf_recv;
 	do {
-		int ret = visca_udp_recv_packet_buf(ctx);
+        size_t ret = visca_udp_recv_packet_buf(ctx);
 		if (ret < 0 && (errno == ETIMEDOUT || errno == EAGAIN)) {
 			if (ctx->seq_ack != ctx->seq_sent) {
 				set_timeout_ms(ctx, 1000);
@@ -147,7 +147,7 @@ inline static int visca_udp_recv_packet(VISCA_udp_ctx_t *ctx)
 			}
 			continue;
 		} else if (ret < 0 || ret < 8) {
-			fprintf(stderr, "Error: libvisca_udp: recv ret=%d errno=%d\n", ret, errno);
+            fprintf(stderr, "Error: libvisca_udp: recv ret=%zu errno=%d\n", ret, errno);
 			return 1;
 		}
 
@@ -191,7 +191,7 @@ inline static int visca_udp_recv_packet(VISCA_udp_ctx_t *ctx)
 	return 1;
 }
 
-static int visca_udp_cb_read(VISCAInterface_t *iface, void *buf, int length)
+static size_t visca_udp_cb_read(VISCAInterface_t *iface, void *buf, int length)
 {
 	if (length <= 0)
 		return 0;
@@ -203,7 +203,7 @@ static int visca_udp_cb_read(VISCAInterface_t *iface, void *buf, int length)
 			return -1;
 	}
 
-	int ret = 0;
+    size_t ret = 0;
 	uint8_t *buf_int = buf;
 	while (length > 0 && ctx->buf_recv_pl_i != ctx->buf_recv_pl_n) {
 		*buf_int++ = ctx->buf_recv[ctx->buf_recv_pl_i++];

@@ -722,7 +722,7 @@ DQ
                                                 <action selector="settingsIniCopyToBackup:" target="Voe-Tx-rLC" id="UPR-o8-xLJ"/>
                                             </connections>
                                         </button>
-                                        <button toolTip="Replace the settings file" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fFL-qV-wEl" userLabel="ToBackup">
+                                        <button toolTip="Replace the settings file. It will first be copied to settings_backup.ini" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fFL-qV-wEl" userLabel="ToBackup">
                                             <rect key="frame" x="106" y="77" width="40" height="27"/>
                                             <buttonCell key="cell" type="push" bezelStyle="rounded" image="arrow.left" catalog="system" imagePosition="only" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="iC6-cK-mEQ">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -730,8 +730,16 @@ DQ
                                             </buttonCell>
                                             <color key="bezelColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                                             <symbolConfiguration key="symbolConfiguration" weight="bold"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="boolean" keyPath="hasDestructiveAction" value="YES"/>
+                                            </userDefinedRuntimeAttributes>
                                             <connections>
                                                 <action selector="settingsIniCopyFromBackup:" target="Voe-Tx-rLC" id="kXc-oe-Xcq"/>
+                                                <binding destination="Voe-Tx-rLC" name="enabled" keyPath="recallBusy" id="lWx-78-k5g">
+                                                    <dictionary key="options">
+                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                    </dictionary>
+                                                </binding>
                                             </connections>
                                         </button>
                                         <textField toolTip="10 to 126. Values above 110 may result in errors." horizontalHuggingPriority="251" verticalHuggingPriority="750" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="0hd-rw-gt7">
@@ -775,6 +783,12 @@ DQ
                                             </buttonCell>
                                             <connections>
                                                 <action selector="batchAction:" target="Voe-Tx-rLC" id="35x-fw-Guf"/>
+                                                <binding destination="Voe-Tx-rLC" name="title" keyPath="batchAllButtonLabel" id="17g-i7-naa"/>
+                                                <binding destination="Voe-Tx-rLC" name="enabled" keyPath="recallBusy" id="XYf-Vg-8PI">
+                                                    <dictionary key="options">
+                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                    </dictionary>
+                                                </binding>
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="n0Y-Pm-447" userLabel="Offset">
@@ -803,7 +817,7 @@ Gw
 </string>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="commandCancel:" target="Voe-Tx-rLC" id="4cf-DV-I4X"/>
+                                                <action selector="commandCancel:" target="Voe-Tx-rLC" id="dAT-Oz-YVP"/>
                                             </connections>
                                         </button>
                                         <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TS2-9r-vk4">
@@ -821,13 +835,19 @@ Gw
                                             </connections>
                                         </segmentedControl>
                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UIB-D9-46n">
-                                            <rect key="frame" x="152" y="13" width="126" height="32"/>
-                                            <buttonCell key="cell" type="push" title="Copy 1 Camera" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="GCx-PQ-rax">
+                                            <rect key="frame" x="105" y="13" width="173" height="32"/>
+                                            <buttonCell key="cell" type="push" title="Copy Selected Camera" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="GCx-PQ-rax">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
                                                 <action selector="batchOneAction:" target="Voe-Tx-rLC" id="VLK-oX-VGB"/>
+                                                <binding destination="Voe-Tx-rLC" name="title" keyPath="batchOneButtonLabel" id="DmN-od-Ppc"/>
+                                                <binding destination="Voe-Tx-rLC" name="enabled" keyPath="recallBusy" id="hvj-dx-6Tr">
+                                                    <dictionary key="options">
+                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                    </dictionary>
+                                                </binding>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -870,6 +890,9 @@ Gw
                                 </view>
                             </tabViewItem>
                         </tabViewItems>
+                        <connections>
+                            <binding destination="Voe-Tx-rLC" name="selectedIndex" keyPath="currentTab" id="7T5-zj-nJ7"/>
+                        </connections>
                     </tabView>
                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Xwa-zZ-IXH">
                         <rect key="frame" x="37" y="17" width="306" height="166"/>
@@ -900,10 +923,16 @@ Gw
                         </popUpButtonCell>
                         <connections>
                             <action selector="changeCamera:" target="Voe-Tx-rLC" id="lSI-Nc-yRi"/>
+                            <binding destination="Voe-Tx-rLC" name="toolTip" keyPath="cameraIP" id="khA-zg-2lM"/>
                             <binding destination="Voe-Tx-rLC" name="selectedIndex" keyPath="cameraIndex" id="ahz-3g-8Xc">
                                 <dictionary key="options">
                                     <integer key="NSNotApplicablePlaceholder" value="-1"/>
                                     <integer key="NSNullPlaceholder" value="-1"/>
+                                </dictionary>
+                            </binding>
+                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="recallBusy" id="OYK-Sa-Dgw">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
                         </connections>
@@ -916,9 +945,14 @@ Gw
                         </buttonCell>
                         <connections>
                             <action selector="reopenCamera:" target="Voe-Tx-rLC" id="1Ua-9B-jDK"/>
+                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="recallBusy" id="rNs-Z8-kRQ">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
                         </connections>
                     </button>
-                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dsb-BY-86L">
+                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dsb-BY-86L" userLabel="Reachable Camera Image View">
                         <rect key="frame" x="234" y="460" width="28" height="16"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="28" id="0WI-HN-sBB"/>
@@ -926,6 +960,7 @@ Gw
                         </constraints>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="PTZCameraIcon" id="ofp-n6-gcw"/>
                         <connections>
+                            <binding destination="Voe-Tx-rLC" name="toolTip" keyPath="cameraIP" id="qaW-Va-FMB"/>
                             <binding destination="Voe-Tx-rLC" name="hidden" keyPath="cameraOpen" id="0u2-aZ-ce0">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
@@ -933,7 +968,7 @@ Gw
                             </binding>
                         </connections>
                     </imageView>
-                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="D0B-8c-vVN">
+                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="D0B-8c-vVN" userLabel="Unreachable Camera Image View">
                         <rect key="frame" x="234" y="460" width="28" height="16"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="16" id="Ue8-Is-nlU"/>
@@ -941,6 +976,7 @@ Gw
                         </constraints>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSStatusUnavailable" id="PKr-VU-HoQ"/>
                         <connections>
+                            <binding destination="Voe-Tx-rLC" name="toolTip" keyPath="cameraIP" id="gun-Qo-JRG"/>
                             <binding destination="Voe-Tx-rLC" name="hidden" keyPath="cameraOpen" id="BTh-s4-Xze"/>
                         </connections>
                     </imageView>
@@ -975,7 +1011,7 @@ Gw
             <rect key="contentRect" x="224" y="343" width="480" height="270"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="775"/>
             <value key="minSize" type="size" width="450" height="220"/>
-            <view key="contentView" id="IqS-1x-ggh">
+            <view key="contentView" appearanceType="aqua" id="IqS-1x-ggh">
                 <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
@@ -1025,11 +1061,10 @@ Gw
         <window title="Camera State" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" frameAutosaveName="" animationBehavior="default" id="YGF-Dk-82F">
             <windowStyleMask key="styleMask" titled="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="109" y="130" width="400" height="196"/>
+            <rect key="contentRect" x="109" y="130" width="400" height="228"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="775"/>
-            <view key="contentView" id="I7c-h6-brQ">
-                <rect key="frame" x="0.0" y="0.0" width="400" height="200"/>
-                <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I7c-h6-brQ">
+                <rect key="frame" x="0.0" y="0.0" width="400" height="227"/>
                 <subviews>
                     <textField toolTip="This is a write-only value; the value you see may be out of date." horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mek-8b-Ze9">
                         <rect key="frame" x="18" y="72" width="124" height="16"/>
@@ -1065,6 +1100,11 @@ Gw
                         <connections>
                             <accessibilityConnection property="title" destination="Mek-8b-Ze9" id="Ts6-gy-rVT"/>
                             <action selector="applyRecallSpeed:" target="Voe-Tx-rLC" id="gAk-kJ-HNM"/>
+                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="recallBusy" id="znq-as-5v4">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" preferredMaxLayoutWidth="31" translatesAutoresizingMaskIntoConstraints="NO" id="UW9-RI-IZh" userLabel="pan">
@@ -1102,6 +1142,11 @@ Gw
                         </buttonCell>
                         <connections>
                             <accessibilityConnection property="title" destination="L28-KD-sfa" id="UP3-XT-fdY"/>
+                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="recallBusy" id="aFT-aF-1NZ">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="751" preferredMaxLayoutWidth="31" translatesAutoresizingMaskIntoConstraints="NO" id="0Ap-46-7Jd" userLabel="zoom">
@@ -1135,6 +1180,11 @@ Gw
                         <connections>
                             <accessibilityConnection property="title" destination="ov4-Ur-Ook" id="CfF-uY-5vA"/>
                             <action selector="applyZoom:" target="Voe-Tx-rLC" id="dDF-sz-e6q"/>
+                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="recallBusy" id="lps-Lb-89U">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" preferredMaxLayoutWidth="31" translatesAutoresizingMaskIntoConstraints="NO" id="5wN-rV-8ah" userLabel="tilt">
@@ -1215,6 +1265,11 @@ Gw
                         </buttonCell>
                         <connections>
                             <action selector="updateCameraState:" target="Voe-Tx-rLC" id="7t4-sE-1VG"/>
+                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="recallBusy" id="O4n-rg-h3y">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
                         </connections>
                     </button>
                     <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="gkf-eR-23b">
@@ -1231,6 +1286,11 @@ Gw
                         </buttonCell>
                         <connections>
                             <action selector="cameraReset:" target="Voe-Tx-rLC" id="ANo-9Y-fl6"/>
+                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="recallBusy" id="4eJ-G9-qLw">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JEr-Ei-MFF">
@@ -1241,8 +1301,33 @@ Gw
                         </buttonCell>
                         <connections>
                             <action selector="cameraHome:" target="Voe-Tx-rLC" id="oiX-A9-Cax"/>
+                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="recallBusy" id="wGi-ED-Daz">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
                         </connections>
                     </button>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Tsj-Kt-SJx">
+                        <rect key="frame" x="18" y="201" width="364" height="16"/>
+                        <textFieldCell key="cell" lineBreakMode="clipping" placeholderString="0.0.0.0" id="YHR-Io-KgG">
+                            <font key="font" usesAppearanceFont="YES"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <binding destination="Voe-Tx-rLC" name="displayPatternValue2" keyPath="cameraIP" previousBinding="yyX-ap-wdz" id="aOl-Kv-ihh">
+                                <dictionary key="options">
+                                    <string key="NSDisplayPattern">%{value1}@ (%{value2}@)</string>
+                                </dictionary>
+                            </binding>
+                            <binding destination="Voe-Tx-rLC" name="displayPatternValue1" keyPath="cameraName" id="yyX-ap-wdz">
+                                <dictionary key="options">
+                                    <string key="NSDisplayPattern">%{value1}@ (%{value2}@)</string>
+                                </dictionary>
+                            </binding>
+                        </connections>
+                    </textField>
                 </subviews>
                 <constraints>
                     <constraint firstItem="gkf-eR-23b" firstAttribute="leading" secondItem="I7c-h6-brQ" secondAttribute="leading" constant="12" symbolic="YES" id="1RD-19-boj"/>
@@ -1259,18 +1344,22 @@ Gw
                     <constraint firstItem="JLS-Ct-B76" firstAttribute="top" secondItem="873-cq-gwm" secondAttribute="bottom" constant="8" symbolic="YES" id="8Mb-e9-GMB"/>
                     <constraint firstItem="2SH-Zw-vNx" firstAttribute="firstBaseline" secondItem="u95-cl-Ddh" secondAttribute="firstBaseline" id="8zc-DX-073"/>
                     <constraint firstItem="Iof-eI-TKC" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="JLS-Ct-B76" secondAttribute="trailing" constant="8" symbolic="YES" id="9OO-wf-rI4"/>
+                    <constraint firstItem="Tsj-Kt-SJx" firstAttribute="top" secondItem="I7c-h6-brQ" secondAttribute="top" constant="10" id="9QH-fV-8X5"/>
                     <constraint firstItem="873-cq-gwm" firstAttribute="top" secondItem="0Ap-46-7Jd" secondAttribute="bottom" constant="8" symbolic="YES" id="CF2-ir-uYj"/>
                     <constraint firstItem="cPT-sh-aez" firstAttribute="top" secondItem="gkf-eR-23b" secondAttribute="bottom" constant="20" symbolic="YES" id="Cdp-wQ-Noz"/>
                     <constraint firstItem="ukB-gX-gKP" firstAttribute="leading" secondItem="2SH-Zw-vNx" secondAttribute="leading" id="DqX-cE-pV4"/>
                     <constraint firstItem="3ph-8i-4EK" firstAttribute="width" secondItem="u95-cl-Ddh" secondAttribute="width" id="Dvk-xz-v6l"/>
                     <constraint firstItem="3ph-8i-4EK" firstAttribute="leading" secondItem="u95-cl-Ddh" secondAttribute="leading" id="FmH-CR-h7v"/>
+                    <constraint firstAttribute="trailing" secondItem="Tsj-Kt-SJx" secondAttribute="trailing" constant="20" symbolic="YES" id="GJn-cm-vP2"/>
                     <constraint firstAttribute="trailing" secondItem="urP-At-r5W" secondAttribute="trailing" constant="20" symbolic="YES" id="HSB-Wd-3gR"/>
                     <constraint firstItem="JEr-Ei-MFF" firstAttribute="firstBaseline" secondItem="X1l-21-Ex1" secondAttribute="firstBaseline" id="Io2-jP-Tbv"/>
                     <constraint firstItem="0Ap-46-7Jd" firstAttribute="trailing" secondItem="UW9-RI-IZh" secondAttribute="trailing" id="KM6-8a-8UR"/>
                     <constraint firstItem="u95-cl-Ddh" firstAttribute="firstBaseline" secondItem="L28-KD-sfa" secondAttribute="firstBaseline" id="Ktz-Xk-bU8"/>
                     <constraint firstItem="AVq-CP-o8l" firstAttribute="top" secondItem="5wN-rV-8ah" secondAttribute="bottom" constant="8" symbolic="YES" id="KuC-hd-7NC"/>
                     <constraint firstItem="X1l-21-Ex1" firstAttribute="leading" secondItem="I7c-h6-brQ" secondAttribute="leading" constant="20" symbolic="YES" id="Miz-Ln-5Nv"/>
+                    <constraint firstItem="Tsj-Kt-SJx" firstAttribute="leading" secondItem="I7c-h6-brQ" secondAttribute="leading" constant="20" symbolic="YES" id="P7b-Qs-0HP"/>
                     <constraint firstItem="ov4-Ur-Ook" firstAttribute="leading" secondItem="L28-KD-sfa" secondAttribute="leading" id="PT7-LW-4TE"/>
+                    <constraint firstItem="L28-KD-sfa" firstAttribute="top" secondItem="Tsj-Kt-SJx" secondAttribute="bottom" constant="15" id="QdU-zV-Pzv"/>
                     <constraint firstItem="0Ap-46-7Jd" firstAttribute="firstBaseline" secondItem="ov4-Ur-Ook" secondAttribute="firstBaseline" id="TLo-gZ-xO8"/>
                     <constraint firstItem="3ph-8i-4EK" firstAttribute="firstBaseline" secondItem="8aF-QR-qro" secondAttribute="firstBaseline" id="UM7-EC-acv"/>
                     <constraint firstItem="UW9-RI-IZh" firstAttribute="firstBaseline" secondItem="L28-KD-sfa" secondAttribute="firstBaseline" id="V1p-S1-Ssf"/>
@@ -1301,14 +1390,13 @@ Gw
                     <constraint firstItem="cPT-sh-aez" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="I7c-h6-brQ" secondAttribute="leading" constant="20" symbolic="YES" id="q9a-YN-4qa"/>
                     <constraint firstItem="JLS-Ct-B76" firstAttribute="firstBaseline" secondItem="Mek-8b-Ze9" secondAttribute="firstBaseline" id="sC6-KP-cDu"/>
                     <constraint firstItem="L28-KD-sfa" firstAttribute="leading" secondItem="I7c-h6-brQ" secondAttribute="leading" constant="20" symbolic="YES" id="vJD-k7-pBf"/>
-                    <constraint firstItem="L28-KD-sfa" firstAttribute="top" secondItem="I7c-h6-brQ" secondAttribute="top" constant="14" id="vdU-6O-vi4"/>
                     <constraint firstItem="JLS-Ct-B76" firstAttribute="leading" secondItem="Mek-8b-Ze9" secondAttribute="trailing" constant="8" symbolic="YES" id="ww7-p1-h6w"/>
                     <constraint firstItem="urP-At-r5W" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="0Ap-46-7Jd" secondAttribute="trailing" constant="8" symbolic="YES" id="zNp-WT-LeW"/>
                     <constraint firstItem="2SH-Zw-vNx" firstAttribute="leading" secondItem="u95-cl-Ddh" secondAttribute="trailing" constant="8" symbolic="YES" id="zca-9g-Wdc"/>
                     <constraint firstItem="5wN-rV-8ah" firstAttribute="leading" secondItem="8aF-QR-qro" secondAttribute="trailing" constant="8" symbolic="YES" id="zu6-08-afB"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="42" y="-79"/>
+            <point key="canvasLocation" x="48" y="-11"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="1D8-Jj-jfN"/>
     </objects>
