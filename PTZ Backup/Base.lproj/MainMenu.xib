@@ -902,7 +902,7 @@ Gw
                         </constraints>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" imageFrameStyle="groove" id="xW7-dC-iEc"/>
                         <connections>
-                            <binding destination="Voe-Tx-rLC" name="value" keyPath="snapshotImage" id="Apu-Oq-1LF"/>
+                            <binding destination="Voe-Tx-rLC" name="value" keyPath="cameraState.snapshotImage" id="POt-yM-aVx"/>
                         </connections>
                     </imageView>
                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Eyk-qe-8u4">
@@ -961,7 +961,7 @@ Gw
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="PTZCameraIcon" id="ofp-n6-gcw"/>
                         <connections>
                             <binding destination="Voe-Tx-rLC" name="toolTip" keyPath="cameraIP" id="qaW-Va-FMB"/>
-                            <binding destination="Voe-Tx-rLC" name="hidden" keyPath="cameraOpen" id="0u2-aZ-ce0">
+                            <binding destination="Voe-Tx-rLC" name="hidden" keyPath="cameraState.cameraOpen" id="UtA-zP-vqe">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
@@ -977,7 +977,7 @@ Gw
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSStatusUnavailable" id="PKr-VU-HoQ"/>
                         <connections>
                             <binding destination="Voe-Tx-rLC" name="toolTip" keyPath="cameraIP" id="gun-Qo-JRG"/>
-                            <binding destination="Voe-Tx-rLC" name="hidden" keyPath="cameraOpen" id="BTh-s4-Xze"/>
+                            <binding destination="Voe-Tx-rLC" name="hidden" keyPath="cameraState.cameraOpen" id="Wha-5I-L1Z"/>
                         </connections>
                     </imageView>
                 </subviews>
@@ -1399,6 +1399,11 @@ Gw
             <point key="canvasLocation" x="48" y="-11"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="1D8-Jj-jfN"/>
+        <viewController id="MdI-N0-20y" customClass="PTZCameraStateViewController">
+            <connections>
+                <outlet property="view" destination="I7c-h6-brQ" id="qqA-Nd-6eo"/>
+            </connections>
+        </viewController>
     </objects>
     <resources>
         <image name="NSStatusUnavailable" width="16" height="16"/>

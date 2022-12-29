@@ -13,6 +13,8 @@
 
 @property NSString *ptzopticsSettingsFilePath;
 
+- (NSString *)ptzopticsSettingsDirectory;
+
 - (NSArray *)cameraList;
 
 - (void)applyPrefChanges;

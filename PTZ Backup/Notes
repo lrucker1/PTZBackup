@@ -22,3 +22,14 @@ Apparently PTZOptics doesn't support cancel:
 Packet: 81 20 ff
 errortype 02 (expected 04)
 - but we can cancel the loop.
+
+//  downloadDestination[reply] = new QFile(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QString::asprintf("%s" , (DOWNLOAD_FILE_DEST_PREFIX)) + currentCamIp + QString::number(1) + ".jpg");
+//
+// AppDataLocation is
+// \li "~/Library/Application Support/<APPNAME>", "/Library/Application Support/<APPNAME>". "<APPDIR>/../Resources"
+
+#define DEFAULT_SETTINGS_PATH "/ptzoptics-controller/settings.ini"
+#define DOWNLOAD_FILE_DEST_PREFIX "/ptzoptics-controller/downloads/snapshot_"
+#define DOWNLOAD_FILE_URI "/snapshot.jpg"
+//     settings->setValue(QString::asprintf("mem%d", presetNum) + currentCamIp, presetText);
+

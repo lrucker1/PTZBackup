@@ -7,8 +7,10 @@
 
 #import "PTZCameraStateViewController.h"
 #import "PTZCamera.h"
+#import "NSWindowAdditions.h"
 
 @interface PTZCameraStateViewController ()
+@property (strong) PTZCamera *cameraState;
 
 @end
 
@@ -16,7 +18,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do view setup here.
-}
+ }
+
 
 @end

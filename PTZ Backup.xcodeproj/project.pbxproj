@@ -30,6 +30,7 @@
 		941ED0522940197F001D8039 /* libvisca_udp.c in Sources */ = {isa = PBXBuildFile; fileRef = 941ED04D2940197F001D8039 /* libvisca_udp.c */; };
 		9479B0E7294273800021734F /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = 9479B0E6294273800021734F /* Credits.html */; };
 		94FA285F295E2B00007A4BDF /* PTZCameraStateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94FA285E295E2B00007A4BDF /* PTZCameraStateViewController.m */; };
+		94FA2861295E2C5B007A4BDF /* NSWindowAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 94FA2860295E2C5B007A4BDF /* NSWindowAdditions.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +87,8 @@
 		9479B0E6294273800021734F /* Credits.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = Credits.html; sourceTree = "<group>"; };
 		94FA285D295E2B00007A4BDF /* PTZCameraStateViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTZCameraStateViewController.h; sourceTree = "<group>"; };
 		94FA285E295E2B00007A4BDF /* PTZCameraStateViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTZCameraStateViewController.m; sourceTree = "<group>"; };
+		94FA2860295E2C5B007A4BDF /* NSWindowAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSWindowAdditions.m; sourceTree = "<group>"; };
+		94FA2862295E2C69007A4BDF /* NSWindowAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSWindowAdditions.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,6 +161,8 @@
 				94039E72294E4C5F009FAE39 /* PTZCamera.m */,
 				94FA285D295E2B00007A4BDF /* PTZCameraStateViewController.h */,
 				94FA285E295E2B00007A4BDF /* PTZCameraStateViewController.m */,
+				94FA2860295E2C5B007A4BDF /* NSWindowAdditions.m */,
+				94FA2862295E2C69007A4BDF /* NSWindowAdditions.h */,
 				9479B0E6294273800021734F /* Credits.html */,
 				941ED01D293FF3D5001D8039 /* Assets.xcassets */,
 				941ED01F293FF3D5001D8039 /* MainMenu.xib */,
@@ -329,6 +334,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				941ED04F2940197F001D8039 /* libvisca_posix.c in Sources */,
+				94FA2861295E2C5B007A4BDF /* NSWindowAdditions.m in Sources */,
 				9409E7A12954D7F700163502 /* PTZPrefsController.m in Sources */,
 				941ED023293FF3D5001D8039 /* main.m in Sources */,
 				9409E79D2954BEE500163502 /* PTZSettingsFile.m in Sources */,

@@ -227,6 +227,14 @@
                             <action selector="remove:" target="lwo-Jt-O4u" id="KiQ-uF-FYh"/>
                         </connections>
                     </button>
+                    <button verticalHuggingPriority="750" id="np0-h6-UBy">
+                        <rect key="frame" x="291" y="231" width="106" height="27"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" title="Show in Finder" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="TpP-jR-t9d">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="tsJ-D4-szX" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="20" symbolic="YES" id="MlY-7M-MTa"/>

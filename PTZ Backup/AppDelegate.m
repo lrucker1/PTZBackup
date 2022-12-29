@@ -10,26 +10,8 @@
 #import "AppDelegate.h"
 #import "PTZCamera.h"
 #import "PTZSettingsFile.h"
-#import "libvisca.h"
 #import "PTZPrefsController.h"
 
-//  downloadDestination[reply] = new QFile(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QString::asprintf("%s" , (DOWNLOAD_FILE_DEST_PREFIX)) + currentCamIp + QString::number(1) + ".jpg");
-//
-// AppDataLocation is
-// \li "~/Library/Application Support/<APPNAME>", "/Library/Application Support/<APPNAME>". "<APPDIR>/../Resources"
-
-#define DEFAULT_SETTINGS_PATH "/ptzoptics-controller/settings.ini"
-#define DOWNLOAD_FILE_DEST_PREFIX "/ptzoptics-controller/downloads/snapshot_"
-#define DOWNLOAD_FILE_URI "/snapshot.jpg"
-//     settings->setValue(QString::asprintf("mem%d", presetNum) + currentCamIp, presetText);
-
-// yeah, yeah, globals bad. Next major upgrade: refactor into separate windows, prep for supporting multiple windows - one per camera.
-VISCAInterface_t iface;
-VISCACamera_t camera;
-
-BOOL open_interface(const char *ttydev);
-void close_interface(void);
-void backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOffset, uint32_t delaySecs, bool isBackup, AppDelegate *appDelegate);
 
 typedef enum {
     PTZRestore = 0,
@@ -84,7 +66,6 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 @property NSInteger currentMode;
 @property NSInteger currentTab;
 @property BOOL autoRecall;
-@property BOOL cameraOpen;
 @property BOOL busy, recallBusy;
 @property BOOL hideRecallIcon, hideRestoreIcon;
 @property BOOL useOBSSettings;
@@ -99,7 +80,7 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 @property (strong) PTZSettingsFile *sourceSettings;
 @property (strong) PTZSettingsFile *backupSettings;
 
-@property dispatch_queue_t recallQueue;
+@property dispatch_queue_t cameraQueue;
 @end
 
 @implementation AppDelegate
@@ -178,6 +159,7 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 }
 
 // should contain settings.ini, downloads folder, and backup settingsXX.ini
+// TODO: check settings.ini, they allow custom values.
 - (NSString *)ptzopticsSettingsDirectory {
     return [[self ptzopticsSettingsFilePath] stringByDeletingLastPathComponent];
 }
@@ -202,12 +184,11 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
     [self willChangeValueForKey:@"batchDelay"];
     [[NSUserDefaults standardUserDefaults] registerDefaults:@{PTZ_BatchDelayKey:@(5)}];
     [self didChangeValueForKey:@"batchDelay"];
-    _recallQueue = dispatch_queue_create("recallQueue", NULL);
+    _cameraQueue = dispatch_queue_create("cameraQueue", NULL);
     
     self.openCamera = -1;
     
     self.cameraState = [PTZCamera new];
-    self.cameraState.presetSpeed = 24; // Note that this is write-only; we could save to Mac prefs but we can't read back from the camera.
     BOOL useLocalhost = NO;
     // Insert code here to initialize your application
     for (NSString *arg in [[NSProcessInfo processInfo] arguments]) {
@@ -297,10 +278,6 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
     // Insert code here to tear down your application
-    if (self.openCamera == self.cameraIndex) {
-        close_interface();
-        self.openCamera = -1;
-    }
 }
 
 - (BOOL)applicationSupportsSecureRestorableState:(NSApplication *)app {
@@ -369,23 +346,19 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 
 - (void)closeCamera {
     if (self.openCamera != -1) {
-        close_interface();
+        [self.cameraState closeCamera];
         self.openCamera = -1;
-        self.cameraOpen = NO;
     }
 }
 
 - (void)loadCamera {
     self.busy = YES;
     if (self.openCamera != -1) {
-        close_interface();
         self.openCamera = -1;
-        self.cameraOpen = NO;
     }
-    BOOL success = open_interface([[self cameraIP] UTF8String]);
+    BOOL success = [self.cameraState loadCameraWithAddress:self.cameraIP];
     if (success) {
         self.openCamera = self.cameraIndex;
-        self.cameraOpen = YES;
     }
     self.busy = NO;
 }
@@ -508,9 +481,7 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
     if (first != nil) {
         [window makeFirstResponder:window.contentView];
     }
-    if (VISCA_set_pantilt_preset_speed(&iface, &camera, (uint32_t)self.cameraState.presetSpeed) != VISCA_SUCCESS) {
-        NSLog(@"visca: unable to set speed\n");
-    }
+    [self.cameraState applyPantiltPresetSpeed:nil];
     if (first != nil) {
         [window makeFirstResponder:first];
     }
@@ -535,13 +506,8 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
     if (first != nil) {
         [window makeFirstResponder:window.contentView];
     }
-    // VISCA_set_pantilt_absolute_position(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t pan_speed, uint32_t tilt_speed, int pan_position, int tilt_position)
 
-    if (VISCA_set_pantilt_absolute_position(&iface, &camera, (uint32_t)self.cameraState.panSpeed, (uint32_t)self.cameraState.tiltSpeed, (int)self.cameraState.pan, (int)self.cameraState.tilt) != VISCA_SUCCESS) {
-        NSLog(@"visca: unable to set pan/tilt\n");
-    } else {
-        VISCA_set_pantilt_stop(&iface, &camera, (uint32_t)self.cameraState.panSpeed, (uint32_t)self.cameraState.tiltSpeed);
-    }
+    [self.cameraState applyPantiltAbsolutePosition:nil];
     if (first != nil) {
         [window makeFirstResponder:first];
     }
@@ -555,11 +521,7 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
     if (first != nil) {
         [window makeFirstResponder:window.contentView];
     }
-    if (VISCA_set_zoom_value(&iface, &camera, (uint32_t)self.cameraState.zoom) != VISCA_SUCCESS) {
-        NSLog(@"visca: unable to set zoom\n");
-    } else {
-        VISCA_set_zoom_stop(&iface, &camera);
-    }
+    [self.cameraState applyZoom:nil];
     if (first != nil) {
         [window makeFirstResponder:first];
     }
@@ -567,39 +529,17 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 
 - (IBAction)updateCameraState:(id)sender {
     [self loadCameraIfNeeded];
-    if (self.cameraOpen) {
-        uint16_t zoomValue;
-        int16_t panPosition, tiltPosition;
-        if (VISCA_get_pantilt_position(&iface, &camera, &panPosition, &tiltPosition) == VISCA_SUCCESS) {
-            self.cameraState.pan = panPosition;
-            self.cameraState.tilt = tiltPosition;
-        } else {
-            NSLog(@"failed to get pan/tilt values\n");
-        }
-        if (VISCA_get_zoom_value(&iface, &camera, &zoomValue) == VISCA_SUCCESS) {
-            self.cameraState.zoom = zoomValue;
-        } else {
-            NSLog(@"failed to get zoom value\n");
-        }
-    }
+    [self.cameraState updateCameraState];
 }
 
 - (IBAction)cameraHome:(id)sender {
     [self loadCameraIfNeeded];
-    if (self.cameraOpen) {
-        if (VISCA_set_pantilt_home(&iface, &camera) != VISCA_SUCCESS) {
-            NSLog(@"failed to home camera\n");
-        }
-    }
+    [self.cameraState pantiltHome:nil];
 }
 
 - (IBAction)cameraReset:(id)sender {
     [self loadCameraIfNeeded];
-    if (self.cameraOpen) {
-        if (VISCA_set_pantilt_reset(&iface, &camera) != VISCA_SUCCESS) {
-            NSLog(@"failed to reset camera\n");
-        }
-    }
+    [self.cameraState pantiltReset:nil];
 }
 
 - (IBAction)changeMode:(id)sender {
@@ -614,15 +554,15 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 }
 
 - (void)batchRecallCamera:(NSInteger)cam {
-    dispatch_async(_recallQueue, ^{
+    self.recallBusy = YES;
+    dispatch_async(_cameraQueue, ^{
         dispatch_sync(dispatch_get_main_queue(), ^{
             self.cameraIndex = cam;
             [self loadCameraIfNeeded];
         });
-        if (self.cameraOpen) {
-           //backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOffset, uint32_t delaySecs, bool isBackup)
-            backupRestore(&iface, &camera, (uint32_t)self.rangeOffset, (uint32_t)self.batchDelay, self.batchIsBackup, self);
-        }
+        [self.cameraState backupRestoreWithOffset:self.rangeOffset delay:self.batchDelay isBackup:self.batchIsBackup onDone:^(BOOL success) {
+            self.recallBusy = NO;
+        }];
     });
 }
 
@@ -648,108 +588,39 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 - (IBAction)recallScene:(id)sender {
     self.hideRecallIcon = YES;
     [self loadCameraIfNeeded];
-    if (self.cameraOpen) {
-        self.recallBusy = YES;
-        dispatch_async(_recallQueue, ^{
-            uint16_t zoomValue;
-            int16_t panPosition, tiltPosition;
-            if (VISCA_memory_recall(&iface, &camera, self.recallValue) != VISCA_SUCCESS) {
-                NSLog(@"failed to recall scene %ld\n", self.recallValue);
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    self.hideRecallIcon = NO;
-                });
-            } else if (iface.type == VISCA_RESPONSE_ERROR && iface.errortype == VISCA_ERROR_CMD_CANCELLED) {
-                NSLog(@"command cancelled\n");
-            }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.recallBusy = NO;
-            });
-            if (VISCA_get_zoom_value(&iface, &camera, &zoomValue) == VISCA_SUCCESS) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    self.cameraState.zoom = zoomValue;
-                });
-            }
-            if (VISCA_get_pantilt_position(&iface, &camera, &panPosition, &tiltPosition) == VISCA_SUCCESS) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    self.cameraState.pan = panPosition;
-                    self.cameraState.tilt = tiltPosition;
-                });
-            }
-        });
-    } else {
-        self.hideRecallIcon = NO;
-    }
-}
-
-- (NSString *)snapshotURL {
-    // I do know this is not the recommended way to make an URL! :)
-    return [NSString stringWithFormat:@"http://%@:80/snapshot.jpg", [self cameraIP]];
-}
-
-- (void)batchSetFinishedAtIndex:(int)index {
-    [self fetchSnapshotAtIndex:index];
-}
-
-- (void)fetchSnapshot {
-    [self fetchSnapshotAtIndex:(int)self.currentIndex];
-}
-
-- (void)fetchSnapshotAtIndex:(int)index {
-    // I do know this is not the recommended way to make an URL! :)
-    NSString *url = [self snapshotURL];
-    NSString *cameraIP = [self cameraIP];
-    [[[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:url]
-                                 completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        if (data != nil) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.snapshotImage = [[NSImage alloc] initWithData:data];
-            });
-            // PTZ app only shows 6, but being able to see what got saved is useful.
-            NSString *rootPath = [self ptzopticsSettingsDirectory];
-            if ([rootPath length] > 0) {
-                NSString *filename = [NSString stringWithFormat:@"snapshot_%@%d.jpg", cameraIP, index];
-                
-                NSString *path = [NSString pathWithComponents:@[rootPath, @"downloads", filename]];
-                //NSLog(@"saving snapshot to %@", path);
-                [data writeToFile:path atomically:YES];
-            }
+    self.recallBusy = YES;
+    [self.cameraState memoryRecall:self.recallValue onDone:^(BOOL success) {
+        self.recallBusy = NO;
+        if (success) {
+            [self.cameraState updateCameraState];
         } else {
-            NSLog(@"Failed to get snapshot: error %@", error);
+            self.hideRecallIcon = NO;
         }
-    }] resume];
+    }];
 }
 
 - (void)loadCameraIfReachable {
-    NSString *url = [self snapshotURL];
-    [[[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:url]
-                                 completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (data != nil) {
-                self.reachable = ReachableYes;
-                [self loadCameraIfNeeded];
-            } else {
-                self.reachable = ReachableNo;
-            }
-        });
-    }] resume];
-
+    [self.cameraState isCameraReachable:self.cameraIP onDone:^(BOOL success) {
+        if (success) {
+            self.reachable = ReachableYes;
+            [self loadCameraIfNeeded];
+        } else {
+            self.reachable = ReachableNo;
+        }
+    }];
 }
 
 - (IBAction)restoreScene:(id)sender {
     self.hideRestoreIcon = YES;
     [self loadCameraIfNeeded];
-    if (self.cameraOpen) {
-        self.busy = YES;
-        if (VISCA_memory_set(&iface, &camera, self.restoreValue) != VISCA_SUCCESS) {
-            NSLog(@"failed to restore scene %ld\n", self.restoreValue);
-            self.hideRestoreIcon = NO;
+    NSInteger recallValue = self.recallValue;
+    [self.cameraState memorySet:recallValue onDone:^(BOOL success) {
+        if (success) {
+            [self.cameraState fetchSnapshotAtIndex:recallValue];
         } else {
-            [self fetchSnapshot];
+            self.hideRestoreIcon = NO;
         }
-        self.busy = NO;
-    } else {
-        self.hideRestoreIcon = NO;
-    }
+    }];
 }
 
 // NSTextField actions are required so we don't propagate return to the button, because it increments. But we may stil want to load the scene.
@@ -871,12 +742,7 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 }
 
 - (IBAction)commandCancel:(id)sender {
-    if (self.batchOperationInProgress) {
-        self.batchCancelPending = YES;
-    }
-    if (VISCA_cancel(&iface, &camera) != VISCA_SUCCESS) {
-        NSLog(@"visca: cancel attempt failed\n");
-    }
+    [self.cameraState cancelCommand];
 }
 
 - (void)writeToConsole:(NSString *)string // IN
@@ -892,80 +758,3 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 
 @end
 
-BOOL open_interface(const char *ttydev)
-{
-    int port = 5678; // True for PTZOptics. YMMV.
-    if (VISCA_open_tcp(&iface, ttydev, port) != VISCA_SUCCESS) {
-        NSLog(@"visca: unable to open tcp device %s:%d\n", ttydev, port);
-        return NO;
-    }
-
-    iface.broadcast = 0;
-    camera.address = 1; // Because we are using IP
-
-    if (VISCA_clear(&iface, &camera) != VISCA_SUCCESS) {
-        NSLog(@"visca: unable to clear interface\n");
-        VISCA_close(&iface);
-        return NO;
-    }
-
-    NSLog(@"Camera %s initialization successful.\n", ttydev);
-    return YES;
-}
-
-void close_interface(void)
-{
-    //VISCA_usleep(2000); // calls usleep. doesn't appear to actually sleep.
-
-    VISCA_close(&iface);
-}
-
-void backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOffset, uint32_t delaySecs, bool isBackup, AppDelegate *appDelegate)
-{
-    uint32_t fromOffset = isBackup ? 0 : inOffset;
-    uint32_t toOffset = isBackup ? inOffset : 0;
-
-    uint32_t sceneIndex;
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        appDelegate.batchCancelPending = NO;
-        appDelegate.batchOperationInProgress = YES;
-        appDelegate.recallBusy = YES;
-    });
-    __block BOOL cancel = NO;
-    for (sceneIndex = 1; sceneIndex < 10; sceneIndex++) {
-        fprintf(stderr, "recall %d", sceneIndex + fromOffset);
-        if (VISCA_memory_recall(iface, camera, sceneIndex + fromOffset) != VISCA_SUCCESS) {
-            fprintf(stderr, "\nfailed to send recall command %d\n", sceneIndex + fromOffset);
-            continue;
-        } else if (iface->type == VISCA_RESPONSE_ERROR) {
-            fprintf(stderr, "\nCancelled recall at scene %d\n", sceneIndex + fromOffset);
-            break;
-        }
-        fprintf(stderr, " set %d", sceneIndex + toOffset);
-        if (VISCA_memory_set(iface, camera, sceneIndex + toOffset) != VISCA_SUCCESS) {
-            fprintf(stderr, "\nfailed to send set command %d\n", sceneIndex + toOffset);
-            continue;
-        } else if (iface->type == VISCA_RESPONSE_ERROR) {
-            fprintf(stderr, "\nCancelled set at scene %d\n", sceneIndex + toOffset);
-            break;
-        }
-        fprintf(stderr, " copied scene %d to %d\n", sceneIndex + fromOffset, sceneIndex + toOffset);
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [appDelegate batchSetFinishedAtIndex:sceneIndex+toOffset];
-            cancel = appDelegate.batchCancelPending;
-        });
-        if (cancel) {
-            break;
-        }
-        // You can recall all 9 scenes in a row with no delay. You can set 9 scenes without a delay!
-        // But if you are doing a recall/set combo, the delay is required. Otherwise it just sits there in 'send' starting around recall 3. Might just be a bug in our cameras - well, PTZOptics says no. I don't believe them. They said I'm overloading the camera with commands, but these *are* waiting for the previous one to finish.
-        // Also 'usleep' doesn't seem to sleep, so we're stuck with integer seconds. And the firmware version affects the required delay. Latest one only needs 1 sec; older ones needed 5.
-        sleep(delaySecs);
-    }
-    // DO NOT DO AN EARLY RETURN! We must get here.
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        appDelegate.batchCancelPending = NO;
-        appDelegate.batchOperationInProgress = NO;
-        appDelegate.recallBusy = NO;
-    });
-}
