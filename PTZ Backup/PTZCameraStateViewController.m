@@ -82,8 +82,9 @@
             [window makeFirstResponder:first];
         }
         return YES;
-
-    } else if (commandSelector == @selector(deleteForward:)) {
+    }
+#if 0
+    else if (commandSelector == @selector(deleteForward:)) {
         //Do something against DELETE key
 
     } else if (commandSelector == @selector(deleteBackward:)) {
@@ -95,6 +96,7 @@
     } else if (commandSelector == @selector(cancelOperation:)) {
         //Do something against Escape key
     }
+#endif
     // return YES if the action was handled; otherwise NO
     return NO;
 }

@@ -28,6 +28,8 @@ errortype 02 (expected 04)
 // AppDataLocation is
 // \li "~/Library/Application Support/<APPNAME>", "/Library/Application Support/<APPNAME>". "<APPDIR>/../Resources"
 
+        devNameGetter->get(QNetworkRequest(QUrl("http://" + currentCamIp + "/cgi-bin/param.cgi?get_device_conf")));
+
 #define DEFAULT_SETTINGS_PATH "/ptzoptics-controller/settings.ini"
 #define DOWNLOAD_FILE_DEST_PREFIX "/ptzoptics-controller/downloads/snapshot_"
 #define DOWNLOAD_FILE_URI "/snapshot.jpg"

@@ -91,7 +91,7 @@ uint32_t _VISCA_send_packet(VISCAInterface_t *iface, VISCACamera_t *camera, VISC
 uint32_t _VISCA_get_packet(VISCAInterface_t *iface)
 {
 	int pos = 0;
-	int bytes_read; // TODO: why does it not recognize -1 if this is size_t?
+	int bytes_read;
 
 	// wait for message
 	if (iface->callback->wait_read)

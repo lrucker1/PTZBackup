@@ -29,23 +29,10 @@ typedef enum {
 static NSString *PTZ_SettingsPathKey = @"PTZSettingsPath";
 static NSString *PTZ_SettingsFilePathKey = @"PTZSettingsFilePath";
 static NSString *PTZ_BatchDelayKey = @"BatchDelay";
+static NSString *PTZ_RangeOffsetKey = @"RangeOffset";
 static NSString *PTZ_UseLocalCamerasKey = @"UseLocalCameraSettings";
 static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 
-@interface NSAttributedString (PTZAdditions)
-+ (id)attributedStringWithString: (NSString *)string;
-@end
-
-@implementation NSAttributedString (PTZAdditions)
-
-+ (id)attributedStringWithString: (NSString *)string
-{
-   // Use self, so we get NSMutableAttributedStrings when called on that class.
-    NSAttributedString *attributedString = [[self alloc] initWithString:string attributes:@{NSFontAttributeName:[NSFont userFixedPitchFontOfSize:[NSFont systemFontSize]]}];
-   return attributedString;
-}
-
-@end
 
 @interface AppDelegate ()
 
@@ -63,15 +50,12 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 @property NSInteger currentMode;
 @property NSInteger currentTab;
 @property BOOL autoRecall;
-@property BOOL busy; // TODO: move both of these to PTZCamera
 @property BOOL hideRecallIcon, hideRestoreIcon;
-@property BOOL useOBSSettings;
 @property BOOL batchIsBackup;
 @property BOOL batchCancelPending, batchOperationInProgress;
 @property (strong) NSFileHandle* pipeReadHandle;
 @property (strong) NSPipe *pipe;
 @property (strong) PTZCamera *cameraState;
-@property (strong) NSImage *snapshotImage;
 @property PTZPrefsController *prefsController;
 @property (strong) PTZSettingsFile *sourceSettings;
 @property (strong) PTZSettingsFile *backupSettings;
@@ -79,6 +63,12 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 @end
 
 @implementation AppDelegate
+
++ (void)initialize {
+    [super initialize];
+    // Has to happen here so it's set before window restoration happens. There are all sorts of side effects, like end-editing on textfields which triggers validation before all the values are set.
+    [[NSUserDefaults standardUserDefaults] registerDefaults:@{PTZ_BatchDelayKey:@(5),PTZ_RangeOffsetKey:@(80),PTZ_MaxRangeOffsetKey:@(80)}];
+}
 
 + (NSSet *)keyPathsForValuesAffectingValueForKey: (NSString *)key // IN
 {
@@ -147,6 +137,14 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
     [[NSUserDefaults standardUserDefaults] setInteger:value forKey:PTZ_BatchDelayKey];
 }
 
+- (NSInteger)rangeOffset {
+    return [[NSUserDefaults standardUserDefaults] integerForKey:PTZ_RangeOffsetKey];
+}
+
+- (void)setRangeOffset:(NSInteger)value {
+    [[NSUserDefaults standardUserDefaults] setInteger:value forKey:PTZ_RangeOffsetKey];
+}
+
 - (NSString *)ptzopticsSettingsFilePath {
     return [[NSUserDefaults standardUserDefaults] stringForKey:PTZ_SettingsFilePathKey];
 }
@@ -160,7 +158,7 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 }
 
 // should contain settings.ini, downloads folder, and backup settingsXX.ini
-// TODO: check settings.ini, they allow custom values.
+// I saw an entry for a custom downloads path in settings.ini once, but I can't see where the actual app is using it. So I'm not checking for it; if you use a custom downloads folder this is your todo note.
 - (NSString *)ptzopticsSettingsDirectory {
     return [[self ptzopticsSettingsFilePath] stringByDeletingLastPathComponent];
 }
@@ -180,11 +178,6 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    [[NSUserDefaults standardUserDefaults] registerDefaults:@{PTZ_MaxRangeOffsetKey:@(80)}];
-    // Restoration has already read this value; make sure it gets a real one.
-    [self willChangeValueForKey:@"batchDelay"];
-    [[NSUserDefaults standardUserDefaults] registerDefaults:@{PTZ_BatchDelayKey:@(5)}];
-    [self didChangeValueForKey:@"batchDelay"];
     
     self.openCamera = -1;
     
@@ -216,7 +209,6 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 #else
     [self configConsoleRedirect];
 #endif
-    self.rangeOffset = 80; // TODO: Defaults
     self.currentIndex = 1;
     self.cameraIndex = 0;
     [self updateMode:0]; // TODO: Defaults
@@ -640,7 +632,9 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
         }
         return YES;
 
-    } else if (commandSelector == @selector(deleteForward:)) {
+    }
+#if 0
+    else if (commandSelector == @selector(deleteForward:)) {
         //Do something against DELETE key
 
     } else if (commandSelector == @selector(deleteBackward:)) {
@@ -652,6 +646,7 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
     } else if (commandSelector == @selector(cancelOperation:)) {
         //Do something against Escape key
     }
+#endif
     // return YES if the action was handled; otherwise NO
     return NO;
 }
@@ -684,13 +679,14 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 
 - (void)writeToConsole:(NSString *)string // IN
 {
-   NSTextStorage *textStorage = [self.console textStorage];
-   [textStorage beginEditing];
-   [textStorage appendAttributedString:
-      [NSAttributedString attributedStringWithString:string]];
-   [textStorage endEditing];
-   NSRange range = NSMakeRange([[self.console string] length], 0);
-   [self.console scrollRangeToVisible:range];
+    NSTextStorage *textStorage = [self.console textStorage];
+    [textStorage beginEditing];
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:string attributes:@{NSFontAttributeName:[NSFont userFixedPitchFontOfSize:[NSFont systemFontSize]]}];
+
+    [textStorage appendAttributedString:attributedString];
+    [textStorage endEditing];
+    NSRange range = NSMakeRange([[self.console string] length], 0);
+    [self.console scrollRangeToVisible:range];
 }
 
 @end
