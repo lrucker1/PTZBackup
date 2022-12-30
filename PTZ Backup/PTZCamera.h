@@ -26,6 +26,7 @@ typedef void (^PTZDoneBlock)(BOOL success);
 
 @property BOOL cameraOpen;
 @property (strong) NSImage *snapshotImage;
+@property BOOL connectingBusy, recallBusy;
 
 @property VISCAInterface_t iface;
 @property VISCACamera_t camera;

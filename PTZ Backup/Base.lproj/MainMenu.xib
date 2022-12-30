@@ -373,7 +373,7 @@
             <rect key="contentRect" x="335" y="390" width="380" height="465"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="775"/>
             <view key="contentView" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="380" height="489"/>
+                <rect key="frame" x="0.0" y="-24" width="380" height="489"/>
                 <subviews>
                     <tabView translatesAutoresizingMaskIntoConstraints="NO" id="OsU-dz-hPa">
                         <rect key="frame" x="-7" y="180" width="394" height="275"/>
@@ -586,7 +586,7 @@
                                         <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="KbU-sj-TxH">
                                             <rect key="frame" x="283" y="19" width="16" height="16"/>
                                             <connections>
-                                                <binding destination="Voe-Tx-rLC" name="animate" keyPath="busy" id="tfy-71-BHI"/>
+                                                <binding destination="Voe-Tx-rLC" name="animate" keyPath="connectingBusy" id="tfy-71-BHI"/>
                                             </connections>
                                         </progressIndicator>
                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GVh-FL-SLF">
@@ -1021,7 +1021,7 @@ Gw
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" drawsBackground="NO" id="B5g-mx-zfa">
                             <rect key="frame" x="0.0" y="0.0" width="465" height="213"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <textView wantsLayer="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="Pht-VT-EwM">
                                     <rect key="frame" x="0.0" y="0.0" width="465" height="213"/>
@@ -1065,7 +1065,7 @@ Gw
             <rect key="contentRect" x="109" y="130" width="400" height="228"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="775"/>
             <view key="contentView" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I7c-h6-brQ">
-                <rect key="frame" x="0.0" y="0.0" width="400" height="227"/>
+                <rect key="frame" x="0.0" y="1" width="400" height="227"/>
                 <subviews>
                     <textField toolTip="This is a write-only value; the value you see may be out of date." horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mek-8b-Ze9">
                         <rect key="frame" x="18" y="72" width="124" height="16"/>

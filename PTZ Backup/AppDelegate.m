@@ -63,7 +63,7 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 @property NSInteger currentMode;
 @property NSInteger currentTab;
 @property BOOL autoRecall;
-@property BOOL busy, recallBusy; // TODO: move both of these to PTZCamera
+@property BOOL busy; // TODO: move both of these to PTZCamera
 @property BOOL hideRecallIcon, hideRestoreIcon;
 @property BOOL useOBSSettings;
 @property BOOL batchIsBackup;
@@ -120,7 +120,13 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
         || [key isEqualToString:@"batchOneButtonLabel"]) {
         [keyPaths addObject:@"batchIsBackup"];
     }
-    [keyPaths unionSet:[super keyPathsForValuesAffectingValueForKey:key]];
+    if (   [key isEqualToString:@"recallBusy"]) {
+        [keyPaths addObject:@"cameraState.recallBusy"];
+    }
+    if (   [key isEqualToString:@"connectingBusy"]) {
+        [keyPaths addObject:@"cameraState.connectingBusy"];
+    }
+   [keyPaths unionSet:[super keyPathsForValuesAffectingValueForKey:key]];
 
    return keyPaths;
 }
@@ -221,6 +227,14 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
         [self showPrefs:nil];
     }
     [self loadBackupSettings];
+}
+
+- (BOOL)recallBusy {
+    return self.cameraState.recallBusy;
+}
+
+- (BOOL)connectingBusy {
+    return self.cameraState.connectingBusy;
 }
 
 - (NSArray *)cameraList {
@@ -346,7 +360,6 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 }
 
 - (void)loadCamera {
-    self.busy = YES;
     if (self.openCamera != -1) {
         self.openCamera = -1;
     }
@@ -355,7 +368,6 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
         if (success) {
             self.openCamera = self.cameraIndex;
         }
-        self.busy = NO;
     }];
 }
 
@@ -531,10 +543,7 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 }
 
 - (void)batchRecallCamera:(NSString *)cameraIP {
-    self.recallBusy = YES;
-    [self.cameraState backupRestoreWithAddress:cameraIP offset:self.rangeOffset delay:self.batchDelay isBackup:self.batchIsBackup onDone:^(BOOL success) {
-        self.recallBusy = NO;
-    }];
+    [self.cameraState backupRestoreWithAddress:cameraIP offset:self.rangeOffset delay:self.batchDelay isBackup:self.batchIsBackup onDone:nil];
 }
 
 - (IBAction)batchAction:(id)sender {
@@ -559,9 +568,7 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 
 - (IBAction)recallScene:(id)sender {
     self.hideRecallIcon = YES;
-    self.recallBusy = YES;
     [self.cameraState memoryRecall:self.recallValue onDone:^(BOOL success) {
-        self.recallBusy = NO;
         if (success) {
             [self.cameraState updateCameraState];
         } else {

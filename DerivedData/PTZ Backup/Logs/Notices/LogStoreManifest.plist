@@ -1070,6 +1070,34 @@
 			<key>uniqueIdentifier</key>
 			<string>2A9F8550-0C63-439E-ACF2-21698CA6D9CD</string>
 		</dict>
+		<key>2ABEF3C1-B251-4A3D-B7D8-C72AE2ED5E45</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>2ABEF3C1-B251-4A3D-B7D8-C72AE2ED5E45.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>signature</key>
+			<string>eyJibHVlcHJpbnRfYmx1ZXByaW50VmFyaWFudCI6eyJnZW5lcmljIjp7fX0sImJsdWVwcmludF9wcm92aWRlckZpbGVQYXRoU3RyaW5nIjoiXC9Vc2Vyc1wvbHJ1Y2tlclwvTWljcm9jb2RlXC9QVFogQmFja3VwXC9QVFogQmFja3VwLnhjb2RlcHJvaiIsInR5cGUiOnsiYmx1ZXByaW50Ijp7fX0sImJsdWVwcmludF9ibHVlcHJpbnRJZGVudGlmaWVyIjoiOTQxRUQwMTYyOTNGRjNENDAwMUQ4MDM5In0=</string>
+			<key>timeStartedRecording</key>
+			<real>694113992.15882802</real>
+			<key>timeStoppedRecording</key>
+			<real>63113904000</real>
+			<key>title</key>
+			<string>Build PTZ Backup</string>
+			<key>uniqueIdentifier</key>
+			<string>2ABEF3C1-B251-4A3D-B7D8-C72AE2ED5E45</string>
+		</dict>
 		<key>2B99EACF-FC78-4D8F-B358-31C28FFC06FA</key>
 		<dict>
 			<key>className</key>
@@ -1321,6 +1349,34 @@
 			<string>Build PTZ Backup</string>
 			<key>uniqueIdentifier</key>
 			<string>32490F9A-AEA7-4E6D-9503-1B6D31EA94D9</string>
+		</dict>
+		<key>35152C65-313D-4973-B6CC-74D85AABBC23</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>35152C65-313D-4973-B6CC-74D85AABBC23.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>S</string>
+			</dict>
+			<key>signature</key>
+			<string>eyJ0eXBlIjp7ImJsdWVwcmludFByb3ZpZGVyIjp7fX0sImJsdWVwcmludFByb3ZpZGVyX3Byb3ZpZGVyRmlsZVBhdGhTdHJpbmciOiJcL1VzZXJzXC9scnVja2VyXC9NaWNyb2NvZGVcL1BUWiBCYWNrdXBcL1BUWiBCYWNrdXAueGNvZGVwcm9qIn0=</string>
+			<key>timeStartedRecording</key>
+			<real>694113992.15882802</real>
+			<key>timeStoppedRecording</key>
+			<real>63113904000</real>
+			<key>title</key>
+			<string>Build PTZ Backup</string>
+			<key>uniqueIdentifier</key>
+			<string>35152C65-313D-4973-B6CC-74D85AABBC23</string>
 		</dict>
 		<key>35818354-92E2-4DCF-88D1-B5E53FB699D4</key>
 		<dict>
@@ -4345,6 +4401,34 @@
 			<string>Build PTZ Backup</string>
 			<key>uniqueIdentifier</key>
 			<string>9F572BB9-952C-4068-AF0E-5E436419FCC8</string>
+		</dict>
+		<key>A20D8229-6AC9-4E70-B112-F92C5F8F2B51</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>A20D8229-6AC9-4E70-B112-F92C5F8F2B51.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>S</string>
+			</dict>
+			<key>signature</key>
+			<string>eyJ0eXBlIjp7ImJ1aWxkU3lzdGVtVGFzayI6e319LCJidWlsZFN5c3RlbVRhc2tfYnVpbGRUYXNrIjoiUHJlcGFyZSBidWlsZCJ9</string>
+			<key>timeStartedRecording</key>
+			<real>694113992.15882802</real>
+			<key>timeStoppedRecording</key>
+			<real>63113904000</real>
+			<key>title</key>
+			<string>Build PTZ Backup</string>
+			<key>uniqueIdentifier</key>
+			<string>A20D8229-6AC9-4E70-B112-F92C5F8F2B51</string>
 		</dict>
 		<key>A2985065-EC79-49EC-B105-8D59FA1E6641</key>
 		<dict>

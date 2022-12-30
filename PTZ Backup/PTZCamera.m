@@ -76,9 +76,11 @@ void backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOf
         handler();
         return;
     }
+    self.connectingBusy = YES;
     dispatch_async(self.cameraQueue, ^{
         BOOL success = open_interface(&self->_iface, &self->_camera, [self.cameraIP UTF8String]);
         dispatch_async(dispatch_get_main_queue(), ^{
+            self.connectingBusy = NO;
             if (success) {
                 self.cameraOpen = YES;
             }
@@ -181,9 +183,11 @@ void backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOf
             [self callDoneBlock:doneBlock success:NO];
             return;
         }
+        self.recallBusy = YES;
         dispatch_async(self.cameraQueue, ^{
             BOOL success = VISCA_memory_recall(&self->_iface, &self->_camera, scene) == VISCA_SUCCESS;
             dispatch_sync(dispatch_get_main_queue(), ^{
+                self.recallBusy = NO;
                 [self callDoneBlock:doneBlock success:success];
             });
         });
@@ -346,6 +350,7 @@ void backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOf
     dispatch_sync(dispatch_get_main_queue(), ^{
         ptzCamera.batchCancelPending = NO;
         ptzCamera.batchOperationInProgress = YES;
+        ptzCamera.recallBusy = YES;
     });
     __block BOOL cancel = NO;
     for (sceneIndex = 1; sceneIndex < 10; sceneIndex++) {
@@ -382,6 +387,7 @@ void backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOf
     dispatch_sync(dispatch_get_main_queue(), ^{
         ptzCamera.batchCancelPending = NO;
         ptzCamera.batchOperationInProgress = NO;
+        ptzCamera.recallBusy = YES;
         if (doneBlock) {
             doneBlock(!cancel);
         }
