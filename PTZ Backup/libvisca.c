@@ -50,12 +50,12 @@ void _VISCA_append_byte(VISCAPacket_t *packet, unsigned char byte)
 
 uint32_t _VISCA_write_packet_data(VISCAInterface_t *iface, VISCACamera_t *camera, VISCAPacket_t *packet)
 {
-	size_t bytes_written;
+	int bytes_written;
 
     // _packet_print(packet);
 	bytes_written = iface->callback->write(iface, packet->bytes, packet->length);
 	if (bytes_written < packet->length) {
-        fprintf(stderr, " write fail written %zu packet length %d   \n", bytes_written, packet->length);
+        fprintf(stderr, " write fail written %d packet length %d   \n", bytes_written, packet->length);
 		return VISCA_FAILURE;
     } else {
 		return VISCA_SUCCESS;
@@ -91,7 +91,7 @@ uint32_t _VISCA_send_packet(VISCAInterface_t *iface, VISCACamera_t *camera, VISC
 uint32_t _VISCA_get_packet(VISCAInterface_t *iface)
 {
 	int pos = 0;
-	size_t bytes_read;
+	int bytes_read; // TODO: why does it not recognize -1 if this is size_t?
 
 	// wait for message
 	if (iface->callback->wait_read)

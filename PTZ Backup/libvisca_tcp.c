@@ -22,16 +22,16 @@ typedef struct _VISCA_tcp_ctx {
 #endif
 } VISCA_tcp_ctx_t;
 
-static size_t visca_tcp_cb_write(VISCAInterface_t *iface, const void *buf, int length)
+static int visca_tcp_cb_write(VISCAInterface_t *iface, const void *buf, int length)
 {
 	VISCA_tcp_ctx_t *ctx = iface->ctx;
-	return send(ctx->sockfd, buf, length, 0);
+	return (int)send(ctx->sockfd, buf, length, 0);
 }
 
-static size_t visca_tcp_cb_read(VISCAInterface_t *iface, void *buf, int length)
+static int visca_tcp_cb_read(VISCAInterface_t *iface, void *buf, int length)
 {
 	VISCA_tcp_ctx_t *ctx = iface->ctx;
-	return recv(ctx->sockfd, buf, length, 0);
+	return (int)recv(ctx->sockfd, buf, length, 0);
 }
 
 static int visca_tcp_cb_close(VISCAInterface_t *iface)

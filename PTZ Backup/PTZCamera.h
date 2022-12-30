@@ -30,8 +30,9 @@ typedef void (^PTZDoneBlock)(BOOL success);
 @property VISCAInterface_t iface;
 @property VISCACamera_t camera;
 
+- (void)changeCamera:(NSString *)cameraIP;
 - (void)closeCamera;
-- (BOOL)loadCameraWithAddress:(NSString *)ipAddr;
+- (void)closeAndReload:(PTZDoneBlock _Nullable)doneBlock;
 
 - (void)applyPantiltPresetSpeed:(PTZDoneBlock _Nullable)doneBlock;
 - (void)applyPantiltAbsolutePosition:(PTZDoneBlock _Nullable)doneBlock;
@@ -45,12 +46,9 @@ typedef void (^PTZDoneBlock)(BOOL success);
 - (void)isCameraReachable:(NSString *)address onDone:(PTZDoneBlock)doneBlock;
 - (void)fetchSnapshotAtIndex:(NSInteger)index;
 - (void)updateCameraState;
-- (void)backupRestoreWithOffset:(NSInteger)rangeOffset delay:(NSInteger)batchDelay isBackup:(BOOL)isBackup onDone:(PTZDoneBlock _Nullable)doneBlock;
+- (void)backupRestoreWithAddress:(NSString *)cameraIP offset:(NSInteger)rangeOffset delay:(NSInteger)batchDelay isBackup:(BOOL)isBackup onDone:(PTZDoneBlock _Nullable)doneBlock;
 
 @end
 
-BOOL open_interface(VISCAInterface_t *iface, VISCACamera_t *camera, const char *ttydev);
-void close_interface(VISCAInterface_t *iface);
-void backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOffset, uint32_t delaySecs, bool isBackup, PTZCamera *ptzCamera,  PTZDoneBlock doneBlock);
 
 NS_ASSUME_NONNULL_END

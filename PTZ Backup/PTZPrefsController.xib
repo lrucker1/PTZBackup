@@ -234,6 +234,9 @@
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
+                        <connections>
+                            <action selector="showIniFileInFinder:" target="-2" id="g6I-Zl-FFH"/>
+                        </connections>
                     </button>
                 </subviews>
                 <constraints>

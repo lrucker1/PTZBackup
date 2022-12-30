@@ -371,8 +371,8 @@ extern "C" {
 struct _VISCA_interface;
 
 typedef struct _VISCA_callback {
-    size_t (*write)(struct _VISCA_interface *iface, const void *buf, int length);
-    size_t (*read)(struct _VISCA_interface *iface, void *buf, int length);
+    int (*write)(struct _VISCA_interface *iface, const void *buf, int length);
+    int (*read)(struct _VISCA_interface *iface, void *buf, int length);
 	void (*wait_read)(struct _VISCA_interface *iface);
 	void (*clear_error)(struct _VISCA_interface *iface);
 	int (*close)(struct _VISCA_interface *iface);

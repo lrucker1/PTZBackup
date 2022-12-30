@@ -9,7 +9,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class PTZCamera;
+
 @interface PTZCameraStateViewController : NSViewController
+
+@property PTZCamera *cameraState;
 
 @end
 

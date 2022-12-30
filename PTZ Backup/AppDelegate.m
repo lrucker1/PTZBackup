@@ -11,6 +11,8 @@
 #import "PTZCamera.h"
 #import "PTZSettingsFile.h"
 #import "PTZPrefsController.h"
+#import "PTZCameraStateViewController.h"
+#import "NSWindowAdditions.h"
 
 
 typedef enum {
@@ -18,12 +20,6 @@ typedef enum {
     PTZCheck = 1,
     PTZBackup = 2
 } PTZMode;
-
-typedef enum {
-    ReachableUnknown = 0,
-    ReachableYes,
-    ReachableNo
-} Reachable;
 
 typedef enum {
     TabSingle = 0,
@@ -45,7 +41,7 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 + (id)attributedStringWithString: (NSString *)string
 {
    // Use self, so we get NSMutableAttributedStrings when called on that class.
-   NSAttributedString *attributedString = [[self alloc] initWithString:string];
+    NSAttributedString *attributedString = [[self alloc] initWithString:string attributes:@{NSFontAttributeName:[NSFont userFixedPitchFontOfSize:[NSFont systemFontSize]]}];
    return attributedString;
 }
 
@@ -57,6 +53,7 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 @property (strong) IBOutlet NSWindow *stateWindow;
 @property (strong) IBOutlet NSTextView *console;
 @property (strong) IBOutlet NSPopUpButton *cameraButton;
+@property (strong) IBOutlet PTZCameraStateViewController *stateViewController;
 
 @property NSInteger rangeOffset, currentIndex;
 @property NSInteger openCamera, cameraIndex;
@@ -66,12 +63,11 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 @property NSInteger currentMode;
 @property NSInteger currentTab;
 @property BOOL autoRecall;
-@property BOOL busy, recallBusy;
+@property BOOL busy, recallBusy; // TODO: move both of these to PTZCamera
 @property BOOL hideRecallIcon, hideRestoreIcon;
 @property BOOL useOBSSettings;
 @property BOOL batchIsBackup;
 @property BOOL batchCancelPending, batchOperationInProgress;
-@property Reachable reachable;
 @property (strong) NSFileHandle* pipeReadHandle;
 @property (strong) NSPipe *pipe;
 @property (strong) PTZCamera *cameraState;
@@ -80,7 +76,6 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 @property (strong) PTZSettingsFile *sourceSettings;
 @property (strong) PTZSettingsFile *backupSettings;
 
-@property dispatch_queue_t cameraQueue;
 @end
 
 @implementation AppDelegate
@@ -184,11 +179,11 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
     [self willChangeValueForKey:@"batchDelay"];
     [[NSUserDefaults standardUserDefaults] registerDefaults:@{PTZ_BatchDelayKey:@(5)}];
     [self didChangeValueForKey:@"batchDelay"];
-    _cameraQueue = dispatch_queue_create("cameraQueue", NULL);
     
     self.openCamera = -1;
     
     self.cameraState = [PTZCamera new];
+    self.stateViewController.cameraState = self.cameraState;
     BOOL useLocalhost = NO;
     // Insert code here to initialize your application
     for (NSString *arg in [[NSProcessInfo processInfo] arguments]) {
@@ -202,7 +197,6 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
         }
     }
     if (useLocalhost) {
-        self.reachable = ReachableYes;
         // Use the bundle resource for testing.
         NSString *path = [[NSBundle mainBundle] pathForResource:@"settings" ofType:@"ini"];
         if (path) {
@@ -272,7 +266,7 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
         [[self.cameraButton lastItem] setRepresentedObject:@[ipAddr, originalIP]];
     }
     if ([cameraList count] > 0) {
-        [self loadCameraIfReachable];
+        [self cameraDidChange];
     }
 }
 
@@ -356,19 +350,13 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
     if (self.openCamera != -1) {
         self.openCamera = -1;
     }
-    BOOL success = [self.cameraState loadCameraWithAddress:self.cameraIP];
-    if (success) {
-        self.openCamera = self.cameraIndex;
-    }
-    self.busy = NO;
-}
-
-// This will not test reachability because that is async.
-- (void)loadCameraIfNeeded {
-    if (self.openCamera == self.cameraIndex || self.reachable == ReachableNo) {
-        return;
-    }
-    [self loadCamera];
+    // Close and reload
+    [self.cameraState closeAndReload:^(BOOL success) {
+        if (success) {
+            self.openCamera = self.cameraIndex;
+        }
+        self.busy = NO;
+    }];
 }
 
 - (void)loadBackupSettings {
@@ -420,17 +408,12 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 }
 
 - (IBAction)reopenCamera:(id)sender {
-    // Close and reload
-    if (self.reachable == ReachableYes) {
-        [self loadCamera];
-    } else {
-        [self loadCameraIfReachable];
-    }
+    [self loadCamera];
 }
 
 - (IBAction)changeCamera:(id)sender {
     if (self.openCamera != self.cameraIndex) {
-        [self loadCameraIfReachable];
+        [self cameraDidChange];
     }
 }
 
@@ -441,7 +424,7 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
     } else {
         self.cameraIndex = 0;
     }
-    [self loadCameraIfNeeded];
+    [self cameraDidChange];
 }
 
 - (void)updateMode:(NSInteger)mode {
@@ -518,9 +501,6 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
     NSView *view = (NSView *)sender;
     NSWindow *window = view.window;
     NSView *first = [self currentEditingViewForWindow:window];
-    if (first != nil) {
-        [window makeFirstResponder:window.contentView];
-    }
     [self.cameraState applyZoom:nil];
     if (first != nil) {
         [window makeFirstResponder:first];
@@ -528,17 +508,14 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 }
 
 - (IBAction)updateCameraState:(id)sender {
-    [self loadCameraIfNeeded];
     [self.cameraState updateCameraState];
 }
 
 - (IBAction)cameraHome:(id)sender {
-    [self loadCameraIfNeeded];
     [self.cameraState pantiltHome:nil];
 }
 
 - (IBAction)cameraReset:(id)sender {
-    [self loadCameraIfNeeded];
     [self.cameraState pantiltReset:nil];
 }
 
@@ -553,28 +530,23 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
     }
 }
 
-- (void)batchRecallCamera:(NSInteger)cam {
+- (void)batchRecallCamera:(NSString *)cameraIP {
     self.recallBusy = YES;
-    dispatch_async(_cameraQueue, ^{
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            self.cameraIndex = cam;
-            [self loadCameraIfNeeded];
-        });
-        [self.cameraState backupRestoreWithOffset:self.rangeOffset delay:self.batchDelay isBackup:self.batchIsBackup onDone:^(BOOL success) {
-            self.recallBusy = NO;
-        }];
-    });
+    [self.cameraState backupRestoreWithAddress:cameraIP offset:self.rangeOffset delay:self.batchDelay isBackup:self.batchIsBackup onDone:^(BOOL success) {
+        self.recallBusy = NO;
+    }];
 }
 
 - (IBAction)batchAction:(id)sender {
     NSInteger cameraCount = [self.cameraButton numberOfItems];
     for (NSInteger i = 0; i < cameraCount; i++) {
-        [self batchRecallCamera:i];
+        self.cameraIndex = i;
+        [self batchRecallCamera:self.cameraIP];
     }
 }
 
 - (IBAction)batchOneAction:(id)sender {
-    [self batchRecallCamera:self.cameraIndex];
+    [self batchRecallCamera:self.cameraIP];
 }
 
 - (NSString *)batchOneButtonLabel {
@@ -587,7 +559,6 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 
 - (IBAction)recallScene:(id)sender {
     self.hideRecallIcon = YES;
-    [self loadCameraIfNeeded];
     self.recallBusy = YES;
     [self.cameraState memoryRecall:self.recallValue onDone:^(BOOL success) {
         self.recallBusy = NO;
@@ -599,20 +570,12 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
     }];
 }
 
-- (void)loadCameraIfReachable {
-    [self.cameraState isCameraReachable:self.cameraIP onDone:^(BOOL success) {
-        if (success) {
-            self.reachable = ReachableYes;
-            [self loadCameraIfNeeded];
-        } else {
-            self.reachable = ReachableNo;
-        }
-    }];
+- (void)cameraDidChange {
+    [self.cameraState changeCamera:self.cameraIP];
 }
 
 - (IBAction)restoreScene:(id)sender {
     self.hideRestoreIcon = YES;
-    [self loadCameraIfNeeded];
     NSInteger recallValue = self.recallValue;
     [self.cameraState memorySet:recallValue onDone:^(BOOL success) {
         if (success) {
@@ -654,39 +617,6 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
     }
 }
 
-- (IBAction)changePresetSpeed:(id)sender {
-    if (self.cameraState.presetSpeed > 0x18) {
-        self.cameraState.presetSpeed = 0x18;
-    } else if (self.cameraState.presetSpeed < 1) {
-        self.cameraState.presetSpeed = 1;
-    }
-}
-
-- (IBAction)changePanSpeed:(id)sender {
-    if (self.cameraState.panSpeed > 0x18) {
-        self.cameraState.panSpeed = 0x18;
-    } else if (self.cameraState.panSpeed < 1) {
-        self.cameraState.panSpeed = 1;
-    }
-}
-
-- (IBAction)changeTiltSpeed:(id)sender {
-    if (self.cameraState.tiltSpeed > 0x14) {
-        self.cameraState.tiltSpeed = 0x14;
-    } else if (self.cameraState.tiltSpeed < 1) {
-        self.cameraState.tiltSpeed = 1;
-    }
-}
-
-- (IBAction)changeZoom:(id)sender {
-    // 0x4000 max for PTZOptics
-    if (self.cameraState.zoom > 0x4000) {
-        self.cameraState.zoom = 0x4000;
-    } else if (self.cameraState.zoom < 0) {
-        self.cameraState.zoom = 0;
-    }
-}
-
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)fieldEditor doCommandBySelector:(SEL)commandSelector
 {
     //NSLog(@"Selector method is (%@)", NSStringFromSelector( commandSelector ) );
@@ -694,7 +624,7 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
         //Do something against ENTER key
         // Force the field to do an "apply". Seriously, guys, this code is ancient and there's still no better way?
         NSWindow *window = fieldEditor.window;
-        NSView *first = [self currentEditingViewForWindow:window];
+        NSView *first = [window ptz_currentEditingView];
         if (first != nil) {
             [window makeFirstResponder:window.contentView];
         }

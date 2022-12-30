@@ -17,6 +17,7 @@
             <connections>
                 <outlet property="cameraButton" destination="Eyk-qe-8u4" id="vbt-SL-D0j"/>
                 <outlet property="console" destination="Pht-VT-EwM" id="5kb-dn-q6N"/>
+                <outlet property="stateViewController" destination="MdI-N0-20y" id="f8y-WQ-eOU"/>
                 <outlet property="stateWindow" destination="YGF-Dk-82F" id="JR3-Md-ceB"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
             </connections>
@@ -1086,9 +1087,9 @@ Gw
                         </textFieldCell>
                         <connections>
                             <accessibilityConnection property="title" destination="Mek-8b-Ze9" id="OqX-5x-fzO"/>
-                            <action selector="changePresetSpeed:" target="Voe-Tx-rLC" id="kPU-QB-GfH"/>
-                            <binding destination="Voe-Tx-rLC" name="value" keyPath="cameraState.presetSpeed" id="kGw-fW-0no"/>
-                            <outlet property="delegate" destination="Voe-Tx-rLC" id="EEN-fh-ciQ"/>
+                            <action selector="changePresetSpeed:" target="MdI-N0-20y" id="TKK-to-152"/>
+                            <binding destination="MdI-N0-20y" name="value" keyPath="cameraState.presetSpeed" id="Syv-eW-yht"/>
+                            <outlet property="delegate" destination="MdI-N0-20y" id="T8A-T9-9E7"/>
                         </connections>
                     </textField>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Iof-eI-TKC">
@@ -1099,7 +1100,7 @@ Gw
                         </buttonCell>
                         <connections>
                             <accessibilityConnection property="title" destination="Mek-8b-Ze9" id="Ts6-gy-rVT"/>
-                            <action selector="applyRecallSpeed:" target="Voe-Tx-rLC" id="gAk-kJ-HNM"/>
+                            <action selector="applyRecallSpeed:" target="MdI-N0-20y" id="zbj-1Q-QWb"/>
                             <binding destination="Voe-Tx-rLC" name="enabled" keyPath="recallBusy" id="znq-as-5v4">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
@@ -1119,8 +1120,8 @@ Gw
                         </textFieldCell>
                         <connections>
                             <accessibilityConnection property="title" destination="L28-KD-sfa" id="RQm-cz-OEc"/>
-                            <binding destination="Voe-Tx-rLC" name="value" keyPath="cameraState.pan" id="7TE-Ll-F59"/>
-                            <outlet property="delegate" destination="Voe-Tx-rLC" id="t6W-kF-GEV"/>
+                            <binding destination="MdI-N0-20y" name="value" keyPath="cameraState.pan" id="oFE-Va-s8v"/>
+                            <outlet property="delegate" destination="MdI-N0-20y" id="I3A-bd-DXl"/>
                         </connections>
                     </textField>
                     <textField toolTip="This is a write-only value; the value you see may be out of date." horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="L28-KD-sfa">
@@ -1136,12 +1137,10 @@ Gw
                         <buttonCell key="cell" type="push" title="Apply" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="MEi-3k-beA">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
-                            <connections>
-                                <action selector="applyPanTilt:" target="Voe-Tx-rLC" id="A3I-WK-RKk"/>
-                            </connections>
                         </buttonCell>
                         <connections>
                             <accessibilityConnection property="title" destination="L28-KD-sfa" id="UP3-XT-fdY"/>
+                            <action selector="applyPanTilt:" target="MdI-N0-20y" id="bxl-oF-lGP"/>
                             <binding destination="Voe-Tx-rLC" name="enabled" keyPath="recallBusy" id="aFT-aF-1NZ">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
@@ -1158,9 +1157,9 @@ Gw
                         </textFieldCell>
                         <connections>
                             <accessibilityConnection property="title" destination="ov4-Ur-Ook" id="AUP-sy-XwS"/>
-                            <action selector="changeZoom:" target="Voe-Tx-rLC" id="QzC-9b-PKJ"/>
-                            <binding destination="Voe-Tx-rLC" name="value" keyPath="cameraState.zoom" id="OXu-tB-R81"/>
-                            <outlet property="delegate" destination="Voe-Tx-rLC" id="gEv-Da-RdS"/>
+                            <action selector="changeZoom:" target="MdI-N0-20y" id="RT5-Mb-lG3"/>
+                            <binding destination="MdI-N0-20y" name="value" keyPath="cameraState.zoom" id="atE-ka-VbZ"/>
+                            <outlet property="delegate" destination="MdI-N0-20y" id="p3k-rc-eKo"/>
                         </connections>
                     </textField>
                     <textField toolTip="This is a write-only value; the value you see may be out of date." horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ov4-Ur-Ook">
@@ -1179,7 +1178,7 @@ Gw
                         </buttonCell>
                         <connections>
                             <accessibilityConnection property="title" destination="ov4-Ur-Ook" id="CfF-uY-5vA"/>
-                            <action selector="applyZoom:" target="Voe-Tx-rLC" id="dDF-sz-e6q"/>
+                            <action selector="applyZoom:" target="MdI-N0-20y" id="8e2-YE-8Mg"/>
                             <binding destination="Voe-Tx-rLC" name="enabled" keyPath="recallBusy" id="lps-Lb-89U">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
@@ -1196,8 +1195,8 @@ Gw
                         </textFieldCell>
                         <connections>
                             <accessibilityConnection property="title" destination="8aF-QR-qro" id="l6Q-3K-hux"/>
-                            <binding destination="Voe-Tx-rLC" name="value" keyPath="cameraState.tilt" id="8RP-WE-DoH"/>
-                            <outlet property="delegate" destination="Voe-Tx-rLC" id="XdG-jB-OkL"/>
+                            <binding destination="MdI-N0-20y" name="value" keyPath="cameraState.tilt" id="ubH-Qb-2wW"/>
+                            <outlet property="delegate" destination="MdI-N0-20y" id="ICC-Ne-ERF"/>
                         </connections>
                     </textField>
                     <textField toolTip="This is a write-only value; the value you see may be out of date." horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8aF-QR-qro">
@@ -1220,8 +1219,8 @@ Gw
                         </textFieldCell>
                         <connections>
                             <accessibilityConnection property="title" destination="u95-cl-Ddh" id="Tqs-mv-Qup"/>
-                            <binding destination="Voe-Tx-rLC" name="value" keyPath="cameraState.panSpeed" id="9Pv-cf-kC4"/>
-                            <outlet property="delegate" destination="Voe-Tx-rLC" id="j5z-gX-ZwP"/>
+                            <binding destination="MdI-N0-20y" name="value" keyPath="cameraState.panSpeed" id="clO-Km-e7l"/>
+                            <outlet property="delegate" destination="MdI-N0-20y" id="agh-Pi-MKe"/>
                         </connections>
                     </textField>
                     <textField toolTip="This is a write-only value; the value you see may be out of date." horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="u95-cl-Ddh">
@@ -1241,9 +1240,9 @@ Gw
                         </textFieldCell>
                         <connections>
                             <accessibilityConnection property="title" destination="3ph-8i-4EK" id="kM0-06-wKv"/>
-                            <action selector="changeTiltSpeed:" target="Voe-Tx-rLC" id="tE7-Ha-bGK"/>
-                            <binding destination="Voe-Tx-rLC" name="value" keyPath="cameraState.tiltSpeed" id="moP-5h-1m3"/>
-                            <outlet property="delegate" destination="Voe-Tx-rLC" id="LeL-8H-cqD"/>
+                            <action selector="changeTiltSpeed:" target="MdI-N0-20y" id="RZA-91-eAk"/>
+                            <binding destination="MdI-N0-20y" name="value" keyPath="cameraState.tiltSpeed" id="JEk-fu-wNV"/>
+                            <outlet property="delegate" destination="MdI-N0-20y" id="eUR-5a-Y2w"/>
                         </connections>
                     </textField>
                     <textField toolTip="This is a write-only value; the value you see may be out of date." horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3ph-8i-4EK">
@@ -1264,7 +1263,7 @@ Gw
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="updateCameraState:" target="Voe-Tx-rLC" id="7t4-sE-1VG"/>
+                            <action selector="updateCameraState:" target="MdI-N0-20y" id="bJv-d9-6TI"/>
                             <binding destination="Voe-Tx-rLC" name="enabled" keyPath="recallBusy" id="O4n-rg-h3y">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
@@ -1285,7 +1284,7 @@ Gw
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="cameraReset:" target="Voe-Tx-rLC" id="ANo-9Y-fl6"/>
+                            <action selector="cameraReset:" target="MdI-N0-20y" id="VVM-wv-NQp"/>
                             <binding destination="Voe-Tx-rLC" name="enabled" keyPath="recallBusy" id="4eJ-G9-qLw">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
@@ -1300,7 +1299,7 @@ Gw
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="cameraHome:" target="Voe-Tx-rLC" id="oiX-A9-Cax"/>
+                            <action selector="cameraHome:" target="MdI-N0-20y" id="Bih-3V-iGN"/>
                             <binding destination="Voe-Tx-rLC" name="enabled" keyPath="recallBusy" id="wGi-ED-Daz">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>

@@ -11,16 +11,16 @@ typedef struct _VISCA_serial_ctx {
 	struct termios options;
 } VISCA_serial_ctx_t;
 
-static size_t visca_serial_cb_write(VISCAInterface_t *iface, const void *buf, int length)
+static int visca_serial_cb_write(VISCAInterface_t *iface, const void *buf, int length)
 {
 	VISCA_serial_ctx_t *ctx = iface->ctx;
-	return write(ctx->port_fd, buf, length);
+	return (int)write(ctx->port_fd, buf, length);
 }
 
-static size_t visca_serial_cb_read(VISCAInterface_t *iface, void *buf, int length)
+static int visca_serial_cb_read(VISCAInterface_t *iface, void *buf, int length)
 {
 	VISCA_serial_ctx_t *ctx = iface->ctx;
-	return read(ctx->port_fd, buf, length);
+	return (int)read(ctx->port_fd, buf, length);
 }
 
 static void visca_serial_cb_wait_read(VISCAInterface_t *iface)

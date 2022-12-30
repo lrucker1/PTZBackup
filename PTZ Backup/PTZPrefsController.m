@@ -106,6 +106,12 @@
     return (AppDelegate *)[NSApp delegate];
 }
 
+- (IBAction)showIniFileInFinder:(id)sender {
+    NSURL *url = self.iniFilePathControl.URL;
+    [[NSWorkspace sharedWorkspace] selectFile:[url path]
+                     inFileViewerRootedAtPath:[url path]];
+}
+
 - (IBAction)applyChanges:(id)sender {
     NSURL *url = self.iniFilePathControl.URL;
     NSString *path = [url path];
