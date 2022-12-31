@@ -6,7 +6,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "libvisca.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -14,24 +13,24 @@ typedef void (^PTZDoneBlock)(BOOL success);
 
 @interface PTZCamera : NSObject
 
-// R/W on the camera
+// R/W camera values
 @property NSInteger tilt;
 @property NSInteger pan;
 @property NSInteger zoom;
 
-// Write-only on the camera
+// Write-only camera values
 @property NSInteger tiltSpeed;
 @property NSInteger panSpeed;
 @property NSInteger presetSpeed;
+
+@property (readonly) NSString *cameraIP;
 
 @property BOOL cameraOpen;
 @property (strong) NSImage *snapshotImage;
 @property BOOL connectingBusy, recallBusy;
 
-@property VISCAInterface_t iface;
-@property VISCACamera_t camera;
+- (instancetype)initWithIP:(NSString *)ipAddr;
 
-- (void)changeCamera:(NSString *)cameraIP;
 - (void)closeCamera;
 - (void)closeAndReload:(PTZDoneBlock _Nullable)doneBlock;
 
@@ -44,10 +43,10 @@ typedef void (^PTZDoneBlock)(BOOL success);
 - (void)memorySet:(NSInteger)scene onDone:(PTZDoneBlock _Nullable)doneBlock;
 - (void)cancelCommand;
 
-- (void)isCameraReachable:(NSString *)address onDone:(PTZDoneBlock)doneBlock;
+- (void)isCameraReachable:(PTZDoneBlock)doneBlock;
 - (void)fetchSnapshotAtIndex:(NSInteger)index;
 - (void)updateCameraState;
-- (void)backupRestoreWithAddress:(NSString *)cameraIP offset:(NSInteger)rangeOffset delay:(NSInteger)batchDelay isBackup:(BOOL)isBackup onDone:(PTZDoneBlock _Nullable)doneBlock;
+- (void)backupRestoreWithOffset:(NSInteger)rangeOffset delay:(NSInteger)batchDelay isBackup:(BOOL)isBackup onDone:(PTZDoneBlock _Nullable)doneBlock;
 
 @end
 

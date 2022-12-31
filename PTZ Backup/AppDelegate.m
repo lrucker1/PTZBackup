@@ -12,6 +12,7 @@
 #import "PTZSettingsFile.h"
 #import "PTZPrefsController.h"
 #import "PTZCameraStateViewController.h"
+#import "PTZPrefCamera.h"
 #import "NSWindowAdditions.h"
 
 
@@ -32,7 +33,17 @@ static NSString *PTZ_BatchDelayKey = @"BatchDelay";
 static NSString *PTZ_RangeOffsetKey = @"RangeOffset";
 static NSString *PTZ_UseLocalCamerasKey = @"UseLocalCameraSettings";
 static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
+static NSString *PTZ_BatchIsBackupKey = @"BatchIsBackup";
+static NSString *PTZ_SingleModeKey = @"SingleMode";
 
+void PTZLog(NSString *format, ...) {
+    va_list args;
+    va_start(args, format);
+    NSString *s = [[NSString alloc] initWithFormat:format arguments:args];
+    va_end(args);
+    s = [s stringByAppendingString:@"\n"];
+    fprintf(stdout, "%s", [s UTF8String]);
+}
 
 @interface AppDelegate ()
 
@@ -52,9 +63,9 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 @property BOOL autoRecall;
 @property BOOL hideRecallIcon, hideRestoreIcon;
 @property BOOL batchIsBackup;
-@property BOOL batchCancelPending, batchOperationInProgress;
-@property (strong) NSFileHandle* pipeReadHandle;
-@property (strong) NSPipe *pipe;
+@property BOOL batchOperationInProgress;
+@property (strong) NSFileHandle *pipeReadHandle, *stdoutPipeReadHandle;
+@property (strong) NSPipe *pipe, *stdoutPipe;
 @property (strong) PTZCamera *cameraState;
 @property PTZPrefsController *prefsController;
 @property (strong) PTZSettingsFile *sourceSettings;
@@ -67,7 +78,13 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 + (void)initialize {
     [super initialize];
     // Has to happen here so it's set before window restoration happens. There are all sorts of side effects, like end-editing on textfields which triggers validation before all the values are set.
-    [[NSUserDefaults standardUserDefaults] registerDefaults:@{PTZ_BatchDelayKey:@(5),PTZ_RangeOffsetKey:@(80),PTZ_MaxRangeOffsetKey:@(80)}];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:
+        @{PTZ_BatchDelayKey:@(5),
+          PTZ_RangeOffsetKey:@(80),
+          PTZ_MaxRangeOffsetKey:@(80),
+          PTZ_BatchIsBackupKey:@(YES),
+          PTZ_SingleModeKey:@(0)
+        }];
 }
 
 + (NSSet *)keyPathsForValuesAffectingValueForKey: (NSString *)key // IN
@@ -121,11 +138,19 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
    return keyPaths;
 }
 
+- (void)handleStdoutPipeNotification:(NSNotification *)notification {
+    [_stdoutPipeReadHandle readInBackgroundAndNotify];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSString *stdOutString = [[NSString alloc] initWithData: [[notification userInfo] objectForKey: NSFileHandleNotificationDataItem] encoding: NSASCIIStringEncoding];
+        [self writeToConsole:stdOutString];
+    });
+}
+
 - (void)handlePipeNotification:(NSNotification *)notification {
     [_pipeReadHandle readInBackgroundAndNotify];
     dispatch_async(dispatch_get_main_queue(), ^{
         NSString *stdOutString = [[NSString alloc] initWithData: [[notification userInfo] objectForKey: NSFileHandleNotificationDataItem] encoding: NSASCIIStringEncoding];
-        [self writeToConsole:stdOutString];
+        [self writeToConsole:stdOutString color:[NSColor redColor]];
     });
 }
 
@@ -143,6 +168,22 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 
 - (void)setRangeOffset:(NSInteger)value {
     [[NSUserDefaults standardUserDefaults] setInteger:value forKey:PTZ_RangeOffsetKey];
+}
+
+- (NSInteger)currentMode {
+    return [[NSUserDefaults standardUserDefaults] integerForKey:PTZ_SingleModeKey];
+}
+
+- (void)setCurrentMode:(NSInteger)value {
+    [[NSUserDefaults standardUserDefaults] setInteger:value forKey:PTZ_SingleModeKey];
+}
+
+- (BOOL)batchIsBackup {
+    return [[NSUserDefaults standardUserDefaults] boolForKey:PTZ_BatchIsBackupKey];
+}
+
+- (void)setBatchIsBackup:(BOOL)value {
+    [[NSUserDefaults standardUserDefaults] setBool:value forKey:PTZ_BatchIsBackupKey];
 }
 
 - (NSString *)ptzopticsSettingsFilePath {
@@ -170,19 +211,24 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 }
 
 - (void)configConsoleRedirect {
-    _pipe = [NSPipe pipe];
-    _pipeReadHandle = [_pipe fileHandleForReading];
-    dup2([[_pipe fileHandleForWriting] fileDescriptor], fileno(stderr));
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlePipeNotification:) name:NSFileHandleReadCompletionNotification object:_pipeReadHandle];
-    [_pipeReadHandle readInBackgroundAndNotify];
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"ShowStderrInLog"]) {
+        _pipe = [NSPipe pipe];
+        _pipeReadHandle = [_pipe fileHandleForReading];
+        dup2([[_pipe fileHandleForWriting] fileDescriptor], fileno(stderr));
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlePipeNotification:) name:NSFileHandleReadCompletionNotification object:_pipeReadHandle];
+        [_pipeReadHandle readInBackgroundAndNotify];
+    }
+    _stdoutPipe = [NSPipe pipe];
+    _stdoutPipeReadHandle = [_stdoutPipe fileHandleForReading];
+    dup2([[_stdoutPipe fileHandleForWriting] fileDescriptor], fileno(stdout));
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleStdoutPipeNotification:) name:NSFileHandleReadCompletionNotification object:_stdoutPipeReadHandle];
+    [_stdoutPipeReadHandle readInBackgroundAndNotify];
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     
     self.openCamera = -1;
     
-    self.cameraState = [PTZCamera new];
-    self.stateViewController.cameraState = self.cameraState;
     BOOL useLocalhost = NO;
     // Insert code here to initialize your application
     for (NSString *arg in [[NSProcessInfo processInfo] arguments]) {
@@ -191,8 +237,10 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
             [self writeToConsole:@"Using localhost\n"];
             [self.cameraButton removeAllItems];
             [self.cameraButton addItemWithTitle:@"localhost"];
-            [[self.cameraButton lastItem] setRepresentedObject:@[@"localhost", @"localhost"]];
-            [self loadCamera];
+            PTZPrefCamera *prefCamera = [[PTZPrefCamera alloc] initWithDictionary:@{@"cameraname":@"localhost", @"devicename":@"localhost"}];
+            prefCamera.camera = [[PTZCamera alloc] initWithIP:prefCamera.devicename];
+            [[self.cameraButton lastItem] setRepresentedObject:prefCamera];
+            [self reopenCamera:nil];
         }
     }
     if (useLocalhost) {
@@ -204,14 +252,9 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
     } else {
         [self updateCameraPopup];
     }
-#if DEBUG
-    [self writeToConsole:@"Debug build; log is written to stderr"];
-#else
     [self configConsoleRedirect];
-#endif
     self.currentIndex = 1;
     self.cameraIndex = 0;
-    [self updateMode:0]; // TODO: Defaults
     self.hideRestoreIcon = YES;
     self.hideRecallIcon = YES;
     NSString *iniPath = [self ptzopticsSettingsFilePath];
@@ -232,11 +275,11 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 - (NSArray *)cameraList {
     NSString *path = [self ptzopticsSettingsFilePath];
     if (path == nil) {
-        NSLog(@"PTZOptics settings.ini file path not set");
+        PTZLog(@"PTZOptics settings.ini file path not set");
         return nil;
     }
     if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
-        NSLog(@"%@ not found", path);
+        PTZLog(@"%@ not found", path);
         return nil;
     }
 
@@ -246,7 +289,7 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
         return cameras;
     }
 
-    NSLog(@"No valid cameras found in %@", path);
+    PTZLog(@"No valid cameras found in %@", path);
     [self.sourceSettings logDictionary];
     return nil;
 }
@@ -264,12 +307,11 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
     [self.cameraButton removeAllItems];
     int i = 1;
     for (NSDictionary *cameraInfo in cameraList) {
-        NSString *cameraname = [cameraInfo objectForKey:@"cameraname"];
-        NSString *title = [NSString stringWithFormat:@"%d - %@", i++, cameraname];
-        NSString *ipAddr = [cameraInfo objectForKey:@"devicename"];
-        NSString *originalIP = [cameraInfo objectForKey:@"original"] ?: ipAddr;
+        PTZPrefCamera *prefCamera = [[PTZPrefCamera alloc] initWithDictionary:cameraInfo];
+        NSString *title = [NSString stringWithFormat:@"%d - %@", i++, prefCamera.cameraname];
         [self.cameraButton addItemWithTitle:title];
-        [[self.cameraButton lastItem] setRepresentedObject:@[ipAddr, originalIP]];
+        prefCamera.camera = [[PTZCamera alloc] initWithIP:prefCamera.devicename];
+        [[self.cameraButton lastItem] setRepresentedObject:prefCamera];
     }
     if ([cameraList count] > 0) {
         [self cameraDidChange];
@@ -292,17 +334,17 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 }
 
 - (NSString *)cameraName {
-    return [[self.cameraButton selectedItem] title];
+    return [[[self.cameraButton selectedItem] representedObject] cameraname];
 }
 
 // Current camera address
 - (NSString *)cameraIP {
-    return [[[self.cameraButton selectedItem] representedObject] firstObject];
+    return [[[self.cameraButton selectedItem] representedObject] originalDeviceName];
 }
 
 // Address as used in settings.ini
 - (NSString *)settingsFileCameraIP {
-    return [[[self.cameraButton selectedItem] representedObject] lastObject];
+    return [[[self.cameraButton selectedItem] representedObject] devicename];
 }
 
 - (NSString *)recallName {
@@ -351,17 +393,6 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
     }
 }
 
-- (void)loadCamera {
-    if (self.openCamera != -1) {
-        self.openCamera = -1;
-    }
-    // Close and reload
-    [self.cameraState closeAndReload:^(BOOL success) {
-        if (success) {
-            self.openCamera = self.cameraIndex;
-        }
-    }];
-}
 
 - (void)loadBackupSettings {
     self.backupSettings = nil;
@@ -384,7 +415,7 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
         [self.sourceSettings writeToFile:path];
         [self loadBackupSettings];
     } else {
-        NSLog(@"Unable to copy: settings directory not found");
+        PTZLog(@"Unable to copy: settings directory not found");
     }
 }
 
@@ -394,11 +425,11 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
         if (rootPath != nil) {
             NSString *path = [NSString pathWithComponents:@[rootPath, @"settings.ini"]];
             if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
-                NSLog(@"Copying old settings.ini to settings_backup.ini");
+                PTZLog(@"Copying old settings.ini to settings_backup.ini");
                 NSString *backupPath = [NSString pathWithComponents:@[rootPath, @"settings_backup.ini"]];
                 NSError *error;
                 if (![[NSFileManager defaultManager] copyItemAtPath:path toPath:backupPath error:&error]) {
-                    NSLog(@"Failed to make settings_backup: %@", error);
+                    PTZLog(@"Failed to make settings_backup: %@", error);
                     [[NSAlert alertWithError:error] runModal];
                     return;
                 }
@@ -406,13 +437,21 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
             [self.backupSettings writeToFile:path];
             self.sourceSettings = [[PTZSettingsFile alloc] initWithPath:path];
         } else {
-            NSLog(@"Unable to copy: settings directory not found");
+            PTZLog(@"Unable to copy: settings directory not found");
         }
     }
 }
 
 - (IBAction)reopenCamera:(id)sender {
-    [self loadCamera];
+    if (self.openCamera != -1) {
+        self.openCamera = -1;
+    }
+    // Close and reload
+    [self.cameraState closeAndReload:^(BOOL success) {
+        if (success) {
+            self.openCamera = self.cameraIndex;
+        }
+    }];
 }
 
 - (IBAction)changeCamera:(id)sender {
@@ -460,68 +499,17 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
     return first;
 }
 
-- (IBAction)applyRecallSpeed:(id)sender {
-    // Force an active textfield to end editing so we get the current value, then put it back when we're done.
-    NSView *view = (NSView *)sender;
-    NSWindow *window = view.window;
-    NSView *first = [self currentEditingViewForWindow:window];
-    if (first != nil) {
-        [window makeFirstResponder:window.contentView];
-    }
-    [self.cameraState applyPantiltPresetSpeed:nil];
-    if (first != nil) {
-        [window makeFirstResponder:first];
-    }
-}
 
 - (IBAction)applyBatchDelay:(id)sender {
     // Force an active textfield to end editing so we get the current value, then put it back when we're done.
     NSView *view = (NSView *)sender;
     NSWindow *window = view.window;
-    NSView *first = [self currentEditingViewForWindow:window];
+    NSView *first = [window ptz_currentEditingView];
     if (first != nil) {
         [window makeFirstResponder:first];
     }
 }
 
-
-- (IBAction)applyPanTilt:(id)sender {
-    // Force an active textfield to end editing so we get the current value, then put it back when we're done.
-    NSView *view = (NSView *)sender;
-    NSWindow *window = view.window;
-    NSView *first = [self currentEditingViewForWindow:window];
-    if (first != nil) {
-        [window makeFirstResponder:window.contentView];
-    }
-
-    [self.cameraState applyPantiltAbsolutePosition:nil];
-    if (first != nil) {
-        [window makeFirstResponder:first];
-    }
-}
-
-- (IBAction)applyZoom:(id)sender {
-    // Force an active textfield to end editing so we get the current value, then put it back when we're done.
-    NSView *view = (NSView *)sender;
-    NSWindow *window = view.window;
-    NSView *first = [self currentEditingViewForWindow:window];
-    [self.cameraState applyZoom:nil];
-    if (first != nil) {
-        [window makeFirstResponder:first];
-    }
-}
-
-- (IBAction)updateCameraState:(id)sender {
-    [self.cameraState updateCameraState];
-}
-
-- (IBAction)cameraHome:(id)sender {
-    [self.cameraState pantiltHome:nil];
-}
-
-- (IBAction)cameraReset:(id)sender {
-    [self.cameraState pantiltReset:nil];
-}
 
 - (IBAction)changeMode:(id)sender {
     NSSegmentedControl *seg = (NSSegmentedControl *)sender;
@@ -534,20 +522,32 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
     }
 }
 
-- (void)batchRecallCamera:(NSString *)cameraIP {
-    [self.cameraState backupRestoreWithAddress:cameraIP offset:self.rangeOffset delay:self.batchDelay isBackup:self.batchIsBackup onDone:nil];
+- (PTZCamera *)cameraAtIndex:(NSInteger)index {
+    return [[[self.cameraButton itemAtIndex:index] representedObject] camera];
+}
+
+- (void)batchRecallCamera:(PTZCamera *)camera {
+    self.batchOperationInProgress = YES;
+    [camera backupRestoreWithOffset:self.rangeOffset delay:self.batchDelay isBackup:self.batchIsBackup onDone:^(BOOL success) {
+        BOOL stillBusy = NO;
+        NSInteger cameraCount = [self.cameraButton numberOfItems];
+        for (NSInteger i = 0; i < cameraCount; i++) {
+            stillBusy = stillBusy || [self cameraAtIndex:i].recallBusy;
+        }
+        self.batchOperationInProgress = stillBusy;
+    }];
 }
 
 - (IBAction)batchAction:(id)sender {
     NSInteger cameraCount = [self.cameraButton numberOfItems];
     for (NSInteger i = 0; i < cameraCount; i++) {
-        self.cameraIndex = i;
-        [self batchRecallCamera:self.cameraIP];
+        PTZCamera *camera = [self cameraAtIndex:i];
+        [self batchRecallCamera:camera];
     }
 }
 
 - (IBAction)batchOneAction:(id)sender {
-    [self batchRecallCamera:self.cameraIP];
+    [self batchRecallCamera:self.cameraState];
 }
 
 - (NSString *)batchOneButtonLabel {
@@ -570,7 +570,8 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 }
 
 - (void)cameraDidChange {
-    [self.cameraState changeCamera:self.cameraIP];
+    self.cameraState = [[[self.cameraButton selectedItem] representedObject] camera];
+    self.stateViewController.cameraState = self.cameraState;
 }
 
 - (IBAction)restoreScene:(id)sender {
@@ -618,7 +619,6 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
 
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)fieldEditor doCommandBySelector:(SEL)commandSelector
 {
-    //NSLog(@"Selector method is (%@)", NSStringFromSelector( commandSelector ) );
     if (commandSelector == @selector(insertNewline:)) {
         //Do something against ENTER key
         // Force the field to do an "apply". Seriously, guys, this code is ancient and there's still no better way?
@@ -677,11 +677,17 @@ static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
     [self.cameraState cancelCommand];
 }
 
-- (void)writeToConsole:(NSString *)string // IN
+- (void)writeToConsole:(NSString *)string {
+    [self writeToConsole:string color:nil];
+}
+
+- (void)writeToConsole:(NSString *)string color:(NSColor *)color
 {
     NSTextStorage *textStorage = [self.console textStorage];
     [textStorage beginEditing];
-    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:string attributes:@{NSFontAttributeName:[NSFont userFixedPitchFontOfSize:[NSFont systemFontSize]]}];
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:string attributes:
+          @{NSFontAttributeName:[NSFont userFixedPitchFontOfSize:[NSFont systemFontSize]],
+            NSForegroundColorAttributeName:(color ?: [NSColor textColor])}];
 
     [textStorage appendAttributedString:attributedString];
     [textStorage endEditing];

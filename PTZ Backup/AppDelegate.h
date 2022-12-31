@@ -9,6 +9,8 @@
 
 #define PTZ_LocalCamerasKey @"LocalCameras"
 
+void PTZLog(NSString *format, ...);
+
 @interface AppDelegate : NSObject <NSApplicationDelegate, NSWindowDelegate>
 
 @property NSString *ptzopticsSettingsFilePath;

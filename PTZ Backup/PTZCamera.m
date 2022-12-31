@@ -8,6 +8,7 @@
 
 #import "PTZCamera.h"
 #import "AppDelegate.h"
+#import "libvisca.h"
 
 // It doesn't, but the unrecognized message interrupts the running one.
 #define CAMERA_SUPPORTS_CANCEL 1
@@ -24,6 +25,9 @@ void backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOf
 @property BOOL batchCancelPending, batchOperationInProgress;
 @property BOOL ptzStateValid;
 @property dispatch_queue_t cameraQueue;
+
+@property VISCAInterface_t iface;
+@property VISCACamera_t camera;
 
 @end
 
@@ -61,14 +65,6 @@ void backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOf
     [self loadCameraWithCompletionHandler:^() {
         [self callDoneBlock:doneBlock success:self.cameraOpen];
     }];
-}
-
-- (void)changeCamera:(NSString *)cameraIP {
-    if (![cameraIP isEqualToString:self.cameraIP]) {
-        [self closeCamera];
-        self.cameraIP = cameraIP;
-    }
-    // Don't open, that's async. Wait for loadCameraWithCompletionHandler.
 }
 
 - (void)loadCameraWithCompletionHandler:(PTZCommandBlock)handler {
@@ -223,10 +219,8 @@ void backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOf
 #endif
 }
 
-// PTZCLEANUP: when we have multiple instances of this class we won't need to pass cameraIPs around.
-- (void)backupRestoreWithAddress:(NSString *)cameraIP offset:(NSInteger)rangeOffset delay:(NSInteger)batchDelay isBackup:(BOOL)isBackup onDone:( PTZDoneBlock)doneBlock {
+- (void)backupRestoreWithOffset:(NSInteger)rangeOffset delay:(NSInteger)batchDelay isBackup:(BOOL)isBackup onDone:( PTZDoneBlock)doneBlock {
     
-    [self changeCamera:cameraIP];
     [self loadCameraWithCompletionHandler:^() {
         if (!self.cameraOpen) {
             [self callDoneBlock:doneBlock success:NO];
@@ -261,7 +255,7 @@ void backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOf
             if ([rootPath length] > 0) {
                 NSString *filename = [NSString stringWithFormat:@"snapshot_%@%d.jpg", cameraIP, (int)index];
                 NSString *path = [NSString pathWithComponents:@[rootPath, @"downloads", filename]];
-                //NSLog(@"saving snapshot to %@", path);
+                //PTZLog(@"saving snapshot to %@", path);
                 [data writeToFile:path atomically:YES];
             }
         } else {
@@ -270,8 +264,7 @@ void backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOf
     }] resume];
 }
 
-- (void)isCameraReachable:(NSString *)address onDone:(PTZDoneBlock)doneBlock {
-    self.cameraIP = address;
+- (void)isCameraReachable:(PTZDoneBlock)doneBlock {
     NSString *url = [self snapshotURL];
     // This will work even if there's no snapshot.jpg yet.
     [[[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:url]
@@ -317,7 +310,7 @@ BOOL open_interface(VISCAInterface_t *iface, VISCACamera_t *camera, const char *
 {
     int port = 5678; // True for PTZOptics. YMMV.
     if (VISCA_open_tcp(iface, hostname, port) != VISCA_SUCCESS) {
-        NSLog(@"visca: unable to open tcp device %s:%d\n", hostname, port);
+        PTZLog(@"unable to open tcp device %s:%d", hostname, port);
         return NO;
     }
 
@@ -325,12 +318,12 @@ BOOL open_interface(VISCAInterface_t *iface, VISCACamera_t *camera, const char *
     camera->address = 1; // Because we are using IP
 
     if (VISCA_clear(iface, camera) != VISCA_SUCCESS) {
-        NSLog(@"visca: unable to clear interface\n");
+        PTZLog(@"%s: unable to clear interface.", hostname);
         VISCA_close(iface);
         return NO;
     }
 
-    NSLog(@"Camera %s initialization successful.\n", hostname);
+    PTZLog(@"%s: initialization successful.", hostname);
     return YES;
 }
 
@@ -345,6 +338,7 @@ void backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOf
 {
     uint32_t fromOffset = isBackup ? 0 : inOffset;
     uint32_t toOffset = isBackup ? inOffset : 0;
+    NSString *log = @"";
 
     uint32_t sceneIndex;
     dispatch_sync(dispatch_get_main_queue(), ^{
@@ -354,23 +348,24 @@ void backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOf
     });
     __block BOOL cancel = NO;
     for (sceneIndex = 1; sceneIndex < 10; sceneIndex++) {
-        fprintf(stderr, "recall %d", sceneIndex + fromOffset);
+        log = [NSString stringWithFormat:@"%@ : ", ptzCamera.cameraIP];
+        log = [log stringByAppendingFormat:@"recall %d", sceneIndex + fromOffset];
         if (VISCA_memory_recall(iface, camera, sceneIndex + fromOffset) != VISCA_SUCCESS) {
-            fprintf(stderr, "\nfailed to send recall command %d\n", sceneIndex + fromOffset);
+            log = [log stringByAppendingFormat:@" failed to send recall command %d\n", sceneIndex + fromOffset];
             continue;
         } else if (iface->type == VISCA_RESPONSE_ERROR) {
-            fprintf(stderr, "\nCancelled recall at scene %d\n", sceneIndex + fromOffset);
+            log = [log stringByAppendingFormat:@" Cancelled recall at scene %d\n", sceneIndex + fromOffset];
             break;
         }
-        fprintf(stderr, " set %d", sceneIndex + toOffset);
+        log = [log stringByAppendingFormat:@" set %d", sceneIndex + toOffset];
         if (VISCA_memory_set(iface, camera, sceneIndex + toOffset) != VISCA_SUCCESS) {
-            fprintf(stderr, "\nfailed to send set command %d\n", sceneIndex + toOffset);
+            log = [log stringByAppendingFormat:@"failed to send set command %d\n", sceneIndex + toOffset];
             continue;
         } else if (iface->type == VISCA_RESPONSE_ERROR) {
-            fprintf(stderr, "\nCancelled set at scene %d\n", sceneIndex + toOffset);
+            log = [log stringByAppendingFormat:@" cancelled set at scene %d\n", sceneIndex + toOffset];
             break;
         }
-        fprintf(stderr, " copied scene %d to %d\n", sceneIndex + fromOffset, sceneIndex + toOffset);
+        log = [log stringByAppendingFormat:@" copied scene %d to %d\n", sceneIndex + fromOffset, sceneIndex + toOffset];
         dispatch_sync(dispatch_get_main_queue(), ^{
             [ptzCamera batchSetFinishedAtIndex:sceneIndex+toOffset];
             cancel = ptzCamera.batchCancelPending;
@@ -382,12 +377,17 @@ void backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOf
         // But if you are doing a recall/set combo, the delay is required. Otherwise it just sits there in 'send' starting around recall 3. Might just be a bug in our cameras - well, PTZOptics says no. I don't believe them. They said I'm overloading the camera with commands, but these *are* waiting for the previous one to finish.
         // Also 'usleep' doesn't seem to sleep, so we're stuck with integer seconds. And the firmware version affects the required delay. Latest one only needs 1 sec; older ones needed 5.
         sleep(delaySecs);
+        fprintf(stdout, "%s", [log UTF8String]);
+        log = @"";
     }
     // DO NOT DO AN EARLY RETURN! We must get here.
     dispatch_sync(dispatch_get_main_queue(), ^{
+        if ([log length] > 0) {
+            fprintf(stdout, "%s", [log UTF8String]);
+        }
         ptzCamera.batchCancelPending = NO;
         ptzCamera.batchOperationInProgress = NO;
-        ptzCamera.recallBusy = YES;
+        ptzCamera.recallBusy = NO;
         if (doneBlock) {
             doneBlock(!cancel);
         }

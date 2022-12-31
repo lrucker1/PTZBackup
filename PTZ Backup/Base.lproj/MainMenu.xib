@@ -373,7 +373,7 @@
             <rect key="contentRect" x="335" y="390" width="380" height="465"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="775"/>
             <view key="contentView" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="-24" width="380" height="489"/>
+                <rect key="frame" x="0.0" y="0.0" width="380" height="489"/>
                 <subviews>
                     <tabView translatesAutoresizingMaskIntoConstraints="NO" id="OsU-dz-hPa">
                         <rect key="frame" x="-7" y="180" width="394" height="275"/>
@@ -785,7 +785,7 @@ DQ
                                             <connections>
                                                 <action selector="batchAction:" target="Voe-Tx-rLC" id="35x-fw-Guf"/>
                                                 <binding destination="Voe-Tx-rLC" name="title" keyPath="batchAllButtonLabel" id="17g-i7-naa"/>
-                                                <binding destination="Voe-Tx-rLC" name="enabled" keyPath="recallBusy" id="XYf-Vg-8PI">
+                                                <binding destination="Voe-Tx-rLC" name="enabled" keyPath="batchOperationInProgress" id="br4-n6-xa4">
                                                     <dictionary key="options">
                                                         <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                     </dictionary>
@@ -924,18 +924,13 @@ Gw
                         </popUpButtonCell>
                         <connections>
                             <action selector="changeCamera:" target="Voe-Tx-rLC" id="lSI-Nc-yRi"/>
-                            <binding destination="Voe-Tx-rLC" name="toolTip" keyPath="cameraIP" id="khA-zg-2lM"/>
                             <binding destination="Voe-Tx-rLC" name="selectedIndex" keyPath="cameraIndex" id="ahz-3g-8Xc">
                                 <dictionary key="options">
                                     <integer key="NSNotApplicablePlaceholder" value="-1"/>
                                     <integer key="NSNullPlaceholder" value="-1"/>
                                 </dictionary>
                             </binding>
-                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="recallBusy" id="OYK-Sa-Dgw">
-                                <dictionary key="options">
-                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                </dictionary>
-                            </binding>
+                            <binding destination="Voe-Tx-rLC" name="toolTip" keyPath="cameraState.cameraIP" id="8sM-vq-75U"/>
                         </connections>
                     </popUpButton>
                     <button toolTip="Close and reopen the selected camera" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NWi-T5-5gA">
@@ -961,12 +956,12 @@ Gw
                         </constraints>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="PTZCameraIcon" id="ofp-n6-gcw"/>
                         <connections>
-                            <binding destination="Voe-Tx-rLC" name="toolTip" keyPath="cameraIP" id="qaW-Va-FMB"/>
                             <binding destination="Voe-Tx-rLC" name="hidden" keyPath="cameraState.cameraOpen" id="UtA-zP-vqe">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
+                            <binding destination="Voe-Tx-rLC" name="toolTip" keyPath="cameraState.cameraIP" id="T7B-Fe-05F"/>
                         </connections>
                     </imageView>
                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="D0B-8c-vVN" userLabel="Unreachable Camera Image View">
@@ -977,8 +972,8 @@ Gw
                         </constraints>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSStatusUnavailable" id="PKr-VU-HoQ"/>
                         <connections>
-                            <binding destination="Voe-Tx-rLC" name="toolTip" keyPath="cameraIP" id="gun-Qo-JRG"/>
                             <binding destination="Voe-Tx-rLC" name="hidden" keyPath="cameraState.cameraOpen" id="Wha-5I-L1Z"/>
+                            <binding destination="Voe-Tx-rLC" name="toolTip" keyPath="cameraState.cameraIP" id="iji-Cl-qao"/>
                         </connections>
                     </imageView>
                 </subviews>
@@ -1065,7 +1060,7 @@ Gw
             <rect key="contentRect" x="109" y="130" width="400" height="228"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="775"/>
             <view key="contentView" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I7c-h6-brQ">
-                <rect key="frame" x="0.0" y="1" width="400" height="227"/>
+                <rect key="frame" x="0.0" y="0.0" width="400" height="227"/>
                 <subviews>
                     <textField toolTip="This is a write-only value; the value you see may be out of date." horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mek-8b-Ze9">
                         <rect key="frame" x="18" y="72" width="124" height="16"/>
@@ -1101,7 +1096,7 @@ Gw
                         <connections>
                             <accessibilityConnection property="title" destination="Mek-8b-Ze9" id="Ts6-gy-rVT"/>
                             <action selector="applyRecallSpeed:" target="MdI-N0-20y" id="zbj-1Q-QWb"/>
-                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="recallBusy" id="znq-as-5v4">
+                            <binding destination="MdI-N0-20y" name="enabled" keyPath="cameraState.recallBusy" id="31R-IF-EwA">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
@@ -1141,7 +1136,7 @@ Gw
                         <connections>
                             <accessibilityConnection property="title" destination="L28-KD-sfa" id="UP3-XT-fdY"/>
                             <action selector="applyPanTilt:" target="MdI-N0-20y" id="bxl-oF-lGP"/>
-                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="recallBusy" id="aFT-aF-1NZ">
+                            <binding destination="MdI-N0-20y" name="enabled" keyPath="cameraState.recallBusy" id="uos-I2-Nnw">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
@@ -1179,7 +1174,7 @@ Gw
                         <connections>
                             <accessibilityConnection property="title" destination="ov4-Ur-Ook" id="CfF-uY-5vA"/>
                             <action selector="applyZoom:" target="MdI-N0-20y" id="8e2-YE-8Mg"/>
-                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="recallBusy" id="lps-Lb-89U">
+                            <binding destination="MdI-N0-20y" name="enabled" keyPath="cameraState.recallBusy" id="zyT-uG-hsa">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
@@ -1264,7 +1259,7 @@ Gw
                         </buttonCell>
                         <connections>
                             <action selector="updateCameraState:" target="MdI-N0-20y" id="bJv-d9-6TI"/>
-                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="recallBusy" id="O4n-rg-h3y">
+                            <binding destination="MdI-N0-20y" name="enabled" keyPath="cameraState.recallBusy" id="Lj8-iQ-PAS">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
@@ -1285,7 +1280,7 @@ Gw
                         </buttonCell>
                         <connections>
                             <action selector="cameraReset:" target="MdI-N0-20y" id="VVM-wv-NQp"/>
-                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="recallBusy" id="4eJ-G9-qLw">
+                            <binding destination="MdI-N0-20y" name="enabled" keyPath="cameraState.recallBusy" id="qZb-a4-GMD">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
@@ -1300,7 +1295,7 @@ Gw
                         </buttonCell>
                         <connections>
                             <action selector="cameraHome:" target="MdI-N0-20y" id="Bih-3V-iGN"/>
-                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="recallBusy" id="wGi-ED-Daz">
+                            <binding destination="MdI-N0-20y" name="enabled" keyPath="cameraState.recallBusy" id="qhb-id-Vqp">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
