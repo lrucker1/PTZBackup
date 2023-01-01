@@ -15,6 +15,7 @@
 #import "PTZPrefCamera.h"
 #import "NSWindowAdditions.h"
 
+static AppDelegate *selfType;
 
 typedef enum {
     PTZRestore = 0,
@@ -58,6 +59,7 @@ void PTZLog(NSString *format, ...) {
 @property NSInteger cameraIndex;
 @property NSInteger recallOffset, restoreOffset;
 @property (readonly) NSInteger recallValue, restoreValue;
+@property NSString *editableRestoreName;
 @property NSInteger batchDelay;
 @property NSInteger currentMode;
 @property NSInteger currentTab;
@@ -226,7 +228,11 @@ void PTZLog(NSString *format, ...) {
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    
+    [self addObserver:self
+           forKeyPath:@"restoreName"
+              options:0
+              context:&selfType];
+
     BOOL useLocalhost = NO;
     for (NSString *arg in [[NSProcessInfo processInfo] arguments]) {
         // You can also set 'localhost' as a temporary address in app preferences; this is left from early testing before that was added, when cameras got loaded at startup. It still might be useful for testing.
@@ -462,19 +468,6 @@ void PTZLog(NSString *format, ...) {
     self.currentMode = mode;
 }
 
-- (NSView *)currentEditingViewForWindow:(NSWindow *)window {
-    NSView *fieldEditor = [window fieldEditor:NO forObject:nil];
-    NSView *first = nil;
-    if (fieldEditor != nil) {
-        first = fieldEditor;
-        do {
-            first = [first superview];
-        } while (first != nil && ![first isKindOfClass:[NSTextField class]]);
-    }
-    return first;
-}
-
-
 - (IBAction)applyBatchDelay:(id)sender {
     // Force an active textfield to end editing so we get the current value, then put it back when we're done.
     NSView *view = (NSView *)sender;
@@ -484,6 +477,31 @@ void PTZLog(NSString *format, ...) {
         [window makeFirstResponder:first];
     }
 }
+
+- (IBAction)restoreSceneName:(id)sender {
+    // In Restore mode, we can copy the backup name to the restore name.
+    // In Backup mode, just copy the whole settings.ini file on the Batch pane.
+    // It might also be useful to edit names in Check mode... but that's a task for a future version.
+    if (self.currentMode == PTZRestore) {
+        self.editableRestoreName = self.backupName;
+    }
+}
+
+- (IBAction)saveSceneName:(id)sender {
+    // Only for Restore.
+    if (self.currentMode != PTZRestore) {
+        return;
+    }
+    // Force an active textfield to end editing so we get the current value, then put it back when we're done.
+    NSView *view = (NSView *)sender;
+    NSWindow *window = view.window;
+    NSView *first = [window ptz_currentEditingView];
+    [self.sourceSettings setName:self.editableRestoreName forScene:self.currentIndex camera:self.settingsFileCameraIP];
+    if (first != nil) {
+        [window makeFirstResponder:first];
+    }
+}
+
 
 
 - (IBAction)changeMode:(id)sender {
@@ -668,6 +686,21 @@ void PTZLog(NSString *format, ...) {
     [textStorage endEditing];
     NSRange range = NSMakeRange([[self.console string] length], 0);
     [self.console scrollRangeToVisible:range];
+}
+
+- (void)observeValueForKeyPath: (NSString *)keyPath    // IN
+                      ofObject: (id)object             // IN
+                        change: (NSDictionary *)change // IN
+                       context: (void *)context        // IN
+{
+   if (context != &selfType) {
+      [super observeValueForKeyPath:keyPath
+                           ofObject:object
+                             change:change
+                            context:context];
+   } else if ([keyPath isEqualToString:@"restoreName"]) {
+      self.editableRestoreName = self.restoreName;
+   }
 }
 
 @end

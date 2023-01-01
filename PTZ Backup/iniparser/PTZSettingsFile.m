@@ -13,6 +13,7 @@
 @interface PTZSettingsFile ()
 
 @property dictionary * ini;
+@property NSString *path;
 
 @end
 
@@ -51,6 +52,7 @@ static int _error_callback(const char *format, ...)
     if (self) {
         _last_error[0] = '\0';
         _ini = iniparser_load([path UTF8String]);
+        _path = path;
         if (_ini == NULL) {
             return nil;
         }
@@ -131,6 +133,14 @@ static int _error_callback(const char *format, ...)
 - (NSString *)stringFromList:(NSString *)list key:(NSString *)key {
     NSString *iniKey = [NSString stringWithFormat:@"%@:%@", list, key];
     return [self stringForKey:iniKey];
+}
+
+- (void)setName:(NSString *)name forScene:(NSInteger)scene camera:(NSString *)ipAddr {
+    // list General "mem" + index + ip
+    NSString *key = [NSString stringWithFormat:@"%@:mem%d%@", @"General", (int)scene, ipAddr];
+    if (iniparser_set(self.ini, [key UTF8String], [name UTF8String]) == 0) {
+        [self writeToFile:self.path];
+    }
 }
 
 - (NSString *)nameForScene:(NSInteger)scene camera:(NSString *)ipAddr {

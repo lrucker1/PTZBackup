@@ -368,7 +368,7 @@
             </items>
             <point key="canvasLocation" x="200" y="121"/>
         </menu>
-        <window title="PTZ Backup" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
+        <window title="PTZ Backup" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" frameAutosaveName="BackupWindow" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="335" y="390" width="380" height="465"/>
@@ -476,17 +476,22 @@
                                             </connections>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mVM-iA-Obc" userLabel="Set Name">
-                                            <rect key="frame" x="182" y="104" width="120" height="16"/>
+                                            <rect key="frame" x="177" y="104" width="124" height="16"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="0fO-U4-L1M"/>
                                             </constraints>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" placeholderString="Scene Name" drawsBackground="YES" usesSingleLineMode="YES" id="A84-Tv-NyZ">
+                                            <textFieldCell key="cell" lineBreakMode="clipping" selectable="YES" editable="YES" placeholderString="Scene Name" drawsBackground="YES" usesSingleLineMode="YES" id="A84-Tv-NyZ">
                                                 <font key="font" usesAppearanceFont="YES"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                             <connections>
-                                                <binding destination="Voe-Tx-rLC" name="value" keyPath="restoreName" id="8Cp-Qs-L6l"/>
+                                                <binding destination="Voe-Tx-rLC" name="editable" keyPath="currentMode" id="BZ2-bQ-eHx">
+                                                    <dictionary key="options">
+                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                    </dictionary>
+                                                </binding>
+                                                <binding destination="Voe-Tx-rLC" name="value" keyPath="editableRestoreName" id="2hY-eI-BGD"/>
                                             </connections>
                                         </textField>
                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="B2q-V1-N0x">
@@ -571,7 +576,7 @@
                                             </connections>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sde-LW-14p" userLabel="Recall Name">
-                                            <rect key="frame" x="27" y="104" width="120" height="16"/>
+                                            <rect key="frame" x="22" y="104" width="120" height="16"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="Nsr-87-LHw"/>
                                             </constraints>
@@ -624,6 +629,38 @@ DQ
                                                 </binding>
                                             </connections>
                                         </button>
+                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lV8-9r-qGU">
+                                            <rect key="frame" x="311" y="96" width="54" height="27"/>
+                                            <buttonCell key="cell" type="push" title="Save" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cbw-nC-wPb">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="smallSystem"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="saveSceneName:" target="Voe-Tx-rLC" id="NvG-Ns-yoD"/>
+                                                <binding destination="Voe-Tx-rLC" name="enabled" keyPath="currentMode" id="HRh-59-nHf">
+                                                    <dictionary key="options">
+                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                    </dictionary>
+                                                </binding>
+                                                <binding destination="Voe-Tx-rLC" name="hidden" keyPath="currentMode" previousBinding="HRh-59-nHf" id="tb0-RU-lGv"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wft-I7-nC3">
+                                            <rect key="frame" x="150" y="102" width="21" height="19"/>
+                                            <buttonCell key="cell" type="roundRect" bezelStyle="roundedRect" image="arrow.right" catalog="system" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="u5N-I2-cdd">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="cellTitle"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="restoreSceneName:" target="Voe-Tx-rLC" id="WpL-yd-nuq"/>
+                                                <binding destination="Voe-Tx-rLC" name="enabled" keyPath="currentMode" id="sdY-1f-W6T">
+                                                    <dictionary key="options">
+                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                    </dictionary>
+                                                </binding>
+                                                <binding destination="Voe-Tx-rLC" name="hidden" keyPath="currentMode" previousBinding="sdY-1f-W6T" id="MBF-Lg-Agt"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="DeD-K2-EO7" firstAttribute="leading" secondItem="N5v-lP-Fy0" secondAttribute="trailing" id="0iF-qv-mMY"/>
@@ -633,7 +670,7 @@ DQ
                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="mVM-iA-Obc" secondAttribute="trailing" constant="20" symbolic="YES" id="2rr-P0-gM0"/>
                                         <constraint firstAttribute="trailing" secondItem="B2q-V1-N0x" secondAttribute="trailing" constant="17" id="3Tw-Il-TSZ"/>
                                         <constraint firstItem="4bP-4d-9KG" firstAttribute="leading" secondItem="ZT3-Mm-z7N" secondAttribute="trailing" constant="8" symbolic="YES" id="3ci-Jn-BvS"/>
-                                        <constraint firstItem="sde-LW-14p" firstAttribute="leading" secondItem="I3C-OL-9mc" secondAttribute="leading" constant="10" id="3fa-0e-Mj9"/>
+                                        <constraint firstItem="sde-LW-14p" firstAttribute="leading" secondItem="I3C-OL-9mc" secondAttribute="leading" constant="5" id="3fa-0e-Mj9"/>
                                         <constraint firstItem="IYL-jP-MeM" firstAttribute="trailing" secondItem="B2q-V1-N0x" secondAttribute="trailing" id="3lB-qw-pNg"/>
                                         <constraint firstItem="FYk-mV-RX1" firstAttribute="top" secondItem="mVM-iA-Obc" secondAttribute="bottom" constant="15" id="6bv-Cw-y7b"/>
                                         <constraint firstItem="IYL-jP-MeM" firstAttribute="centerY" secondItem="KbU-sj-TxH" secondAttribute="centerY" id="8o5-0j-UI4"/>
@@ -646,20 +683,26 @@ DQ
                                         <constraint firstItem="KbU-sj-TxH" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="GVh-FL-SLF" secondAttribute="trailing" constant="8" symbolic="YES" id="HAp-B5-DnA"/>
                                         <constraint firstItem="ZT3-Mm-z7N" firstAttribute="leading" secondItem="WJf-Ci-cIK" secondAttribute="leading" constant="20" symbolic="YES" id="IWE-T5-BVg"/>
                                         <constraint firstItem="7F7-Qj-5gx" firstAttribute="firstBaseline" secondItem="I3C-OL-9mc" secondAttribute="firstBaseline" id="Jzz-F6-9jr"/>
+                                        <constraint firstAttribute="trailing" secondItem="lV8-9r-qGU" secondAttribute="trailing" constant="15" id="MPV-wj-FXJ"/>
                                         <constraint firstItem="v0r-bl-G13" firstAttribute="leading" secondItem="hUh-Jn-YPK" secondAttribute="trailing" constant="8" symbolic="YES" id="NGj-0o-GCo"/>
                                         <constraint firstAttribute="bottom" secondItem="GVh-FL-SLF" secondAttribute="bottom" constant="17" id="SJw-LV-6CC"/>
                                         <constraint firstItem="DeD-K2-EO7" firstAttribute="centerY" secondItem="N5v-lP-Fy0" secondAttribute="centerY" id="TfO-kd-mRF"/>
                                         <constraint firstItem="GVh-FL-SLF" firstAttribute="leading" secondItem="WJf-Ci-cIK" secondAttribute="leading" constant="20" symbolic="YES" id="V5T-Ld-G3q"/>
+                                        <constraint firstItem="wft-I7-nC3" firstAttribute="centerY" secondItem="sde-LW-14p" secondAttribute="centerY" id="WFz-ON-EIi"/>
                                         <constraint firstItem="cwF-sE-5d4" firstAttribute="leading" secondItem="7F7-Qj-5gx" secondAttribute="trailing" constant="6" id="XJS-nf-qjL"/>
                                         <constraint firstItem="v0r-bl-G13" firstAttribute="firstBaseline" secondItem="hUh-Jn-YPK" secondAttribute="firstBaseline" id="XOC-Cw-YAb"/>
+                                        <constraint firstItem="lV8-9r-qGU" firstAttribute="firstBaseline" secondItem="mVM-iA-Obc" secondAttribute="firstBaseline" id="ZCL-L5-do2"/>
                                         <constraint firstItem="N5v-lP-Fy0" firstAttribute="leading" secondItem="1IR-vS-VSM" secondAttribute="trailing" constant="8" symbolic="YES" id="ZtJ-H5-RJo"/>
                                         <constraint firstItem="mVM-iA-Obc" firstAttribute="firstBaseline" secondItem="sde-LW-14p" secondAttribute="firstBaseline" id="aXo-eC-FWc"/>
                                         <constraint firstItem="DeD-K2-EO7" firstAttribute="firstBaseline" secondItem="I3C-OL-9mc" secondAttribute="firstBaseline" id="agv-6t-vVq"/>
                                         <constraint firstItem="Ljb-gw-gtL" firstAttribute="firstBaseline" secondItem="I3C-OL-9mc" secondAttribute="firstBaseline" id="ajd-gj-g3H"/>
+                                        <constraint firstItem="lV8-9r-qGU" firstAttribute="leading" secondItem="mVM-iA-Obc" secondAttribute="trailing" constant="16" id="b2b-ZY-bSw"/>
+                                        <constraint firstItem="mVM-iA-Obc" firstAttribute="leading" secondItem="wft-I7-nC3" secondAttribute="trailing" constant="6" id="b69-9R-16V"/>
                                         <constraint firstItem="7F7-Qj-5gx" firstAttribute="centerY" secondItem="Ljb-gw-gtL" secondAttribute="centerY" id="bTl-KE-zrg"/>
                                         <constraint firstItem="4bP-4d-9KG" firstAttribute="firstBaseline" secondItem="ZT3-Mm-z7N" secondAttribute="firstBaseline" id="dMl-9K-84a"/>
                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="FYk-mV-RX1" secondAttribute="trailing" constant="20" symbolic="YES" id="dmD-aZ-ZfQ"/>
                                         <constraint firstItem="FYk-mV-RX1" firstAttribute="leading" secondItem="WJf-Ci-cIK" secondAttribute="leading" constant="17" id="er5-fN-bq3"/>
+                                        <constraint firstItem="wft-I7-nC3" firstAttribute="leading" secondItem="sde-LW-14p" secondAttribute="trailing" constant="8" symbolic="YES" id="iHT-Wt-Q2P"/>
                                         <constraint firstItem="IYL-jP-MeM" firstAttribute="leading" secondItem="KbU-sj-TxH" secondAttribute="trailing" constant="9" id="kkO-J0-20o"/>
                                         <constraint firstItem="rc8-xe-gIv" firstAttribute="centerX" secondItem="WJf-Ci-cIK" secondAttribute="centerX" id="lL7-Ox-Rh6"/>
                                         <constraint firstItem="hUh-Jn-YPK" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="WJf-Ci-cIK" secondAttribute="leading" constant="20" symbolic="YES" id="miw-4d-OXY"/>
@@ -668,7 +711,7 @@ DQ
                                         <constraint firstItem="B2q-V1-N0x" firstAttribute="centerY" secondItem="v0r-bl-G13" secondAttribute="centerY" id="pGw-HG-2DV"/>
                                         <constraint firstItem="I3C-OL-9mc" firstAttribute="leading" secondItem="WJf-Ci-cIK" secondAttribute="leading" constant="17" id="pXc-ng-gzl"/>
                                         <constraint firstItem="7F7-Qj-5gx" firstAttribute="leading" secondItem="Ljb-gw-gtL" secondAttribute="trailing" id="sGf-6L-BSc"/>
-                                        <constraint firstItem="mVM-iA-Obc" firstAttribute="leading" secondItem="1IR-vS-VSM" secondAttribute="leading" constant="10" id="u8k-MU-fcR"/>
+                                        <constraint firstItem="mVM-iA-Obc" firstAttribute="leading" secondItem="1IR-vS-VSM" secondAttribute="leading" constant="5" id="u8k-MU-fcR"/>
                                         <constraint firstItem="sde-LW-14p" firstAttribute="top" secondItem="I3C-OL-9mc" secondAttribute="bottom" constant="5" id="vh4-cn-Pee"/>
                                         <constraint firstItem="v0r-bl-G13" firstAttribute="firstBaseline" secondItem="ZT3-Mm-z7N" secondAttribute="firstBaseline" id="vvV-Iw-pVg"/>
                                         <constraint firstItem="1IR-vS-VSM" firstAttribute="firstBaseline" secondItem="I3C-OL-9mc" secondAttribute="firstBaseline" id="w5F-Z6-pzd"/>

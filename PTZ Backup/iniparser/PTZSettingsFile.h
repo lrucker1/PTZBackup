@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSArray *)cameraInfo;
 - (NSString *)nameForScene:(NSInteger)scene camera:(NSString *)ipAddr;
+- (void)setName:(NSString *)name forScene:(NSInteger)scene camera:(NSString *)ipAddr;
 
 @end
 
