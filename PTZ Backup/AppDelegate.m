@@ -57,11 +57,12 @@ void PTZLog(NSString *format, ...) {
 
 @property NSInteger rangeOffset, currentIndex;
 @property NSInteger cameraIndex;
-@property NSInteger recallOffset, restoreOffset;
-@property (readonly) NSInteger recallValue, restoreValue;
-@property NSString *editableRestoreName;
+@property NSInteger sceneRecallOffset, sceneSetOffset;
+@property (readonly) NSInteger sceneRecallValue, sceneSetValue;
+@property NSString *editableSceneSetName;
 @property NSInteger batchDelay;
 @property NSInteger currentMode;
+@property (readonly) BOOL isCheckMode, isRestoreMode, isBackupMode;
 @property NSInteger currentTab;
 @property BOOL autoRecall;
 @property BOOL hideRecallIcon, hideRestoreIcon;
@@ -73,6 +74,7 @@ void PTZLog(NSString *format, ...) {
 @property PTZPrefsController *prefsController;
 @property (strong) PTZSettingsFile *sourceSettings;
 @property (strong) PTZSettingsFile *backupSettings;
+@property BOOL applicationIsReady;
 
 @end
 
@@ -92,36 +94,42 @@ void PTZLog(NSString *format, ...) {
 
 + (NSSet *)keyPathsForValuesAffectingValueForKey: (NSString *)key // IN
 {
-   NSMutableSet *keyPaths = [NSMutableSet set];
-
-    if (   [key isEqualToString:@"recallValue"]
-        || [key isEqualToString:@"restoreValue"]) {
+    NSMutableSet *keyPaths = [NSMutableSet set];
+    
+    if (   [key isEqualToString:@"sceneRecallValue"]
+        || [key isEqualToString:@"sceneSetValue"]) {
         [keyPaths addObject:@"rangeOffset"];
-        [keyPaths addObject:@"recallOffset"];
-        [keyPaths addObject:@"restoreOffset"];
+        [keyPaths addObject:@"sceneRecallOffset"];
+        [keyPaths addObject:@"sceneSetOffset"];
         [keyPaths addObject:@"currentIndex"];
-        [keyPaths addObject:@"cameraIndex"];
+        [keyPaths addObject:@"cameraState"];
     }
     if (   [key isEqualToString:@"sceneName"]) {
         [keyPaths addObject:@"sourceSettings"];
         [keyPaths addObject:@"currentIndex"];
-        [keyPaths addObject:@"cameraIndex"];
+        [keyPaths addObject:@"cameraState"];
         [keyPaths addObject:@"cameraList"];
     }
     if (   [key isEqualToString:@"backupName"]) {
         [keyPaths addObject:@"backupSettings"];
         [keyPaths addObject:@"currentIndex"];
-        [keyPaths addObject:@"cameraIndex"];
+        [keyPaths addObject:@"cameraState"];
     }
-    if (   [key isEqualToString:@"recallName"]
-        || [key isEqualToString:@"restoreName"]) {
+    if (   [key isEqualToString:@"sceneRecallName"]
+        || [key isEqualToString:@"sceneSetName"]) {
         [keyPaths addObject:@"backupName"];
         [keyPaths addObject:@"sceneName"];
+        [keyPaths addObject:@"currentMode"];
+        [keyPaths addObject:@"backupSettings"];
+    }
+    if (   [key isEqualToString:@"isCheckMode"]
+        || [key isEqualToString:@"isRestoreMode"]
+        || [key isEqualToString:@"isBackupMode"]) {
         [keyPaths addObject:@"currentMode"];
     }
     if (   [key isEqualToString:@"cameraName"]
         || [key isEqualToString:@"cameraIP"]) {
-        [keyPaths addObject:@"cameraIndex"];
+        [keyPaths addObject:@"cameraState"];
         [keyPaths addObject:@"cameraList"];
     }
     // batchAllButtonLabel
@@ -228,8 +236,11 @@ void PTZLog(NSString *format, ...) {
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    // Seriously, restoration? Why are you making textfields first responder, then resigning it, which triggers the action before we're ready?
+    self.applicationIsReady = YES;
+    [self configConsoleRedirect];
     [self addObserver:self
-           forKeyPath:@"restoreName"
+           forKeyPath:@"sceneSetName"
               options:0
               context:&selfType];
 
@@ -244,20 +255,21 @@ void PTZLog(NSString *format, ...) {
             PTZPrefCamera *prefCamera = [[PTZPrefCamera alloc] initWithDictionary:@{@"cameraname":@"localhost", @"devicename":@"localhost"}];
             prefCamera.camera = [[PTZCamera alloc] initWithIP:prefCamera.devicename];
             [[self.cameraButton lastItem] setRepresentedObject:prefCamera];
-            // We can open localhost now. Real cameras wait until needed, so we don't spin on startup if they're unreachable.
+            // We can open localhost now. Real cameras wait until needed.
             [self reopenCamera:nil];
         }
     }
     if (useLocalhost) {
-        // Use the bundle resource for testing.
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"settings" ofType:@"ini"];
-        if (path) {
-            self.sourceSettings = [[PTZSettingsFile alloc] initWithPath:path];
+        if (self.sourceSettings == nil) {
+            // Use the bundle resource for testing.
+            NSString *path = [[NSBundle mainBundle] pathForResource:@"settings" ofType:@"ini"];
+            if (path) {
+                self.sourceSettings = [[PTZSettingsFile alloc] initWithPath:path];
+            }
         }
     } else {
         [self updateCameraPopup];
     }
-    [self configConsoleRedirect];
     self.currentIndex = 1;
     self.cameraIndex = 0;
     self.hideRestoreIcon = YES;
@@ -268,6 +280,9 @@ void PTZLog(NSString *format, ...) {
     NSString *iniPath = [self ptzopticsSettingsFilePath];
     if (iniPath == nil || [[NSFileManager defaultManager] fileExistsAtPath:iniPath]) {
         [self showPrefs:nil];
+    }
+    if (self.sourceSettings == nil) {
+        [self loadSourceSettings];
     }
     [self loadBackupSettings];
 }
@@ -281,23 +296,15 @@ void PTZLog(NSString *format, ...) {
 }
 
 - (NSArray *)cameraList {
-    NSString *path = [self ptzopticsSettingsFilePath];
-    if (path == nil) {
-        PTZLog(@"PTZOptics settings.ini file path not set");
-        return nil;
+    if (self.sourceSettings == nil) {
+        [self loadSourceSettings];
     }
-    if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
-        PTZLog(@"%@ not found", path);
-        return nil;
-    }
-
-    self.sourceSettings = [[PTZSettingsFile alloc] initWithPath:path];
     NSArray *cameras = [self.sourceSettings cameraInfo];
     if ([cameras count] > 0) {
         return cameras;
     }
 
-    PTZLog(@"No valid cameras found in %@", path);
+    PTZLog(@"No valid cameras found in %@", [self ptzopticsSettingsFilePath]);
     [self.sourceSettings logDictionary];
     return nil;
 }
@@ -342,17 +349,30 @@ void PTZLog(NSString *format, ...) {
     return [[[self.cameraButton selectedItem] representedObject] cameraname];
 }
 
-// Current camera address
+// Current camera address (used in nib bindings)
 - (NSString *)cameraIP {
-    return [[[self.cameraButton selectedItem] representedObject] originalDeviceName];
+    return [[[self.cameraButton selectedItem] representedObject] devicename];
 }
 
 // Address as used in settings.ini
 - (NSString *)settingsFileCameraIP {
-    return [[[self.cameraButton selectedItem] representedObject] devicename];
+    return [[[self.cameraButton selectedItem] representedObject] originalDeviceName];
 }
 
-- (NSString *)recallName {
+- (BOOL)isCheckMode {
+    return self.currentMode == PTZCheck;
+}
+
+- (BOOL)isRestoreMode {
+    return self.currentMode == PTZRestore;
+}
+
+- (BOOL)isBackupMode {
+    return self.currentMode == PTZBackup;
+}
+
+
+- (NSString *)sceneRecallName {
     switch (self.currentMode) {
         case PTZRestore:
             return self.backupName;
@@ -364,12 +384,12 @@ void PTZLog(NSString *format, ...) {
     return @"";
 }
 
-- (NSString *)restoreName {
+- (NSString *)sceneSetName {
     switch (self.currentMode) {
         case PTZRestore:
             return self.sceneName;
         case PTZCheck:
-            return @"";
+            return self.sceneName;
         case PTZBackup:
             return self.backupName;
     }
@@ -384,15 +404,31 @@ void PTZLog(NSString *format, ...) {
     return [self.backupSettings nameForScene:self.currentIndex camera:self.settingsFileCameraIP];
 }
 
+- (void)loadSourceSettings {
+    NSString *path = [self ptzopticsSettingsFilePath];
+    if (path == nil) {
+        PTZLog(@"PTZOptics settings.ini file path not set");
+        return;
+    }
+    if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
+        PTZLog(@"%@ not found", path);
+        return;
+    }
+
+    self.sourceSettings = [[PTZSettingsFile alloc] initWithPath:path];
+}
+
 - (void)loadBackupSettings {
     self.backupSettings = nil;
     NSString *rootPath = [self ptzopticsSettingsDirectory];
     if (rootPath != nil && [[NSFileManager defaultManager] fileExistsAtPath:rootPath]) {
-        NSString *filename = [NSString stringWithFormat:@"settings%d.ini", (int)self.recallOffset];
+        NSString *filename = [NSString stringWithFormat:@"settings%d.ini", (int)self.rangeOffset];
         NSString *path = [NSString pathWithComponents:@[rootPath, filename]];
         
         if (path != nil && [[NSFileManager defaultManager] fileExistsAtPath:path]) {
             self.backupSettings = [[PTZSettingsFile alloc] initWithPath:path];
+        } else {
+            PTZLog(@"%@ not found", path);
         }
     }
 }
@@ -400,7 +436,7 @@ void PTZLog(NSString *format, ...) {
 - (IBAction)settingsIniCopyToBackup:(id)sender {
     NSString *rootPath = [self ptzopticsSettingsDirectory];
     if (rootPath != nil) {
-        NSString *filename = [NSString stringWithFormat:@"settings%d.ini", (int)self.recallOffset];
+        NSString *filename = [NSString stringWithFormat:@"settings%d.ini", (int)self.sceneRecallOffset];
         NSString *path = [NSString pathWithComponents:@[rootPath, filename]];
         [self.sourceSettings writeToFile:path];
         [self loadBackupSettings];
@@ -454,15 +490,15 @@ void PTZLog(NSString *format, ...) {
 - (void)updateMode:(NSInteger)mode {
     switch (mode) {
         case PTZRestore:
-            self.recallOffset = self.rangeOffset;
-            self.restoreOffset = 0;
+            self.sceneRecallOffset = self.rangeOffset;
+            self.sceneSetOffset = 0;
             break;
         case PTZCheck:
-            self.recallOffset = self.restoreOffset = 0;
+            self.sceneRecallOffset = self.sceneSetOffset = 0;
             break;
         case PTZBackup:
-            self.recallOffset = 0;
-            self.restoreOffset = self.rangeOffset;
+            self.sceneRecallOffset = 0;
+            self.sceneSetOffset = self.rangeOffset;
             break;
     }
     self.currentMode = mode;
@@ -478,25 +514,24 @@ void PTZLog(NSString *format, ...) {
     }
 }
 
+// In Restore mode, we can copy the backup name to the restore name.
+// In Check and Restore we can edit and save it.
+// That's all disabled in Backup as you can just copy the whole settings.ini file on the Batch pane and the code logic would get so much more difficult.
 - (IBAction)restoreSceneName:(id)sender {
-    // In Restore mode, we can copy the backup name to the restore name.
-    // In Backup mode, just copy the whole settings.ini file on the Batch pane.
-    // It might also be useful to edit names in Check mode... but that's a task for a future version.
     if (self.currentMode == PTZRestore) {
-        self.editableRestoreName = self.backupName;
+        self.editableSceneSetName = self.backupName;
     }
 }
 
 - (IBAction)saveSceneName:(id)sender {
-    // Only for Restore.
-    if (self.currentMode != PTZRestore) {
+    if (self.currentMode == PTZBackup) {
         return;
     }
     // Force an active textfield to end editing so we get the current value, then put it back when we're done.
     NSView *view = (NSView *)sender;
     NSWindow *window = view.window;
     NSView *first = [window ptz_currentEditingView];
-    [self.sourceSettings setName:self.editableRestoreName forScene:self.currentIndex camera:self.settingsFileCameraIP];
+    [self.sourceSettings setName:self.editableSceneSetName forScene:self.currentIndex camera:self.settingsFileCameraIP];
     if (first != nil) {
         [window makeFirstResponder:first];
     }
@@ -553,7 +588,7 @@ void PTZLog(NSString *format, ...) {
 
 - (IBAction)recallScene:(id)sender {
     self.hideRecallIcon = YES;
-    [self.cameraState memoryRecall:self.recallValue onDone:^(BOOL success) {
+    [self.cameraState memoryRecall:self.sceneRecallValue onDone:^(BOOL success) {
         if (success) {
             [self.cameraState updateCameraState];
         } else {
@@ -567,12 +602,14 @@ void PTZLog(NSString *format, ...) {
     self.stateViewController.cameraState = self.cameraState;
 }
 
+// It's the "Set" command, but that's a special prefix in AppKit.
+
 - (IBAction)restoreScene:(id)sender {
     self.hideRestoreIcon = YES;
-    NSInteger recallValue = self.recallValue;
-    [self.cameraState memorySet:recallValue onDone:^(BOOL success) {
+    NSInteger sceneRecallValue = self.sceneRecallValue;
+    [self.cameraState memorySet:sceneRecallValue onDone:^(BOOL success) {
         if (success) {
-            [self.cameraState fetchSnapshotAtIndex:recallValue];
+            [self.cameraState fetchSnapshotAtIndex:sceneRecallValue];
         } else {
             self.hideRestoreIcon = NO;
         }
@@ -582,6 +619,9 @@ void PTZLog(NSString *format, ...) {
 // NSTextField actions are required so we don't propagate return to the button, because it increments. But we may stil want to load the scene.
 
 - (IBAction)changeRangeOffset:(id)sender {
+    if (!self.applicationIsReady) {
+        return;
+    }
     // Usually a multiple of 10 when doing batches, but can be other values for one-off saves. It's up to the user to choose wisely. I only protect you from tromping on the PTZOptics default 9.
     if (self.rangeOffset < 9) {
         self.rangeOffset = 9;
@@ -600,6 +640,9 @@ void PTZLog(NSString *format, ...) {
 }
 
 - (IBAction)changeCurrentIndex:(id)sender {
+    if (!self.applicationIsReady) {
+        return;
+    }
     if (self.currentIndex > 9) {
         self.currentIndex = 9;
     } else if (self.currentIndex < 1) {
@@ -612,6 +655,9 @@ void PTZLog(NSString *format, ...) {
 
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)fieldEditor doCommandBySelector:(SEL)commandSelector
 {
+    if (!self.applicationIsReady) {
+        return NO;
+    }
     if (commandSelector == @selector(insertNewline:)) {
         //Do something against ENTER key
         // Force the field to do an "apply". Seriously, guys, this code is ancient and there's still no better way?
@@ -657,13 +703,13 @@ void PTZLog(NSString *format, ...) {
     }
 }
 
-- (NSInteger)recallValue {
-    return _recallOffset + _currentIndex;
+- (NSInteger)sceneRecallValue {
+    return _sceneRecallOffset + _currentIndex;
 }
 
 
-- (NSInteger)restoreValue {
-    return _restoreOffset + _currentIndex;
+- (NSInteger)sceneSetValue {
+    return _sceneSetOffset + _currentIndex;
 }
 
 - (IBAction)commandCancel:(id)sender {
@@ -698,8 +744,9 @@ void PTZLog(NSString *format, ...) {
                            ofObject:object
                              change:change
                             context:context];
-   } else if ([keyPath isEqualToString:@"restoreName"]) {
-      self.editableRestoreName = self.restoreName;
+   } else if ([keyPath isEqualToString:@"sceneSetName"]) {
+       // In Backup mode it shows the backup name and is not editable.
+       self.editableSceneSetName = self.sceneSetName;
    }
 }
 

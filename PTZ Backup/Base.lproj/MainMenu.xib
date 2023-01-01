@@ -370,6 +370,7 @@
         </menu>
         <window title="PTZ Backup" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" frameAutosaveName="BackupWindow" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" miniaturizable="YES" resizable="YES"/>
+            <windowCollectionBehavior key="collectionBehavior" fullScreenNone="YES" fullScreenDisallowsTiling="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="335" y="390" width="380" height="465"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="775"/>
@@ -476,7 +477,7 @@
                                             </connections>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mVM-iA-Obc" userLabel="Set Name">
-                                            <rect key="frame" x="177" y="104" width="124" height="16"/>
+                                            <rect key="frame" x="177" y="104" width="134" height="16"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="0fO-U4-L1M"/>
                                             </constraints>
@@ -486,12 +487,12 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                             <connections>
-                                                <binding destination="Voe-Tx-rLC" name="editable" keyPath="currentMode" id="BZ2-bQ-eHx">
+                                                <binding destination="Voe-Tx-rLC" name="editable" keyPath="isBackupMode" id="YrU-sp-upq">
                                                     <dictionary key="options">
                                                         <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                     </dictionary>
                                                 </binding>
-                                                <binding destination="Voe-Tx-rLC" name="value" keyPath="editableRestoreName" id="2hY-eI-BGD"/>
+                                                <binding destination="Voe-Tx-rLC" name="value" keyPath="editableSceneSetName" id="jtW-mQ-BvJ"/>
                                             </connections>
                                         </textField>
                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="B2q-V1-N0x">
@@ -529,7 +530,7 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                             <connections>
-                                                <binding destination="Voe-Tx-rLC" name="value" keyPath="restoreValue" id="Y5f-iB-Tzi"/>
+                                                <binding destination="Voe-Tx-rLC" name="value" keyPath="sceneSetValue" id="hLG-ii-S7R"/>
                                             </connections>
                                         </textField>
                                         <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rc8-xe-gIv">
@@ -572,7 +573,7 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                             <connections>
-                                                <binding destination="Voe-Tx-rLC" name="value" keyPath="recallValue" id="Tr9-37-E51"/>
+                                                <binding destination="Voe-Tx-rLC" name="value" keyPath="sceneRecallValue" id="ag5-d4-A8R"/>
                                             </connections>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sde-LW-14p" userLabel="Recall Name">
@@ -586,7 +587,8 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                             <connections>
-                                                <binding destination="Voe-Tx-rLC" name="value" keyPath="recallName" id="Rfv-BM-WN8"/>
+                                                <binding destination="Voe-Tx-rLC" name="hidden" keyPath="isCheckMode" id="Bee-Ao-2gL"/>
+                                                <binding destination="Voe-Tx-rLC" name="value" keyPath="sceneRecallName" id="cr9-yW-rhl"/>
                                             </connections>
                                         </textField>
                                         <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="KbU-sj-TxH">
@@ -637,12 +639,7 @@ DQ
                                             </buttonCell>
                                             <connections>
                                                 <action selector="saveSceneName:" target="Voe-Tx-rLC" id="NvG-Ns-yoD"/>
-                                                <binding destination="Voe-Tx-rLC" name="enabled" keyPath="currentMode" id="HRh-59-nHf">
-                                                    <dictionary key="options">
-                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                                    </dictionary>
-                                                </binding>
-                                                <binding destination="Voe-Tx-rLC" name="hidden" keyPath="currentMode" previousBinding="HRh-59-nHf" id="tb0-RU-lGv"/>
+                                                <binding destination="Voe-Tx-rLC" name="hidden" keyPath="isBackupMode" id="CGm-ri-f3J"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wft-I7-nC3">
@@ -653,12 +650,11 @@ DQ
                                             </buttonCell>
                                             <connections>
                                                 <action selector="restoreSceneName:" target="Voe-Tx-rLC" id="WpL-yd-nuq"/>
-                                                <binding destination="Voe-Tx-rLC" name="enabled" keyPath="currentMode" id="sdY-1f-W6T">
+                                                <binding destination="Voe-Tx-rLC" name="hidden" keyPath="isRestoreMode" id="FSg-Jf-rn6">
                                                     <dictionary key="options">
                                                         <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                     </dictionary>
                                                 </binding>
-                                                <binding destination="Voe-Tx-rLC" name="hidden" keyPath="currentMode" previousBinding="sdY-1f-W6T" id="MBF-Lg-Agt"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -696,7 +692,7 @@ DQ
                                         <constraint firstItem="mVM-iA-Obc" firstAttribute="firstBaseline" secondItem="sde-LW-14p" secondAttribute="firstBaseline" id="aXo-eC-FWc"/>
                                         <constraint firstItem="DeD-K2-EO7" firstAttribute="firstBaseline" secondItem="I3C-OL-9mc" secondAttribute="firstBaseline" id="agv-6t-vVq"/>
                                         <constraint firstItem="Ljb-gw-gtL" firstAttribute="firstBaseline" secondItem="I3C-OL-9mc" secondAttribute="firstBaseline" id="ajd-gj-g3H"/>
-                                        <constraint firstItem="lV8-9r-qGU" firstAttribute="leading" secondItem="mVM-iA-Obc" secondAttribute="trailing" constant="16" id="b2b-ZY-bSw"/>
+                                        <constraint firstItem="lV8-9r-qGU" firstAttribute="leading" secondItem="mVM-iA-Obc" secondAttribute="trailing" constant="6" id="b2b-ZY-bSw"/>
                                         <constraint firstItem="mVM-iA-Obc" firstAttribute="leading" secondItem="wft-I7-nC3" secondAttribute="trailing" constant="6" id="b69-9R-16V"/>
                                         <constraint firstItem="7F7-Qj-5gx" firstAttribute="centerY" secondItem="Ljb-gw-gtL" secondAttribute="centerY" id="bTl-KE-zrg"/>
                                         <constraint firstItem="4bP-4d-9KG" firstAttribute="firstBaseline" secondItem="ZT3-Mm-z7N" secondAttribute="firstBaseline" id="dMl-9K-84a"/>
@@ -1045,8 +1041,9 @@ Gw
             </view>
             <point key="canvasLocation" x="150" y="253.5"/>
         </window>
-        <window title="Log" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" frameAutosaveName="" animationBehavior="default" id="ma5-Jq-Bzr">
+        <window title="Log" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" frameAutosaveName="LogWindow" animationBehavior="default" id="ma5-Jq-Bzr">
             <windowStyleMask key="styleMask" titled="YES" miniaturizable="YES" resizable="YES"/>
+            <windowCollectionBehavior key="collectionBehavior" fullScreenNone="YES" fullScreenDisallowsTiling="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="224" y="343" width="480" height="270"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="775"/>
@@ -1060,7 +1057,7 @@ Gw
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" drawsBackground="NO" id="B5g-mx-zfa">
                             <rect key="frame" x="0.0" y="0.0" width="465" height="270"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <textView wantsLayer="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="Pht-VT-EwM">
                                     <rect key="frame" x="0.0" y="0.0" width="465" height="270"/>
@@ -1086,13 +1083,14 @@ Gw
             </view>
             <point key="canvasLocation" x="48" y="-111"/>
         </window>
-        <window title="Camera State" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" frameAutosaveName="" animationBehavior="default" id="YGF-Dk-82F">
+        <window title="Camera State" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" frameAutosaveName="CameraStateWindow" animationBehavior="default" id="YGF-Dk-82F">
             <windowStyleMask key="styleMask" titled="YES" miniaturizable="YES" resizable="YES"/>
+            <windowCollectionBehavior key="collectionBehavior" fullScreenNone="YES" fullScreenDisallowsTiling="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="109" y="130" width="400" height="228"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="775"/>
             <view key="contentView" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I7c-h6-brQ">
-                <rect key="frame" x="0.0" y="0.0" width="400" height="227"/>
+                <rect key="frame" x="0.0" y="1" width="400" height="227"/>
                 <subviews>
                     <textField toolTip="This is a write-only value; the value you see may be out of date." horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mek-8b-Ze9">
                         <rect key="frame" x="18" y="72" width="124" height="16"/>
