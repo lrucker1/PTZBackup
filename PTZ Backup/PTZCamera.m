@@ -264,6 +264,7 @@ void backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOf
     }] resume];
 }
 
+// Not needed now that everything is async
 - (void)isCameraReachable:(PTZDoneBlock)doneBlock {
     NSString *url = [self snapshotURL];
     // This will work even if there's no snapshot.jpg yet.
@@ -323,7 +324,7 @@ BOOL open_interface(VISCAInterface_t *iface, VISCACamera_t *camera, const char *
         return NO;
     }
 
-    PTZLog(@"%s: initialization successful.", hostname);
+    PTZLog(@"%s : initialization successful.", hostname);
     return YES;
 }
 
@@ -346,6 +347,8 @@ void backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOf
         ptzCamera.batchOperationInProgress = YES;
         ptzCamera.recallBusy = YES;
     });
+    // Set preset recall speed to max, just in case it got changed.
+    VISCA_set_pantilt_preset_speed(iface, camera, 24);
     __block BOOL cancel = NO;
     for (sceneIndex = 1; sceneIndex < 10; sceneIndex++) {
         log = [NSString stringWithFormat:@"%@ : ", ptzCamera.cameraIP];
@@ -378,9 +381,9 @@ void backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOf
         // Also 'usleep' doesn't seem to sleep, so we're stuck with integer seconds. And the firmware version affects the required delay. Latest one only needs 1 sec; older ones needed 5.
         sleep(delaySecs);
         fprintf(stdout, "%s", [log UTF8String]);
-        log = @"";
+        log = @""; // Clear when exiting loop normally; we want to print anything in the log if we exited the loop via 'break'
     }
-    // DO NOT DO AN EARLY RETURN! We must get here.
+    // DO NOT DO AN EARLY RETURN! We must get here and run this block.
     dispatch_sync(dispatch_get_main_queue(), ^{
         if ([log length] > 0) {
             fprintf(stdout, "%s", [log UTF8String]);

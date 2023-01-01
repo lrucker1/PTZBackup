@@ -1,4 +1,4 @@
-
+On the recall/set delay:
 https://help.ptzoptics.com/support/discussions/topics/13000029804
 
 it will not respond to recalls of presets,
@@ -6,7 +6,7 @@ it will not respond to recalls of presets,
 1). When using the stream deck I had a multi action first send preset recall via http-cgi and then after a delay call a python script to send a visca command for iris setting.  Without a sufficient delay (>=2500mS)  between the two commands the problem would sometimes occur.  
 
 
-Me:
+Conversation with PTZOptics support:
 >> If I send 9 "recall" commands in a loop with no pause other than waiting for the camera to report success, it works fine. Likewise if I send 9 "set" commands. But if I send 9 "recall/set" combinations in a loop, the camera will stop responding at the 3rd "recall”. Putting in a 1 second delay after the set works around this.
 
 PTZ Support:
@@ -21,12 +21,11 @@ https://stackoverflow.com/questions/108183/how-to-prevent-sigpipes-or-handle-the
 Apparently PTZOptics doesn't support cancel:
 Packet: 81 20 ff
 errortype 02 (expected 04)
-- but we can cancel the loop.
+- but we can cancel the loop, and sending it a cancel does interrupt the operation, even if the camera is just wondering what that strange request was.
 
+Interesting stuff from the PTZOptics code (https://github.com/PTZOptics/OBSPlugin) - and no, it's not an OBS plugin:
 //  downloadDestination[reply] = new QFile(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QString::asprintf("%s" , (DOWNLOAD_FILE_DEST_PREFIX)) + currentCamIp + QString::number(1) + ".jpg");
 //
-// AppDataLocation is
-// \li "~/Library/Application Support/<APPNAME>", "/Library/Application Support/<APPNAME>". "<APPDIR>/../Resources"
 
         devNameGetter->get(QNetworkRequest(QUrl("http://" + currentCamIp + "/cgi-bin/param.cgi?get_device_conf")));
 
@@ -35,3 +34,4 @@ errortype 02 (expected 04)
 #define DOWNLOAD_FILE_URI "/snapshot.jpg"
 //     settings->setValue(QString::asprintf("mem%d", presetNum) + currentCamIp, presetText);
 
+Install PTZOptics on an intel Mac and test writing to the ini file.

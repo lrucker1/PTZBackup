@@ -75,11 +75,11 @@ inline static void set_timeout_ms(VISCA_udp_ctx_t *ctx, int timeout)
 		fprintf(stderr, "Error: setsockopt(SO_RCVTIMEO) failed");
 }
 
-static size_t visca_udp_send_packet_buf(VISCA_udp_ctx_t *ctx)
+static int visca_udp_send_packet_buf(VISCA_udp_ctx_t *ctx)
 {
 	debug_udp("udp: send header=%s payload length=%d buf=%s", b2s(ctx->buf_send, 8), ctx->buf_send_n - 8,
 		  b2s(ctx->buf_send + 8, ctx->buf_send_n - 8));
-	size_t ret = sendto(ctx->sockfd, ctx->buf_send, ctx->buf_send_n, 0, (struct sockaddr *)&ctx->addr,
+	int ret = (int)sendto(ctx->sockfd, ctx->buf_send, ctx->buf_send_n, 0, (struct sockaddr *)&ctx->addr,
 			 sizeof(ctx->addr));
 	if (ret >= 8)
 		return ret - 8;
@@ -87,7 +87,7 @@ static size_t visca_udp_send_packet_buf(VISCA_udp_ctx_t *ctx)
 		return -1;
 }
 
-static size_t visca_udp_send_packet(VISCA_udp_ctx_t *ctx, uint16_t type, const void *buf, int length)
+static int visca_udp_send_packet(VISCA_udp_ctx_t *ctx, uint16_t type, const void *buf, int length)
 {
 	uint8_t *buf_udp = ctx->buf_send;
 	ctx->buf_send_n = length + 8;
@@ -106,7 +106,7 @@ static size_t visca_udp_send_packet(VISCA_udp_ctx_t *ctx, uint16_t type, const v
 	return visca_udp_send_packet_buf(ctx);
 }
 
-static size_t visca_udp_cb_write(VISCAInterface_t *iface, const void *buf, int length)
+static int visca_udp_cb_write(VISCAInterface_t *iface, const void *buf, int length)
 {
 	VISCA_udp_ctx_t *ctx = iface->ctx;
 	const uint8_t *buf_int = buf;
@@ -191,7 +191,7 @@ inline static size_t visca_udp_recv_packet(VISCA_udp_ctx_t *ctx)
 	return 1;
 }
 
-static size_t visca_udp_cb_read(VISCAInterface_t *iface, void *buf, int length)
+static int visca_udp_cb_read(VISCAInterface_t *iface, void *buf, int length)
 {
 	if (length <= 0)
 		return 0;
@@ -203,7 +203,7 @@ static size_t visca_udp_cb_read(VISCAInterface_t *iface, void *buf, int length)
 			return -1;
 	}
 
-    size_t ret = 0;
+    int ret = 0;
 	uint8_t *buf_int = buf;
 	while (length > 0 && ctx->buf_recv_pl_i != ctx->buf_recv_pl_n) {
 		*buf_int++ = ctx->buf_recv[ctx->buf_recv_pl_i++];

@@ -17,6 +17,7 @@
             <connections>
                 <outlet property="cameraButton" destination="Eyk-qe-8u4" id="vbt-SL-D0j"/>
                 <outlet property="console" destination="Pht-VT-EwM" id="5kb-dn-q6N"/>
+                <outlet property="singleModeControl" destination="rc8-xe-gIv" id="d8F-q8-UWg"/>
                 <outlet property="stateViewController" destination="MdI-N0-20y" id="f8y-WQ-eOU"/>
                 <outlet property="stateWindow" destination="YGF-Dk-82F" id="JR3-Md-ceB"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
@@ -956,12 +957,12 @@ Gw
                         </constraints>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="PTZCameraIcon" id="ofp-n6-gcw"/>
                         <connections>
+                            <binding destination="Voe-Tx-rLC" name="toolTip" keyPath="cameraState.cameraIP" id="T7B-Fe-05F"/>
                             <binding destination="Voe-Tx-rLC" name="hidden" keyPath="cameraState.cameraOpen" id="UtA-zP-vqe">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="Voe-Tx-rLC" name="toolTip" keyPath="cameraState.cameraIP" id="T7B-Fe-05F"/>
                         </connections>
                     </imageView>
                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="D0B-8c-vVN" userLabel="Unreachable Camera Image View">
@@ -972,8 +973,8 @@ Gw
                         </constraints>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSStatusUnavailable" id="PKr-VU-HoQ"/>
                         <connections>
-                            <binding destination="Voe-Tx-rLC" name="hidden" keyPath="cameraState.cameraOpen" id="Wha-5I-L1Z"/>
                             <binding destination="Voe-Tx-rLC" name="toolTip" keyPath="cameraState.cameraIP" id="iji-Cl-qao"/>
+                            <binding destination="Voe-Tx-rLC" name="hidden" keyPath="cameraState.cameraOpen" id="Wha-5I-L1Z"/>
                         </connections>
                     </imageView>
                 </subviews>
@@ -1012,20 +1013,20 @@ Gw
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView fixedFrame="YES" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nRb-WB-rtx">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="213"/>
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" drawsBackground="NO" id="B5g-mx-zfa">
-                            <rect key="frame" x="0.0" y="0.0" width="465" height="213"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <rect key="frame" x="0.0" y="0.0" width="465" height="270"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView wantsLayer="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="Pht-VT-EwM">
-                                    <rect key="frame" x="0.0" y="0.0" width="465" height="213"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="465" height="270"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    <size key="minSize" width="465" height="213"/>
+                                    <color key="textColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <size key="minSize" width="465" height="270"/>
                                     <size key="maxSize" width="480" height="10000000"/>
-                                    <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="insertionPointColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textView>
                             </subviews>
                         </clipView>
@@ -1034,22 +1035,10 @@ Gw
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="OZb-4x-YdX">
-                            <rect key="frame" x="465" y="0.0" width="15" height="213"/>
+                            <rect key="frame" x="465" y="0.0" width="15" height="270"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D92-Ho-Om5">
-                        <rect key="frame" x="0.0" y="213" width="480" height="57"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" selectable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="Terminal" drawsBackground="YES" id="Kul-iy-2OI">
-                            <font key="font" size="13" name="Menlo-Regular"/>
-                            <color key="textColor" name="systemCyanColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                        </textFieldCell>
-                        <connections>
-                            <binding destination="Voe-Tx-rLC" name="value" keyPath="currentCommand" id="wXH-GL-YpA"/>
-                        </connections>
-                    </textField>
                 </subviews>
             </view>
             <point key="canvasLocation" x="48" y="-111"/>

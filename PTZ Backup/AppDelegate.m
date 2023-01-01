@@ -52,9 +52,10 @@ void PTZLog(NSString *format, ...) {
 @property (strong) IBOutlet NSTextView *console;
 @property (strong) IBOutlet NSPopUpButton *cameraButton;
 @property (strong) IBOutlet PTZCameraStateViewController *stateViewController;
+@property (strong) IBOutlet NSSegmentedControl *singleModeControl;
 
 @property NSInteger rangeOffset, currentIndex;
-@property NSInteger openCamera, cameraIndex;
+@property NSInteger cameraIndex;
 @property NSInteger recallOffset, restoreOffset;
 @property (readonly) NSInteger recallValue, restoreValue;
 @property NSInteger batchDelay;
@@ -91,14 +92,13 @@ void PTZLog(NSString *format, ...) {
 {
    NSMutableSet *keyPaths = [NSMutableSet set];
 
-  if (   [key isEqualToString:@"recallValue"]
-      || [key isEqualToString:@"restoreValue"]
-      || [key isEqualToString:@"currentCommand"]) {
-      [keyPaths addObject:@"rangeOffset"];
-      [keyPaths addObject:@"recallOffset"];
-      [keyPaths addObject:@"restoreOffset"];
-      [keyPaths addObject:@"currentIndex"];
-      [keyPaths addObject:@"cameraIndex"];
+    if (   [key isEqualToString:@"recallValue"]
+        || [key isEqualToString:@"restoreValue"]) {
+        [keyPaths addObject:@"rangeOffset"];
+        [keyPaths addObject:@"recallOffset"];
+        [keyPaths addObject:@"restoreOffset"];
+        [keyPaths addObject:@"currentIndex"];
+        [keyPaths addObject:@"cameraIndex"];
     }
     if (   [key isEqualToString:@"sceneName"]) {
         [keyPaths addObject:@"sourceSettings"];
@@ -150,7 +150,7 @@ void PTZLog(NSString *format, ...) {
     [_pipeReadHandle readInBackgroundAndNotify];
     dispatch_async(dispatch_get_main_queue(), ^{
         NSString *stdOutString = [[NSString alloc] initWithData: [[notification userInfo] objectForKey: NSFileHandleNotificationDataItem] encoding: NSASCIIStringEncoding];
-        [self writeToConsole:stdOutString color:[NSColor redColor]];
+        [self writeToConsole:stdOutString color:[NSColor systemRedColor]];
     });
 }
 
@@ -227,11 +227,9 @@ void PTZLog(NSString *format, ...) {
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     
-    self.openCamera = -1;
-    
     BOOL useLocalhost = NO;
-    // Insert code here to initialize your application
     for (NSString *arg in [[NSProcessInfo processInfo] arguments]) {
+        // You can also set 'localhost' as a temporary address in app preferences; this is left from early testing before that was added, when cameras got loaded at startup. It still might be useful for testing.
         if ([arg isEqualToString:@"localhost"]) {
             useLocalhost = YES;
             [self writeToConsole:@"Using localhost\n"];
@@ -240,6 +238,7 @@ void PTZLog(NSString *format, ...) {
             PTZPrefCamera *prefCamera = [[PTZPrefCamera alloc] initWithDictionary:@{@"cameraname":@"localhost", @"devicename":@"localhost"}];
             prefCamera.camera = [[PTZCamera alloc] initWithIP:prefCamera.devicename];
             [[self.cameraButton lastItem] setRepresentedObject:prefCamera];
+            // We can open localhost now. Real cameras wait until needed, so we don't spin on startup if they're unreachable.
             [self reopenCamera:nil];
         }
     }
@@ -257,6 +256,9 @@ void PTZLog(NSString *format, ...) {
     self.cameraIndex = 0;
     self.hideRestoreIcon = YES;
     self.hideRecallIcon = YES;
+    // If you use bindings on the segmented control the action won't be called, and the dependent values won't be updated. KVO could also be used but this is simpler.
+    self.singleModeControl.selectedSegment = self.currentMode;
+    [self updateMode:self.currentMode];
     NSString *iniPath = [self ptzopticsSettingsFilePath];
     if (iniPath == nil || [[NSFileManager defaultManager] fileExistsAtPath:iniPath]) {
         [self showPrefs:nil];
@@ -296,7 +298,6 @@ void PTZLog(NSString *format, ...) {
 
 - (void)updateCameraPopup {
     NSArray *cameraList = nil;
-    [self closeCamera];
     BOOL useLocal = [[NSUserDefaults standardUserDefaults] boolForKey:PTZ_UseLocalCamerasKey];
     
     if (useLocal) {
@@ -313,9 +314,7 @@ void PTZLog(NSString *format, ...) {
         prefCamera.camera = [[PTZCamera alloc] initWithIP:prefCamera.devicename];
         [[self.cameraButton lastItem] setRepresentedObject:prefCamera];
     }
-    if ([cameraList count] > 0) {
-        [self cameraDidChange];
-    }
+    [self cameraDidChange];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
@@ -379,21 +378,6 @@ void PTZLog(NSString *format, ...) {
     return [self.backupSettings nameForScene:self.currentIndex camera:self.settingsFileCameraIP];
 }
 
-// memory_recall, memory_set
-// ./visla_cli -d $IP memory_recall $recallOffset
-- (NSString *)currentCommand {
-    NSString *cameraIP = [self cameraIP];
-    return [NSString stringWithFormat:@"./visca_cli -d %@ memory_recall %ld\n./visca_cli -d %@ memory_set %ld", cameraIP, (long)self.recallValue, cameraIP, (long)self.restoreValue];
-}
-
-- (void)closeCamera {
-    if (self.openCamera != -1) {
-        [self.cameraState closeCamera];
-        self.openCamera = -1;
-    }
-}
-
-
 - (void)loadBackupSettings {
     self.backupSettings = nil;
     NSString *rootPath = [self ptzopticsSettingsDirectory];
@@ -443,21 +427,12 @@ void PTZLog(NSString *format, ...) {
 }
 
 - (IBAction)reopenCamera:(id)sender {
-    if (self.openCamera != -1) {
-        self.openCamera = -1;
-    }
-    // Close and reload
-    [self.cameraState closeAndReload:^(BOOL success) {
-        if (success) {
-            self.openCamera = self.cameraIndex;
-        }
-    }];
+    // Force close and reload.
+    [self.cameraState closeAndReload:nil];
 }
 
 - (IBAction)changeCamera:(id)sender {
-    if (self.openCamera != self.cameraIndex) {
-        [self cameraDidChange];
-    }
+    [self cameraDidChange];
 }
 
 - (void)nextCamera {
@@ -687,7 +662,7 @@ void PTZLog(NSString *format, ...) {
     [textStorage beginEditing];
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:string attributes:
           @{NSFontAttributeName:[NSFont userFixedPitchFontOfSize:[NSFont systemFontSize]],
-            NSForegroundColorAttributeName:(color ?: [NSColor textColor])}];
+            NSForegroundColorAttributeName:(color ?: [NSColor systemGreenColor])}];
 
     [textStorage appendAttributedString:attributedString];
     [textStorage endEditing];

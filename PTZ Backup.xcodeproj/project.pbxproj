@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		94039E73294E4C5F009FAE39 /* PTZCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 94039E72294E4C5F009FAE39 /* PTZCamera.m */; };
-		94039E752950504C009FAE39 /* Notes in Resources */ = {isa = PBXBuildFile; fileRef = 94039E742950504C009FAE39 /* Notes */; };
 		9409E7932954B06D00163502 /* settings.ini in Resources */ = {isa = PBXBuildFile; fileRef = 9409E7922954B06D00163502 /* settings.ini */; };
 		9409E7962954BD2300163502 /* iniparser.c in Sources */ = {isa = PBXBuildFile; fileRef = 9409E7952954BD2300163502 /* iniparser.c */; };
 		9409E7992954BDC300163502 /* dictionary.c in Sources */ = {isa = PBXBuildFile; fileRef = 9409E7982954BDC300163502 /* dictionary.c */; };
@@ -310,7 +309,6 @@
 			files = (
 				941ED01E293FF3D5001D8039 /* Assets.xcassets in Resources */,
 				9479B0E7294273800021734F /* Credits.html in Resources */,
-				94039E752950504C009FAE39 /* Notes in Resources */,
 				9409E7A22954D7F700163502 /* PTZPrefsController.xib in Resources */,
 				941ED021293FF3D5001D8039 /* MainMenu.xib in Resources */,
 				9409E7932954B06D00163502 /* settings.ini in Resources */,
