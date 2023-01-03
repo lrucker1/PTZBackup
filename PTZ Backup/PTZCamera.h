@@ -22,6 +22,8 @@ typedef void (^PTZDoneBlock)(BOOL success);
 @property NSInteger tiltSpeed;
 @property NSInteger panSpeed;
 @property NSInteger presetSpeed;
+// HTML only
+@property NSInteger zoomSpeed;
 
 @property (readonly) NSString *cameraIP;
 
@@ -43,7 +45,7 @@ typedef void (^PTZDoneBlock)(BOOL success);
 - (void)memorySet:(NSInteger)scene onDone:(PTZDoneBlock _Nullable)doneBlock;
 - (void)cancelCommand;
 
-- (void)isCameraReachable:(PTZDoneBlock)doneBlock;
+- (void)fetchSnapshot;
 - (void)fetchSnapshotAtIndex:(NSInteger)index;
 - (void)updateCameraState;
 - (void)backupRestoreWithOffset:(NSInteger)rangeOffset delay:(NSInteger)batchDelay isBackup:(BOOL)isBackup onDone:(PTZDoneBlock _Nullable)doneBlock;

@@ -38,6 +38,7 @@ void backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOf
     if (self) {
         _panSpeed = 5;
         _tiltSpeed = 5;
+        _zoomSpeed = 4;
         _presetSpeed = 24; // Default, fastest
         NSString *name = [NSString stringWithFormat:@"cameraQueue_0x%p", self];
         _cameraQueue = dispatch_queue_create([name UTF8String], NULL);
@@ -241,11 +242,20 @@ void backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOf
     return (AppDelegate *)[NSApp delegate];
 }
 
+- (void)fetchSnapshot {
+    [self fetchSnapshotAtIndex:-1];
+}
+
+// Camera does not need to be open; this doesn't use sockets.
 - (void)fetchSnapshotAtIndex:(NSInteger)index {
+    // snapshot.jpg is generated on demand. If index >= 0, write the scene snapshot to the downloads folder.
     NSString *url = [self snapshotURL];
     NSString *cameraIP = [self cameraIP];
-    NSString *rootPath = [self.appDelegate ptzopticsSettingsDirectory];
-    [[[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:url]
+    NSString *rootPath = (index >= 0) ? [self.appDelegate ptzopticsSettingsDirectory] : nil;
+    // Just say no to caching; even though the cameras tell us not to cache (the whole "on demand" bit), that's an extra query we can avoid. Also works around an intermittent localhost bug that was returning very very stale cached images.
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10];
+
+    [[[NSURLSession sharedSession] dataTaskWithRequest:request
                                  completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (data != nil) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -262,19 +272,6 @@ void backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOf
             NSLog(@"Failed to get snapshot: error %@", error);
         }
     }] resume];
-}
-
-// Not needed now that everything is async
-- (void)isCameraReachable:(PTZDoneBlock)doneBlock {
-    NSString *url = [self snapshotURL];
-    // This will work even if there's no snapshot.jpg yet.
-    [[[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:url]
-                                 completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            doneBlock(data != nil);
-        });
-    }] resume];
-
 }
 
 - (void)batchSetFinishedAtIndex:(int)index {

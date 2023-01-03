@@ -34,4 +34,3 @@ Interesting stuff from the PTZOptics code (https://github.com/PTZOptics/OBSPlugi
 #define DOWNLOAD_FILE_URI "/snapshot.jpg"
 //     settings->setValue(QString::asprintf("mem%d", presetNum) + currentCamIp, presetText);
 
-Install PTZOptics on an intel Mac and test writing to the ini file.

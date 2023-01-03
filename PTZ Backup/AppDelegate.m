@@ -209,7 +209,7 @@ void PTZLog(NSString *format, ...) {
 }
 
 // should contain settings.ini, downloads folder, and backup settingsXX.ini
-// I saw an entry for a custom downloads path in settings.ini once, but I can't see where the actual app is using it. So I'm not checking for it; if you use a custom downloads folder this is your todo note.
+// I saw an entry for a custom downloads path ("General:snapshotpath") in settings.ini once, but I can't see where the actual app is using it. So I'm not checking for it; if you use a custom downloads folder this is your todo note.
 - (NSString *)ptzopticsSettingsDirectory {
     return [[self ptzopticsSettingsFilePath] stringByDeletingLastPathComponent];
 }
@@ -451,11 +451,18 @@ void PTZLog(NSString *format, ...) {
         if (rootPath != nil) {
             NSString *path = [NSString pathWithComponents:@[rootPath, @"settings.ini"]];
             if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
-                PTZLog(@"Copying old settings.ini to settings_backup.ini");
+                PTZLog(@"Moving old settings.ini to settings_backup.ini");
                 NSString *backupPath = [NSString pathWithComponents:@[rootPath, @"settings_backup.ini"]];
                 NSError *error;
-                if (![[NSFileManager defaultManager] copyItemAtPath:path toPath:backupPath error:&error]) {
-                    PTZLog(@"Failed to make settings_backup: %@", error);
+                if ([[NSFileManager defaultManager] fileExistsAtPath:backupPath]) {
+                    BOOL result = [[NSFileManager defaultManager] trashItemAtURL:[NSURL fileURLWithPath:backupPath] resultingItemURL:nil error:&error];
+                    if (result == NO) {
+                        PTZLog(@"Unable to copy: could not remove old settings_backup.ini");
+                        return;
+                    }
+                }
+                if (![[NSFileManager defaultManager] moveItemAtPath:path toPath:backupPath error:&error]) {
+                    PTZLog(@"Failed to move settings.ini to settings_backup.ini: %@", error);
                     [[NSAlert alertWithError:error] runModal];
                     return;
                 }
@@ -531,13 +538,15 @@ void PTZLog(NSString *format, ...) {
     NSView *view = (NSView *)sender;
     NSWindow *window = view.window;
     NSView *first = [window ptz_currentEditingView];
-    [self.sourceSettings setName:self.editableSceneSetName forScene:self.currentIndex camera:self.settingsFileCameraIP];
+    if ([self.editableSceneSetName length] == 0) {
+        NSBeep();
+    } else {
+        [self.sourceSettings setName:self.editableSceneSetName forScene:self.currentIndex camera:self.settingsFileCameraIP];
+    }
     if (first != nil) {
         [window makeFirstResponder:first];
     }
 }
-
-
 
 - (IBAction)changeMode:(id)sender {
     NSSegmentedControl *seg = (NSSegmentedControl *)sender;
@@ -547,6 +556,71 @@ void PTZLog(NSString *format, ...) {
     NSInteger mode = seg.selectedSegment;
     if (mode != self.currentMode) {
         [self updateMode:mode];
+    }
+}
+
+- (IBAction)takeSnapshot:(id)sender {
+    [self.cameraState fetchSnapshot];
+}
+
+- (IBAction)saveSnapshot:(id)sender {
+    NSImage *image = self.cameraState.snapshotImage;
+    if (image == nil) {
+        NSBeep();
+        return;
+    }
+    NSSavePanel *panel = [NSSavePanel savePanel];
+    [panel setNameFieldStringValue:[NSString stringWithFormat:@"snapshot_%@.jpg", self.cameraIP]];
+    [panel beginWithCompletionHandler:^(NSInteger result){
+        if (result == NSModalResponseOK) {
+            NSURL *url = [panel URL];
+            NSArray *representations;
+            NSData *bitmapData;
+
+            representations = [image representations];
+
+            bitmapData = [NSBitmapImageRep representationOfImageRepsInArray:representations usingType:NSBitmapImageFileTypeJPEG properties:@{NSImageCompressionFactor:@(1.0)}];
+
+            [bitmapData writeToFile:[url path] atomically:YES];
+        }
+    }];
+}
+
+- (IBAction)generateHTML:(id)sender {
+    // https://ptzoptics.com/wp-content/uploads/2020/11/PTZOptics-HTTP-CGI-Commands-Rev-1_4-8-20.pdf
+    // Check the doc; some parameters use hex, some use decimal.
+/*
+ http://[Camera IP]/cgi-bin/ptzctrl.cgi?ptzcmd&[Mode]&[Pan Speed]&[Tilt Speed]&[Pan Position]&[Tilt Position]
+ [Mode]: ABS, REL
+ [Pan Speed]: 1 (Slowest) – 24 (Fastest)
+ [Tilt Speed]: 1 (Slowest) – 20 (Fastest)
+ [Pan Position]: 0001 (First step pan right), 0990 (Last step pan right), FFFE (First step pan left), F670 (Last step pan left)
+ [Tilt Position]: 0001 (First step tilt up), 0510 (Last step tilt up), FFFE (First step tilt down), FE51 (Last step tilt down)
+ */
+    PTZCamera *cam = self.cameraState;
+    NSString *camIP = cam.cameraIP;
+    NSString *ptz_abs = [NSString stringWithFormat:@"http://%@/cgi-bin/ptzctrl.cgi?ptzcmd&ABS&%d&%d&%04hX&%04hX",
+                          camIP, (int)cam.panSpeed, (int)cam.tiltSpeed, (short)cam.pan, (short)cam.tilt];
+/*
+ http://[Camera IP]/cgi-bin/ptzctrl.cgi?ptzcmd&zoomto&[Zoom Speed]&[Zoom Position]
+ [Zoom Speed]: 1 (Slowest) – 7 (Fastest)
+ [Zoom Position]: 0000 (Full wide), 4000 (Full tele)
+ */
+    NSString *ptz_zoomto = [NSString stringWithFormat:@"http://%@/cgi-bin/ptzctrl.cgi?ptzcmd&zoomto&%d&%hX",
+                          camIP, (int)cam.zoomSpeed, (short)cam.zoom];
+    NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
+    [pasteboard clearContents];
+    if ([NSEvent modifierFlags] & NSEventModifierFlagOption) {
+        // Include reset and home. There's no HTML for preset speed.
+        /*
+         http://[camera ip]/cgi-bin/ptzctrl.cgi?ptzcmd&home
+         http://[camera ip]/cgi-bin/param.cgi?pan_tiltdrive_reset
+         */
+        NSString *ptz_home = [NSString stringWithFormat:@"http://%@/cgi-bin/ptzctrl.cgi?ptzcmd&home", camIP];
+        NSString *ptz_reset = [NSString stringWithFormat:@"http://%@/cgi-bin/ptzctrl.cgi?pan_tiltdrive_reset", camIP];
+        [pasteboard writeObjects:@[ptz_abs, ptz_zoomto, ptz_home, ptz_reset]];
+    } else {
+        [pasteboard writeObjects:@[ptz_abs, ptz_zoomto]];
     }
 }
 
@@ -591,6 +665,7 @@ void PTZLog(NSString *format, ...) {
     [self.cameraState memoryRecall:self.sceneRecallValue onDone:^(BOOL success) {
         if (success) {
             [self.cameraState updateCameraState];
+            [self.cameraState fetchSnapshot]; // Fetch without saving.
         } else {
             self.hideRecallIcon = NO;
         }
