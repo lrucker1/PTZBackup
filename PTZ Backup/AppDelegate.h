@@ -8,14 +8,16 @@
 #import <Cocoa/Cocoa.h>
 
 #define PTZ_LocalCamerasKey @"LocalCameras"
+#define PTZ_BatchDelayKey @"BatchDelay"
 
 void PTZLog(NSString *format, ...);
 
-@interface AppDelegate : NSObject <NSApplicationDelegate, NSWindowDelegate>
+@interface AppDelegate : NSObject <NSApplicationDelegate, NSWindowDelegate, NSWindowRestoration>
 
 @property NSString *ptzopticsSettingsFilePath;
 
 - (NSString *)ptzopticsSettingsDirectory;
+- (NSString *)ptzopticsDownloadsDirectory;
 
 - (NSArray *)cameraList;
 

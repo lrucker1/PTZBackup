@@ -28,9 +28,7 @@ typedef enum {
     TabBatch
 } CurrentTab;
 
-static NSString *PTZ_SettingsPathKey = @"PTZSettingsPath";
 static NSString *PTZ_SettingsFilePathKey = @"PTZSettingsFilePath";
-static NSString *PTZ_BatchDelayKey = @"BatchDelay";
 static NSString *PTZ_RangeOffsetKey = @"RangeOffset";
 static NSString *PTZ_UseLocalCamerasKey = @"UseLocalCameraSettings";
 static NSString *PTZ_MaxRangeOffsetKey = @"MaxRangeOffset";
@@ -50,6 +48,7 @@ void PTZLog(NSString *format, ...) {
 
 @property (strong) IBOutlet NSWindow *window;
 @property (strong) IBOutlet NSWindow *stateWindow;
+@property (strong) IBOutlet NSWindow *consoleWindow;
 @property (strong) IBOutlet NSTextView *console;
 @property (strong) IBOutlet NSPopUpButton *cameraButton;
 @property (strong) IBOutlet PTZCameraStateViewController *stateViewController;
@@ -60,7 +59,6 @@ void PTZLog(NSString *format, ...) {
 @property NSInteger sceneRecallOffset, sceneSetOffset;
 @property (readonly) NSInteger sceneRecallValue, sceneSetValue;
 @property NSString *editableSceneSetName;
-@property NSInteger batchDelay;
 @property NSInteger currentMode;
 @property (readonly) BOOL isCheckMode, isRestoreMode, isBackupMode;
 @property NSInteger currentTab;
@@ -90,6 +88,16 @@ void PTZLog(NSString *format, ...) {
           PTZ_BatchIsBackupKey:@(YES),
           PTZ_SingleModeKey:@(0)
         }];
+    // Registering defaults has to happen every time, so if we find the right file go ahead and set it so we don't have to keep checking existence if it doesn't get set through the UI.
+    // If useLocal is set and there's no FilePath, then presumably they are aware they have no settings.ini file and we don't need to look for one.
+    BOOL useLocal = [[NSUserDefaults standardUserDefaults] boolForKey:PTZ_UseLocalCamerasKey];
+
+    if (!useLocal && [[NSUserDefaults standardUserDefaults] objectForKey:PTZ_SettingsFilePathKey] == nil) {
+        NSString *path = [@"~/Library/Application Support/PTZOptics/settings.ini" stringByExpandingTildeInPath];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+            [[NSUserDefaults standardUserDefaults] setObject:path forKey:PTZ_SettingsFilePathKey];
+        }
+    }
 }
 
 + (NSSet *)keyPathsForValuesAffectingValueForKey: (NSString *)key // IN
@@ -114,6 +122,9 @@ void PTZLog(NSString *format, ...) {
         [keyPaths addObject:@"backupSettings"];
         [keyPaths addObject:@"currentIndex"];
         [keyPaths addObject:@"cameraState"];
+    }
+    if (   [key isEqualToString:@"currentMode"]) {
+        [keyPaths addObject:@"applicationIsReady"];
     }
     if (   [key isEqualToString:@"sceneRecallName"]
         || [key isEqualToString:@"sceneSetName"]) {
@@ -168,10 +179,6 @@ void PTZLog(NSString *format, ...) {
     return [[NSUserDefaults standardUserDefaults] integerForKey:PTZ_BatchDelayKey];
 }
 
-- (void)setBatchDelay:(NSInteger)value {
-    [[NSUserDefaults standardUserDefaults] setInteger:value forKey:PTZ_BatchDelayKey];
-}
-
 - (NSInteger)rangeOffset {
     return [[NSUserDefaults standardUserDefaults] integerForKey:PTZ_RangeOffsetKey];
 }
@@ -200,7 +207,7 @@ void PTZLog(NSString *format, ...) {
     return [[NSUserDefaults standardUserDefaults] stringForKey:PTZ_SettingsFilePathKey];
 }
 
-// path/to/settings.ini. Should be a subdir of PTZOptics, not OBS - that's the wrong format!
+// path/to/settings.ini. Should be a subdir of ~/Library/Application Support/PTZOptics, not OBS - that's the wrong format!
 - (void)setPtzopticsSettingsFilePath:(NSString *)newPath {
     NSString *oldPath = self.ptzopticsSettingsFilePath;
     if (![oldPath isEqualToString:newPath]) {
@@ -209,13 +216,23 @@ void PTZLog(NSString *format, ...) {
 }
 
 // should contain settings.ini, downloads folder, and backup settingsXX.ini
-// I saw an entry for a custom downloads path ("General:snapshotpath") in settings.ini once, but I can't see where the actual app is using it. So I'm not checking for it; if you use a custom downloads folder this is your todo note.
 - (NSString *)ptzopticsSettingsDirectory {
     return [[self ptzopticsSettingsFilePath] stringByDeletingLastPathComponent];
 }
 
+// Although you can set a custom downloads path in PTZOptics ("General:snapshotpath"), the app ignores it and always uses the hardcoded #define value.
+- (NSString *)ptzopticsDownloadsDirectory {
+    NSString *rootPath = self.ptzopticsSettingsDirectory;
+    if (rootPath != nil) {
+        return [NSString pathWithComponents:@[rootPath, @"downloads"]];
+    }
+    return nil;
+}
+
 - (void)applyPrefChanges {
     [self willChangeValueForKey:@"cameraList"];
+    [self loadSourceSettings];
+    [self loadBackupSettings];
     [self updateCameraPopup];
     [self didChangeValueForKey:@"cameraList"];
 }
@@ -278,13 +295,46 @@ void PTZLog(NSString *format, ...) {
     self.singleModeControl.selectedSegment = self.currentMode;
     [self updateMode:self.currentMode];
     NSString *iniPath = [self ptzopticsSettingsFilePath];
-    if (iniPath == nil || [[NSFileManager defaultManager] fileExistsAtPath:iniPath]) {
-        [self showPrefs:nil];
+    // Show the prefs at launch if we don't have a settings file and we're not using local (prefs) camera info.
+    BOOL useLocal = [[NSUserDefaults standardUserDefaults] boolForKey:PTZ_UseLocalCamerasKey];
+    if (iniPath == nil || ![[NSFileManager defaultManager] fileExistsAtPath:iniPath]) {
+        if (!useLocal) {
+            [self showPrefs:nil];
+        }
+    } else {
+        // Even if useLocal is true, there's info in the settings file we want to use.
+        if (self.sourceSettings == nil) {
+            [self loadSourceSettings];
+        }
+        if (!useLocal && self.sourceSettings == nil) {
+            // We tried, it's not there, and the user hasn't opted to use local info: make sure prefs are visible so users know where to set it.
+            [self showPrefs:nil];
+        }
     }
-    if (self.sourceSettings == nil) {
-        [self loadSourceSettings];
-    }
+    // If loadBackupSettings fails, it just means there's no backup file, which is fine.
     [self loadBackupSettings];
+    self.consoleWindow.restorationClass = [self class]; // "console"
+    self.stateWindow.restorationClass = [self class]; // "camerastate"
+}
+
+// Autosave frame saves the frame, but doesn't save the open state; we have to do restoration for that.
++ (void)restoreWindowWithIdentifier:(NSUserInterfaceItemIdentifier)identifier
+                              state:(NSCoder *)state
+                  completionHandler:(void (^)(NSWindow *, NSError *))completionHandler {
+    AppDelegate *delegate = (AppDelegate *)[NSApp delegate];
+    NSWindow *window = nil;
+    if ([identifier isEqualToString:@"camerastate"]) {
+        window = delegate.stateWindow;
+    } else if ([identifier isEqualToString:@"console"]) {
+        window = delegate.consoleWindow;
+    } else if ([identifier isEqualToString:@"main"]) {
+        window = delegate.window;
+    } else if ([identifier isEqualToString:@"prefswindow"]) {
+        [delegate showPrefs:nil];
+        window = delegate.prefsController.window;
+    }
+    [window makeKeyAndOrderFront:nil];
+    completionHandler(window, nil);
 }
 
 - (BOOL)recallBusy {
@@ -343,6 +393,7 @@ void PTZLog(NSString *format, ...) {
         self.prefsController = [PTZPrefsController new];
     }
     [self.prefsController.window orderFront:sender];
+    self.prefsController.window.restorationClass = [self class];
 }
 
 - (NSString *)cameraName {
@@ -436,7 +487,7 @@ void PTZLog(NSString *format, ...) {
 - (IBAction)settingsIniCopyToBackup:(id)sender {
     NSString *rootPath = [self ptzopticsSettingsDirectory];
     if (rootPath != nil) {
-        NSString *filename = [NSString stringWithFormat:@"settings%d.ini", (int)self.sceneRecallOffset];
+        NSString *filename = [NSString stringWithFormat:@"settings%d.ini", (int)self.rangeOffset];
         NSString *path = [NSString pathWithComponents:@[rootPath, filename]];
         [self.sourceSettings writeToFile:path];
         [self loadBackupSettings];
@@ -445,13 +496,19 @@ void PTZLog(NSString *format, ...) {
     }
 }
 
+/*
+ * This is going to replace the entire original settings.ini
+ * It moves the original to settings_backup.ini first, just in case they're completely incompatible.
+ * We could just copy the scene names, and we could verify the IP addresses are the same.
+ * But this is a power user tool; the UI does provide a warning, and I am trusting the users to know that their camera states are compatible, and to be able to move the file back or update settings in PTZOptics if they're wrong.
+ */
 - (IBAction)settingsIniCopyFromBackup:(id)sender {
     if (self.backupSettings != nil) {
-        NSString *rootPath = [self ptzopticsSettingsDirectory];
-        if (rootPath != nil) {
-            NSString *path = [NSString pathWithComponents:@[rootPath, @"settings.ini"]];
+        NSString *path = [self ptzopticsSettingsFilePath];
+        if (path != nil) {
             if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
                 PTZLog(@"Moving old settings.ini to settings_backup.ini");
+                NSString *rootPath = [self ptzopticsSettingsDirectory];
                 NSString *backupPath = [NSString pathWithComponents:@[rootPath, @"settings_backup.ini"]];
                 NSError *error;
                 if ([[NSFileManager defaultManager] fileExistsAtPath:backupPath]) {
@@ -511,15 +568,6 @@ void PTZLog(NSString *format, ...) {
     self.currentMode = mode;
 }
 
-- (IBAction)applyBatchDelay:(id)sender {
-    // Force an active textfield to end editing so we get the current value, then put it back when we're done.
-    NSView *view = (NSView *)sender;
-    NSWindow *window = view.window;
-    NSView *first = [window ptz_currentEditingView];
-    if (first != nil) {
-        [window makeFirstResponder:first];
-    }
-}
 
 // In Restore mode, we can copy the backup name to the restore name.
 // In Check and Restore we can edit and save it.
@@ -785,6 +833,14 @@ void PTZLog(NSString *format, ...) {
 
 - (NSInteger)sceneSetValue {
     return _sceneSetOffset + _currentIndex;
+}
+
+- (IBAction)showLogWindow:(id)sender {
+    [self.consoleWindow makeKeyAndOrderFront:nil];
+}
+
+- (IBAction)showCameraStateWindow:(id)sender {
+    [self.stateWindow makeKeyAndOrderFront:nil];
 }
 
 - (IBAction)commandCancel:(id)sender {

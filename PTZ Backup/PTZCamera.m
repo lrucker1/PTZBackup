@@ -251,7 +251,7 @@ void backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOf
     // snapshot.jpg is generated on demand. If index >= 0, write the scene snapshot to the downloads folder.
     NSString *url = [self snapshotURL];
     NSString *cameraIP = [self cameraIP];
-    NSString *rootPath = (index >= 0) ? [self.appDelegate ptzopticsSettingsDirectory] : nil;
+    NSString *rootPath = (index >= 0) ? [self.appDelegate ptzopticsDownloadsDirectory] : nil;
     // Just say no to caching; even though the cameras tell us not to cache (the whole "on demand" bit), that's an extra query we can avoid. Also works around an intermittent localhost bug that was returning very very stale cached images.
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10];
 
@@ -264,7 +264,7 @@ void backupRestore(VISCAInterface_t *iface, VISCACamera_t *camera, uint32_t inOf
             // PTZ app only shows 6, but being able to see what got saved is useful.
             if ([rootPath length] > 0) {
                 NSString *filename = [NSString stringWithFormat:@"snapshot_%@%d.jpg", cameraIP, (int)index];
-                NSString *path = [NSString pathWithComponents:@[rootPath, @"downloads", filename]];
+                NSString *path = [NSString pathWithComponents:@[rootPath, filename]];
                 //PTZLog(@"saving snapshot to %@", path);
                 [data writeToFile:path atomically:YES];
             }

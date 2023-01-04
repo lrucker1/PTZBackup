@@ -9,6 +9,7 @@
 #import "PTZSettingsFile.h"
 #import "PTZPrefCamera.h"
 #import "AppDelegate.h"
+#import "NSWindowAdditions.h"
 
 
 @interface PTZPrefsController ()
@@ -99,6 +100,25 @@
         [cams addObject:[[PTZPrefCamera alloc] initWithDictionary:cam]];
     }
     self.cameras = cams;
+}
+
+
+- (NSInteger)batchDelay {
+    return [[NSUserDefaults standardUserDefaults] integerForKey:PTZ_BatchDelayKey];
+}
+
+- (void)setBatchDelay:(NSInteger)value {
+    [[NSUserDefaults standardUserDefaults] setInteger:value forKey:PTZ_BatchDelayKey];
+}
+
+- (IBAction)applyBatchDelay:(id)sender {
+    // Force an active textfield to end editing so we get the current value, then put it back when we're done.
+    NSView *view = (NSView *)sender;
+    NSWindow *window = view.window;
+    NSView *first = [window ptz_currentEditingView];
+    if (first != nil) {
+        [window makeFirstResponder:first];
+    }
 }
 
 @end
